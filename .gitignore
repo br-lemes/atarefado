@@ -1,0 +1,9 @@
+iup.dll
+iuplua.dll
+lua5.1.dll
+lua5.1.exe
+luasql
+SciTE.properties
+sqlite3.exe
+wlua5.1.exe
+*.sqlite*
