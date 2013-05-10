@@ -15,6 +15,8 @@ function gui.dialog:close_cb()
 		self:hide()
 		eng.done()
 	else
+		gui.result.value = "0"
+		iup.SetFocus(gui.search)
 		return iup.IGNORE
 	end
 end
@@ -41,8 +43,12 @@ function gui.dialog:k_any(k)
 			elseif gui.zbox.value == gui.result_box then
 				gui.task_new:action()
 			end
+		elseif iup.GetFocus() == gui.task_date then
+			gui.task_ok:action()
 		elseif iup.GetFocus() == gui.result then
 			gui.result:dblclick_cb()
+		elseif iup.GetFocus() == gui.taglist then
+			gui.edit_button:action()
 		end
 	elseif k == iup.K_DEL then
 		if iup.GetFocus() == gui.taglist then
@@ -64,16 +70,14 @@ function gui.dialog:k_any(k)
 			return iup.IGNORE
 		end
 	elseif k == iup.K_F9 then
-		if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
-			gui.task_today:action()
-		end
+		gui.task_today:action()
 	elseif k == iup.K_F10 then
-		if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
-			gui.task_tomorrow:action()
-		end
+		gui.task_tomorrow:action()
 	elseif k == iup.K_F11 then
-		if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
-			gui.task_anytime:action()
+		gui.task_anytime:action()
+	elseif k == iup.K_F12 then
+		if gui.zbox.value == gui.result_box then
+			gui.new_button:action()
 		end
 	end
 end
@@ -89,14 +93,23 @@ function gui.opt_load()
 	cur:fetch(row) gui.late.value      = row[1]
 	cur:fetch(row) gui.taglist.value   = row[1]
 	cur:close()
+	if tonumber(gui.taglist.value) >= 3 then
+		gui.edit_button.active = "YES"
+		gui.del_button.active = "YES"
+	end
 end
 
 gui.task_table = { }
 gui.tag_table = { }
 
 function gui.tag_load()
-	local value = gui.taglist.value
+	local id    = 0
+	local value = tonumber(gui.taglist.value)
+	if gui.tag_table and gui.tag_table[value] then
+		id = gui.tag_table[tonumber(gui.taglist.value)].id
+	end
 	gui.tag_table = { }
+	gui.tag_table.id = { }
 	gui.taglist.removeitem = "ALL"
 	gui.task_tag.removeitem = "ALL"
 	table.insert(gui.tag_table, false)
@@ -105,19 +118,26 @@ function gui.tag_load()
 	gui.taglist.appenditem = "Nenhuma"
 	for i,v in ipairs(eng.get_tags()) do
 		table.insert(gui.tag_table, v)
+		gui.tag_table.id[v.id] = #gui.tag_table
 		gui.taglist.appenditem = v.name
 		gui.task_tag.appenditem = v.name
 	end
-	gui.taglist.value = value
+	gui.taglist.value = gui.tag_table.id[id]
 end
 
 function gui.task_load()
-	local i = tonumber(gui.taglist.value)
+	local value = tonumber(gui.result.value)
 	local flags = { }
-	local tag = false
-	gui.result.lastvalue = gui.result.value
+	local tag   = false
+	local i     = tonumber(gui.taglist.value)
+	if gui.task_table and gui.task_table[value] then
+		gui.result.lastid = gui.task_table[value].id
+	else
+		gui.result.lastid = 0
+	end
 	gui.result.itemcount = 0
 	gui.task_table = { }
+	gui.task_table.id = { }
 	gui.result.removeitem = "ALL"
 	flags.anytime = gui.anytime.value == "ON"
 	flags.tomorrow = gui.tomorrow.value == "ON"
@@ -127,8 +147,9 @@ function gui.task_load()
 	flags.late = gui.late.value == "ON"
 	if i == 2 then tag = -1 elseif i > 2 then tag = gui.tag_table[i].id end
 	gui.result.removeitem = "ALL"
-	for i,v in ipairs(eng.gettasks(gui.search.value, flags, tag)) do
+	for _,v in ipairs(eng.gettasks(gui.search.value, flags, tag)) do
 		table.insert(gui.task_table, v)
+		gui.task_table.id[v.id] = #gui.task_table
 	end
 	gui.load_timer.run = "NO"
 	iup.SetIdle(gui.item_load)
@@ -153,10 +174,10 @@ function gui.item_load()
 			gui.result["image" .. n] = gui.red
 		end
 		gui.result.itemcount = n
-		gui.result.value = gui.result.lastvalue
+		--gui.result.value = gui.result.lastvalue
 	else
 		gui.result.itemcount = 0
-		gui.result.value = gui.result.lastvalue
+		gui.result.value = gui.task_table.id[gui.result.lastid]
 		iup.SetIdle(nil)
 	end
 end
@@ -186,8 +207,14 @@ end
 
 function gui.new_ok:action()
 	eng.new_tag(gui.search.value)
+	local cur = eng.con:execute('SELECT last_insert_rowid();')
+	local row = { }
+	cur:fetch(row)
+	cur:close()
 	gui.tag_load()
 	gui.new_cancel:action()
+	gui.taglist.value = gui.tag_table.id[row[1]]
+	gui.task_load()
 end
 
 function gui.new_cancel:action()
@@ -229,7 +256,7 @@ function gui.edit_cancel:action()
 		gui.del_button.active  = "YES"
 	end
 	gui.zbox.value = gui.result_box
-	iup.SetFocus(gui.search)
+	iup.SetFocus(gui.taglist)
 end
 
 function gui.del_button:action()
@@ -237,6 +264,7 @@ function gui.del_button:action()
 	if i >= 3 and gui.question("Excluir tag?") == 1 then
 		eng.del_tag(gui.tag_table[i].id)
 		gui.tag_load()
+		iup.SetFocus(gui.search)
 	end
 end
 
@@ -298,7 +326,12 @@ function gui.task_cancel:action()
 		gui.del_button.active  = "YES"
 	end
 	gui.zbox.value = gui.result_box
-	iup.SetFocus(gui.search)
+	if gui.result.value == "0" then
+		iup.SetFocus(gui.search)
+	else
+		-- corrigir result.value
+		iup.SetFocus(gui.result)
+	end
 end
 
 function gui.taglist:valuechanged_cb()
@@ -392,33 +425,45 @@ function gui.task_delete:action()
 	if gui.question("Excluir tarefa?") == 1 then
 		eng.del_task(gui.task_table[tonumber(gui.result.value)].id)
 		gui.task_load()
-		iup.SetFocus(gui.result)
+		iup.SetFocus(gui.search)
 	end
 end
 
 function gui.task_today:action()
-	upd = { }
-	upd.id = gui.task_table[tonumber(gui.result.value)].id
-	upd.date = os.date('%Y-%m-%d')
-	eng.upd_task(upd)
-	gui.task_load()
-	iup.SetFocus(gui.result)
+	if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
+		upd = { }
+		upd.id = gui.task_table[tonumber(gui.result.value)].id
+		upd.date = os.date('%Y-%m-%d')
+		eng.upd_task(upd)
+		gui.task_load()
+		iup.SetFocus(gui.result)
+	elseif iup.GetFocus() == gui.task_date then
+		gui.task_date.value = os.date('%Y-%m-%d')
+	end
 end
 
 function gui.task_tomorrow:action()
-	upd = { }
-	upd.id = gui.task_table[tonumber(gui.result.value)].id
-	upd.date = os.date('%Y-%m-%d', os.time()+24*60*60)
-	eng.upd_task(upd)
-	gui.task_load()
-	iup.SetFocus(gui.result)
+	if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
+		upd = { }
+		upd.id = gui.task_table[tonumber(gui.result.value)].id
+		upd.date = os.date('%Y-%m-%d', os.time()+24*60*60)
+		eng.upd_task(upd)
+		gui.task_load()
+		iup.SetFocus(gui.result)
+	elseif iup.GetFocus() == gui.task_date then
+		gui.task_date.value = os.date('%Y-%m-%d', os.time()+24*60*60)
+	end
 end
 
 function gui.task_anytime:action()
-	upd = { }
-	upd.id = gui.task_table[tonumber(gui.result.value)].id
-	upd.date = ""
-	eng.upd_task(upd)
-	gui.task_load()
-	iup.SetFocus(gui.result)
+	if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
+		upd = { }
+		upd.id = gui.task_table[tonumber(gui.result.value)].id
+		upd.date = ""
+		eng.upd_task(upd)
+		gui.task_load()
+		iup.SetFocus(gui.result)
+	elseif iup.GetFocus() == gui.task_date then
+		gui.task_date.value = ""
+	end
 end

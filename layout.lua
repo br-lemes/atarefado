@@ -49,16 +49,19 @@ gui.dialog = iup.dialog{
 						elemname = "",
 						iup.button{
 							elemname = "task_new",
+							tip      = "Nova Tarefa (ENTER)",
 							image    = load_image_note_add(),
 							active   = "YES",
 						},
 						iup.button{
 							elemname = "task_edit",
+							tip      = "Editar Tarefa (ENTER)",
 							image    = load_image_note_edit(),
 							active   = "NO",
 						},
 						iup.button{
 							elemname = "task_delete",
+							tip      = "Excluir Tarefa (DEL)",
 							image    = load_image_note_delete(),
 							active   = "NO",
 						},
@@ -67,16 +70,19 @@ gui.dialog = iup.dialog{
 						},
 						iup.button{
 							elemname = "task_today",
+							tip      = "Marcar para hoje (F9)",
 							image    = load_image_flag_orange(),
 							active   = "NO",
 						},
 						iup.button{
 							elemname = "task_tomorrow",
-							image = load_image_flag_blue(),
-							active = "NO",
+							tip      = "Deixar para amanhã (F10)",
+							image    = load_image_flag_blue(),
+							active   = "NO",
 						},
 						iup.button{
 							elemname = "task_anytime",
+							tip      = "Deixar para qualquer dia (F11)",
 							image    = load_image_flag_green(),
 							active   = "NO",
 						},
@@ -90,11 +96,13 @@ gui.dialog = iup.dialog{
 					},
 					iup.button{
 						elemname = "new_cancel",
+						tip      = "ESC",
 						title    = "Cancelar",
 						expand   = "HORIZONTAL",
 					},
 					iup.button{
 						elemname = "new_ok",
+						tip      = "ENTER",
 						title    = "OK",
 						expand   = "HORIZONTAL",
 					},
@@ -107,11 +115,13 @@ gui.dialog = iup.dialog{
 					},
 					iup.button{
 						elemname = "edit_cancel",
+						tip      = "ESC",
 						title    = "Cancelar",
 						expand   = "HORIZONTAL",
 					},
 					iup.button{
 						elemname = "edit_ok",
+						tip      = "ENTER",
 						title    = "OK",
 						expand   = "HORIZONTAL",
 					},
@@ -202,11 +212,13 @@ gui.dialog = iup.dialog{
 						},
 						iup.button{
 							elemname = "task_cancel",
+							tip      = "ESC",
 							title    = "Cancelar",
 							expand   = "HORIZONTAL",
 						},
 						iup.button{
 							elemname = "task_ok",
+							tipe     = "ENTER",
 							title    = "OK",
 							expand   = "HORIZONTAL",
 						},
@@ -296,6 +308,7 @@ gui.dialog = iup.dialog{
 				margin   = "0",
 				iup.button{
 					elemname = "new_button",
+					tip      = "Nova Tag (F12)",
 					image    = load_image_tag_blue_add(),
 					active   = "YES",
 				},
@@ -304,6 +317,7 @@ gui.dialog = iup.dialog{
 				},
 				iup.button{
 					elemname = "edit_button",
+					tip      = "Editar Tag (ENTER)",
 					image    = load_image_tag_blue_edit(),
 					active   = "NO",
 				},
@@ -312,6 +326,7 @@ gui.dialog = iup.dialog{
 				},
 				iup.button{
 					elemname = "del_button",
+					tip      = "Excluir Tag (DEL)",
 					image    = load_image_tag_blue_delete(),
 					active   = "NO",
 				},
