@@ -70,19 +70,19 @@ gui.dialog = iup.dialog{
 						},
 						iup.button{
 							elemname = "task_today",
-							tip      = "Marcar para hoje (F9)",
+							tip      = "Marcar para hoje (F2)",
 							image    = load_image_flag_orange(),
 							active   = "NO",
 						},
 						iup.button{
 							elemname = "task_tomorrow",
-							tip      = "Deixar para amanhã (F10)",
+							tip      = "Deixar para amanhã (F3)",
 							image    = load_image_flag_blue(),
 							active   = "NO",
 						},
 						iup.button{
 							elemname = "task_anytime",
-							tip      = "Deixar para qualquer dia (F11)",
+							tip      = "Deixar para qualquer dia (F4)",
 							image    = load_image_flag_green(),
 							active   = "NO",
 						},
@@ -218,7 +218,7 @@ gui.dialog = iup.dialog{
 						},
 						iup.button{
 							elemname = "task_ok",
-							tipe     = "ENTER",
+							tip      = "ENTER",
 							title    = "OK",
 							expand   = "HORIZONTAL",
 						},

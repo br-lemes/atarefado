@@ -69,11 +69,11 @@ function gui.dialog:k_any(k)
 			gui.result:valuechanged_cb()
 			return iup.IGNORE
 		end
-	elseif k == iup.K_F9 then
+	elseif k == iup.K_F2 then
 		gui.task_today:action()
-	elseif k == iup.K_F10 then
+	elseif k == iup.K_F3 then
 		gui.task_tomorrow:action()
-	elseif k == iup.K_F11 then
+	elseif k == iup.K_F4 then
 		gui.task_anytime:action()
 	elseif k == iup.K_F12 then
 		if gui.zbox.value == gui.result_box then
@@ -425,12 +425,11 @@ function gui.task_delete:action()
 	if gui.question("Excluir tarefa?") == 1 then
 		eng.del_task(gui.task_table[tonumber(gui.result.value)].id)
 		gui.task_load()
-		iup.SetFocus(gui.search)
 	end
 end
 
 function gui.task_today:action()
-	if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
+	if gui.zbox.value == gui.result_box and gui.result.value ~= "0" then
 		upd = { }
 		upd.id = gui.task_table[tonumber(gui.result.value)].id
 		upd.date = os.date('%Y-%m-%d')
@@ -443,7 +442,7 @@ function gui.task_today:action()
 end
 
 function gui.task_tomorrow:action()
-	if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
+	if gui.zbox.value == gui.result_box and gui.result.value ~= "0" then
 		upd = { }
 		upd.id = gui.task_table[tonumber(gui.result.value)].id
 		upd.date = os.date('%Y-%m-%d', os.time()+24*60*60)
@@ -456,7 +455,7 @@ function gui.task_tomorrow:action()
 end
 
 function gui.task_anytime:action()
-	if iup.GetFocus() == gui.result and gui.result.value ~= "0" then
+	if gui.zbox.value == gui.result_box and gui.result.value ~= "0" then
 		upd = { }
 		upd.id = gui.task_table[tonumber(gui.result.value)].id
 		upd.date = ""
