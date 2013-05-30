@@ -75,6 +75,11 @@ function gui.dialog:k_any(k)
 		gui.task_tomorrow:action()
 	elseif k == iup.K_F4 then
 		gui.task_anytime:action()
+	elseif k == iup.K_F5 then
+		if gui.taglist.value == "0" then gui.taglist.value = "1" end
+		gui.tag_load()
+		gui.opt_load()
+		gui.task_load()
 	elseif k == iup.K_F12 then
 		if gui.zbox.value == gui.result_box then
 			gui.new_button:action()
@@ -436,7 +441,7 @@ function gui.task_today:action()
 		eng.upd_task(upd)
 		gui.task_load()
 		iup.SetFocus(gui.result)
-	elseif iup.GetFocus() == gui.task_date then
+	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = os.date('%Y-%m-%d')
 	end
 end
@@ -449,7 +454,7 @@ function gui.task_tomorrow:action()
 		eng.upd_task(upd)
 		gui.task_load()
 		iup.SetFocus(gui.result)
-	elseif iup.GetFocus() == gui.task_date then
+	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = os.date('%Y-%m-%d', os.time()+24*60*60)
 	end
 end
@@ -462,7 +467,7 @@ function gui.task_anytime:action()
 		eng.upd_task(upd)
 		gui.task_load()
 		iup.SetFocus(gui.result)
-	elseif iup.GetFocus() == gui.task_date then
+	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = ""
 	end
 end
