@@ -427,8 +427,11 @@ end
 gui.task_edit.action = gui.result.dblclick_cb
 
 function gui.task_delete:action()
-	if gui.question("Excluir tarefa?") == 1 then
-		eng.del_task(gui.task_table[tonumber(gui.result.value)].id)
+	local task = gui.task_table[tonumber(gui.result.value)]
+	local question = "Excluir tarefa?"
+	if task.recurrent ~= "1" then question = "Tarefa recorrente concluída?" end
+	if gui.question(question) == 1 then
+		eng.del_task(task.id)
 		gui.task_load()
 	end
 end
