@@ -15,7 +15,7 @@ function gui.dialog:close_cb()
 		self:hide()
 		eng.done()
 	else
-		gui.result.value = "0"
+		gui.result.value = nil
 		iup.SetFocus(gui.search)
 		return iup.IGNORE
 	end
@@ -65,7 +65,7 @@ function gui.dialog:k_any(k)
 	elseif k == iup.K_UP then
 		if iup.GetFocus() == gui.result and gui.result.value == "1" then
 			iup.SetFocus(gui.search)
-			gui.result.value = "0"
+			gui.result.value = nil
 			gui.result:valuechanged_cb()
 			return iup.IGNORE
 		end
@@ -76,7 +76,7 @@ function gui.dialog:k_any(k)
 	elseif k == iup.K_F4 then
 		gui.task_anytime:action()
 	elseif k == iup.K_F5 then
-		if gui.taglist.value == "0" then gui.taglist.value = "1" end
+		if gui.taglist.value == "0" or gui.taglist.value == nil then gui.taglist.value = "1" end
 		gui.tag_load()
 		gui.opt_load()
 		gui.task_load()
@@ -275,7 +275,7 @@ end
 
 function gui.task_ok:action()
 	local upd = { }
-	if gui.result.value ~= "0" then
+	if gui.result.value ~= nil and gui.result.value ~= "0" then
 		upd.id = gui.task_table[tonumber(gui.result.value)].id
 	end
 	upd.name = gui.search.value
@@ -331,7 +331,7 @@ function gui.task_cancel:action()
 		gui.del_button.active  = "YES"
 	end
 	gui.zbox.value = gui.result_box
-	if gui.result.value == "0" then
+	if gui.result.value == "0" or gui.result.value == nil then
 		iup.SetFocus(gui.search)
 	else
 		-- corrigir result.value
@@ -340,7 +340,7 @@ function gui.task_cancel:action()
 end
 
 function gui.taglist:valuechanged_cb()
-	if self.lastvalue ~= self.value then
+	if self.value ~= nil and self.lastvalue ~= self.value then
 		eng.con:execute(string.format(
 			'UPDATE options SET value=%q WHERE name="tag";', self.value, self.name))
 		self.lastvalue = self.value
@@ -358,7 +358,7 @@ end
 
 function gui.result:dblclick_cb()
 	local item
-	if gui.result.value == "0" then
+	if gui.result.value == "0" or gui.result.value == nil then
 		item = { name = gui.search.value, date = "", comment = "", recurrent = "1" }
 		local value = ""
 		if tonumber(gui.taglist.value) > 2 then
@@ -404,7 +404,7 @@ function gui.task_recurrent:valuechanged_cb()
 end
 
 function gui.result:valuechanged_cb()
-	if self.value == "0" then
+	if self.value == "0" or self.value == nil then
 		gui.task_edit.active = "NO"
 		gui.task_delete.active = "NO"
 		gui.task_today.active = "NO"
@@ -420,7 +420,7 @@ function gui.result:valuechanged_cb()
 end
 
 function gui.task_new:action()
-	gui.result.value = "0"
+	gui.result.value = nil
 	gui.result:dblclick_cb()
 end
 
@@ -437,7 +437,7 @@ function gui.task_delete:action()
 end
 
 function gui.task_today:action()
-	if gui.zbox.value == gui.result_box and gui.result.value ~= "0" then
+	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
 		upd.id = gui.task_table[tonumber(gui.result.value)].id
 		upd.date = os.date('%Y-%m-%d')
@@ -450,7 +450,7 @@ function gui.task_today:action()
 end
 
 function gui.task_tomorrow:action()
-	if gui.zbox.value == gui.result_box and gui.result.value ~= "0" then
+	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
 		upd.id = gui.task_table[tonumber(gui.result.value)].id
 		upd.date = os.date('%Y-%m-%d', os.time()+24*60*60)
@@ -463,7 +463,7 @@ function gui.task_tomorrow:action()
 end
 
 function gui.task_anytime:action()
-	if gui.zbox.value == gui.result_box and gui.result.value ~= "0" then
+	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
 		upd.id = gui.task_table[tonumber(gui.result.value)].id
 		upd.date = ""
