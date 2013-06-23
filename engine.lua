@@ -1,5 +1,5 @@
 
--- init()
+-- init(dbname)
 -- done()
 
 -- has_table(table)
@@ -55,9 +55,9 @@ eng = { }
 
 -- initialize variables and creates a database if not exists
 -- return: nothing
-function eng.init()
+function eng.init(dbname)
 	eng.env = assert(luasql.sqlite3())
-	eng.con = assert(eng.env:connect('database.sqlite'))
+	eng.con = assert(eng.env:connect(dbname))
 
 	eng.con:execute('BEGIN;')
 	if not eng.has_table('tagnames') then

@@ -68,6 +68,16 @@ gui.dialog = iup.dialog{
 						iup.fill{
 							elemname = "",
 						},
+						iup.label{
+							elemname = "task_recurrency",
+							image    = load_image_refresh(),
+							active   = "NO",
+							padding  = "5x5",
+							tip      = "Tarefa recorrente",
+						},
+						iup.fill{
+							elemname = "",
+						},
 						iup.button{
 							elemname = "task_today",
 							tip      = "Marcar para hoje (F2)",
@@ -170,7 +180,7 @@ gui.dialog = iup.dialog{
 									elemname = "",
 								},
 								iup.list{
-									elemname     = "",
+									elemname     = "task_tagw",
 									expand       = "YES",
 									multiple     = "YES",
 									visiblelines = "1",
@@ -183,7 +193,7 @@ gui.dialog = iup.dialog{
 									"Sábado",
 								},
 								iup.list{
-									elemname     = "",
+									elemname     = "task_tagm",
 									expand       = "YES",
 									multiple     = "YES",
 									visiblelines = "1",
@@ -231,6 +241,11 @@ gui.dialog = iup.dialog{
 			margin   = "10x10",
 			gap      = "10",
 			expand   = "YES",
+			iup.list{
+				elemname = "dbname",
+				dropdown = "YES",
+				expand   = "HORIZONTAL",
+			},
 			iup.hbox{
 				elemname = "",
 				margin   = "0",
@@ -308,7 +323,7 @@ gui.dialog = iup.dialog{
 				margin   = "0",
 				iup.button{
 					elemname = "new_button",
-					tip      = "Nova Tag (F12)",
+					tip      = "Nova Tag (F10)",
 					image    = load_image_tag_blue_add(),
 					active   = "YES",
 				},
@@ -317,7 +332,7 @@ gui.dialog = iup.dialog{
 				},
 				iup.button{
 					elemname = "edit_button",
-					tip      = "Editar Tag (ENTER)",
+					tip      = "Editar Tag (F11)",
 					image    = load_image_tag_blue_edit(),
 					active   = "NO",
 				},
@@ -326,7 +341,7 @@ gui.dialog = iup.dialog{
 				},
 				iup.button{
 					elemname = "del_button",
-					tip      = "Excluir Tag (DEL)",
+					tip      = "Excluir Tag (F12)",
 					image    = load_image_tag_blue_delete(),
 					active   = "NO",
 				},

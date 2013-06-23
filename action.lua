@@ -32,6 +32,13 @@ function gui.dialog:k_any(k)
 		else
 			self:close_cb()
 		end
+	elseif (k == iup.K_cC or iup.K_cc) and iup.GetFocus() == gui.result then
+		if gui.result.value ~= nil and gui.result.value ~= "0" then
+			for k,v in pairs(gui.task_table[tonumber(gui.result.value)]) do
+				print(k, v)
+			end
+			io.stdout:flush()
+		end
 	elseif k == iup.K_CR then
 		if iup.GetFocus() == gui.search then
 			if gui.zbox.value == gui.new_tag then
@@ -45,30 +52,21 @@ function gui.dialog:k_any(k)
 			end
 		elseif iup.GetFocus() == gui.task_date then
 			gui.task_ok:action()
-		elseif iup.GetFocus() == gui.result then
+		elseif gui.result.value ~= nil and gui.result.value ~= "0" then
 			gui.result:dblclick_cb()
-		elseif iup.GetFocus() == gui.taglist then
-			gui.edit_button:action()
 		end
 	elseif k == iup.K_DEL then
-		if iup.GetFocus() == gui.taglist then
-			gui.del_button:action()
-		elseif iup.GetFocus() == gui.result then
-			gui.task_delete:action()
-		end
-	elseif k == iup.K_DOWN then
-		if iup.GetFocus() == gui.search then
-			iup.SetFocus(gui.result)
-			gui.result.value = "1"
-			gui.result:valuechanged_cb()
-		end
-	elseif k == iup.K_UP then
-		if iup.GetFocus() == gui.result and gui.result.value == "1" then
-			iup.SetFocus(gui.search)
-			gui.result.value = nil
-			gui.result:valuechanged_cb()
-			return iup.IGNORE
-		end
+		gui.task_delete:action()
+	elseif k == iup.K_DOWN and iup.GetFocus() == gui.search then
+		iup.SetFocus(gui.result)
+		gui.result.value = "1"
+		gui.result:valuechanged_cb()
+	elseif k == iup.K_UP and iup.GetFocus() == gui.result and gui.result.value == "1" then
+		iup.SetFocus(gui.search)
+		gui.result.value = nil
+		gui.result.lastvalue = nil
+		gui.result:valuechanged_cb()
+		return iup.IGNORE
 	elseif k == iup.K_F2 then
 		gui.task_today:action()
 	elseif k == iup.K_F3 then
@@ -76,14 +74,18 @@ function gui.dialog:k_any(k)
 	elseif k == iup.K_F4 then
 		gui.task_anytime:action()
 	elseif k == iup.K_F5 then
+		gui.db_load()
 		if gui.taglist.value == "0" or gui.taglist.value == nil then gui.taglist.value = "1" end
 		gui.tag_load()
 		gui.opt_load()
 		gui.task_load()
+	elseif k == iup.K_F10 and gui.zbox.value == gui.result_box then
+		gui.new_button:action()
+		return iup.IGNORE
+	elseif k == iup.K_F11 then
+		gui.edit_button:action()
 	elseif k == iup.K_F12 then
-		if gui.zbox.value == gui.result_box then
-			gui.new_button:action()
-		end
+		gui.del_button:action()
 	end
 end
 
@@ -98,6 +100,9 @@ function gui.opt_load()
 	cur:fetch(row) gui.late.value      = row[1]
 	cur:fetch(row) gui.taglist.value   = row[1]
 	cur:close()
+	if gui.taglist.value == nil or gui.taglist.value == "0" then
+		gui.taglist.value = "1"
+	end
 	if tonumber(gui.taglist.value) >= 3 then
 		gui.edit_button.active = "YES"
 		gui.del_button.active = "YES"
@@ -134,7 +139,7 @@ function gui.task_load()
 	local value = tonumber(gui.result.value)
 	local flags = { }
 	local tag   = false
-	local i     = tonumber(gui.taglist.value)
+	local i     = tonumber(gui.taglist.value) or 1
 	if gui.task_table and gui.task_table[value] then
 		gui.result.lastid = gui.task_table[value].id
 	else
@@ -179,11 +184,16 @@ function gui.item_load()
 			gui.result["image" .. n] = gui.red
 		end
 		gui.result.itemcount = n
-		--gui.result.value = gui.result.lastvalue
 	else
+		local value = gui.task_table.id[gui.result.lastid]
+		if value == nil then value = gui.result.lastvalue end
+		if value and tonumber(value) > tonumber(gui.result.count) then
+			value = gui.result.count
+		end
 		gui.result.itemcount = 0
-		gui.result.value = gui.task_table.id[gui.result.lastid]
+		gui.result.value = value
 		iup.SetIdle(nil)
+		gui.result:valuechanged_cb()
 	end
 end
 
@@ -226,7 +236,7 @@ function gui.new_cancel:action()
 	gui.search.value      = ""
 	gui.optbox.active     = "YES"
 	gui.new_button.active = "YES"
-	if tonumber(gui.taglist.value) >= 3 then
+	if gui.taglist.value ~= nil and tonumber(gui.taglist.value) >= 3 then
 		gui.edit_button.active = "YES"
 		gui.del_button.active  = "YES"
 	end
@@ -274,6 +284,7 @@ function gui.del_button:action()
 end
 
 function gui.task_ok:action()
+	if gui.search.value:match("^%s*$") then return end
 	local upd = { }
 	if gui.result.value ~= nil and gui.result.value ~= "0" then
 		upd.id = gui.task_table[tonumber(gui.result.value)].id
@@ -302,7 +313,7 @@ function gui.task_ok:action()
 		end
 	end
 	for i = 1, 7 do
-		local n = gui.task_zoption[2].value:byte(i)
+		local n = gui.task_tagw.value:byte(i)
 		if n == 43 then
 			eng.set_tag(upd.id, i)
 		elseif n == 45 then
@@ -310,7 +321,7 @@ function gui.task_ok:action()
 		end
 	end
 	for i = 1, 31 do
-		local n = gui.task_zoption[3].value:byte(i)
+		local n = gui.task_tagm.value:byte(i)
 		if n == 43 then
 			eng.set_tag(upd.id, i+7)
 		elseif n == 45 then
@@ -386,6 +397,24 @@ function gui.result:dblclick_cb()
 			end
 		end
 		gui.task_tag.value = tagv
+		tagv = ""
+		for i = 1, 7 do
+			if tagt[i] then
+				tagv = tagv .. "+"
+			else
+				tagv = tagv .. "-"
+			end
+		end
+		gui.task_tagw.value = tagv
+		tagv = ""
+		for i = 1, 31 do
+			if tagt[i+7] then
+				tagv = tagv .. "+"
+			else
+				tagv = tagv .. "-"
+			end
+		end
+		gui.task_tagm.value = tagv
 	end
 	gui.optbox.active      = "NO"
 	gui.new_button.active  = "NO"
@@ -410,6 +439,7 @@ function gui.result:valuechanged_cb()
 		gui.task_today.active = "NO"
 		gui.task_tomorrow.active = "NO"
 		gui.task_anytime.active = "NO"
+		gui.task_recurrency.active = "NO"
 	else
 		gui.task_edit.active = "YES"
 		gui.task_delete.active = "YES"
@@ -417,6 +447,15 @@ function gui.result:valuechanged_cb()
 		gui.task_tomorrow.active = "YES"
 		gui.task_anytime.active = "YES"
 	end
+	if self.value and self.value ~= "0" then
+		self.lastvalue = self.value
+		if gui.task_table[tonumber(self.value)].recurrent == "1" then
+			gui.task_recurrency.active = "NO"
+		else
+			gui.task_recurrency.active = "YES"
+		end
+	end
+	
 end
 
 function gui.task_new:action()
@@ -427,12 +466,12 @@ end
 gui.task_edit.action = gui.result.dblclick_cb
 
 function gui.task_delete:action()
-	local task = gui.task_table[tonumber(gui.result.value)]
-	local question = "Excluir tarefa?"
-	if task.recurrent ~= "1" then question = "Tarefa recorrente concluída?" end
-	if gui.question(question) == 1 then
-		eng.del_task(task.id)
-		gui.task_load()
+	if gui.result.value ~= nil and gui.result.value ~= "0" then
+		local task = gui.task_table[tonumber(gui.result.value)]
+		if gui.question("Excluir tarefa?") == 1 then
+			eng.del_task(task.id)
+			gui.task_load()
+		end
 	end
 end
 
@@ -472,5 +511,34 @@ function gui.task_anytime:action()
 		iup.SetFocus(gui.result)
 	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = ""
+	end
+end
+
+gui.dblist = { }
+
+function gui.db_load()
+	local value = gui.dbname.value
+	if value == "0" then value = "1" end
+	gui.dblist = { }
+	gui.dbname.removeitem = "ALL"
+	for file in lfs.dir(".") do
+		if file:sub(-7, -1) == ".sqlite" then
+			table.insert(gui.dblist, file)
+			gui.dbname.appenditem = file:sub(1, -8)
+		end
+	end
+	if #gui.dblist == 0 then gui.dialog:hide() end
+	gui.dbname.lastvalue = value
+	gui.dbname.value = value
+end
+
+function gui.dbname:valuechanged_cb()
+	if gui.dbname.value ~= nil and gui.dbname.value ~= "0" and gui.dbname.lastvalue ~= gui.dbname.value then
+		gui.dbname.lastvalue = gui.dbname.value
+		eng.done()
+		eng.init(gui.dblist[tonumber(gui.dbname.value)])
+		gui.tag_load()
+		gui.opt_load()
+		gui.task_load()
 	end
 end
