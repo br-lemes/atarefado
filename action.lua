@@ -527,9 +527,14 @@ function gui.db_load()
 			gui.dbname.appenditem = file:sub(1, -8)
 		end
 	end
-	if #gui.dblist == 0 then gui.dialog:hide() end
-	gui.dbname.lastvalue = value
-	gui.dbname.value = value
+	if #gui.dblist == 0 then
+		eng.init('atarefado.sqlite')
+		eng.done()
+		gui.db_load()
+	else
+		gui.dbname.lastvalue = value
+		gui.dbname.value = value
+	end
 end
 
 function gui.dbname:valuechanged_cb()
