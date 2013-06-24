@@ -21,7 +21,7 @@ end
 gui.dialog = iup.dialog{
 	elemname   = nil,
 	font       = "HELVETICA_BOLD_12",
-	title      = "Atarefado",
+	title      = "Atarefado 1.0",
 	rastersize = "600x440",
 	iup.split{
 		elemname = "",
