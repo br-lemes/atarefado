@@ -52,7 +52,7 @@ function gui.dialog:k_any(k)
 			end
 		elseif iup.GetFocus() == gui.task_date then
 			gui.task_ok:action()
-		elseif gui.result.value ~= nil and gui.result.value ~= "0" then
+		elseif gui.zbox.value == gui.result_box and gui.result.value ~= nil and gui.result.value ~= "0" then
 			gui.result:dblclick_cb()
 		end
 	elseif k == iup.K_DEL and iup.GetFocus() ~= gui.search and gui.zbox.value == gui.result_box then
