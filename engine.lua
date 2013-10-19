@@ -276,6 +276,8 @@ function eng.gettasks(pattern, flags, tag)
 	local row = { }
 	local result = { }
 	while cur:fetch(row, 'a') do
+		local a, b = pcall(string.match,
+			row.name:upper(), pattern:upper())
 		if ((eng.isanytime(row.date) and flags.anytime) or
 			(eng.istomorrow(row.date) and flags.tomorrow) or
 			(eng.isfuture(row.date) and flags.future) or
@@ -283,8 +285,7 @@ function eng.gettasks(pattern, flags, tag)
 			(eng.isyesterday(row.date) and flags.yesterday) or
 			(eng.islate(row.date) and flags.late)) and
 			(not tag or (tag == -1 and eng.has_notags(row.id)) or
-			eng.has_tag(row.id, tag)) and
-			row.name:upper():match(pattern:upper()) then
+			eng.has_tag(row.id, tag)) and (a and b) then
 				local copy = { }
 				for k,v in pairs(row) do copy[k] = v end
 				table.insert(result, copy)
