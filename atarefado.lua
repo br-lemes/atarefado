@@ -11,6 +11,8 @@ require("icons")
 require("layout")
 require("action")
 
+iup.SetGlobal("UTF8MODE", "NO")
+
 gui.dialog:show()
 gui.db_load()
 eng.init(gui.dblist[1])
