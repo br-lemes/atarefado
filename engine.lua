@@ -202,9 +202,9 @@ end
 
 -- removes a task or goes to next if it's recurrent
 -- return: 1 or nil and error message
-function eng.del_task(task)
+function eng.del_task(task, force)
 	local task = eng.get_task(task)
-	if task.recurrent == '1' then
+	if task.recurrent == '1' or (task.recurrent ~= '1' and force) then
 		local cur, err = eng.con:execute(string.format(
 			'DELETE FROM tasks WHERE id=%d;', task.id))
 		return cur, err
