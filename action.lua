@@ -57,6 +57,8 @@ function gui.dialog:k_any(k)
 		end
 	elseif k == iup.K_DEL and iup.GetFocus() ~= gui.search and gui.zbox.value == gui.result_box then
 		gui.task_delete:action()
+	elseif k == 268500991 --[[iup.K_sDEL]] and iup.GetFocus() ~= gui.search and gui.zbox.value == gui.result_box then
+		gui.task_delete:action(true)
 	elseif k == iup.K_DOWN and iup.GetFocus() == gui.search then
 		iup.SetFocus(gui.result)
 		gui.result.value = "1"
@@ -465,11 +467,19 @@ end
 
 gui.task_edit.action = gui.result.dblclick_cb
 
-function gui.task_delete:action()
+function gui.task_delete:action(force)
 	if gui.result.value ~= nil and gui.result.value ~= "0" then
 		local task = gui.task_table[tonumber(gui.result.value)]
-		if gui.question("Excluir tarefa?") == 1 then
-			eng.del_task(task.id)
+		local question = "Excluir tarefa?"
+		if task.recurrent ~= "1" then
+			if force then
+				question = "Excluir permanentemente tarefa recorrente?"
+			else
+				question = "Tarefa concluída?"
+			end
+		end
+		if gui.question(question) == 1 then
+			eng.del_task(task.id, force)
 			gui.task_load()
 		end
 	end
