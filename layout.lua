@@ -62,14 +62,14 @@ gui.dialog = iup.dialog{
 							active = "NO",
 						},
 						iup.fill{},
-						iup.label{
-							name    = "task_recurrency",
-							image   = gui.refresh,
-							active  = "NO",
-							padding = "5x5",
-							tip     = "Tarefa recorrente",
-						},
-						iup.fill{},
+--						iup.label{
+--							name    = "task_recurrency",
+--							image   = gui.refresh,
+--							active  = "NO",
+--							padding = "5x5",
+--							tip     = "Tarefa recorrente",
+--						},
+--						iup.fill{},
 						iup.button{
 							name   = "task_today",
 							tip    = "Marcar para hoje (F2)",

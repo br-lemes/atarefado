@@ -438,10 +438,10 @@ function gui.result:valuechanged_cb()
 	if self.value == "0" or self.value == nil then
 		gui.task_edit.active = "NO"
 		gui.task_delete.active = "NO"
+		gui.task_delete.image = gui.note_delete
 		gui.task_today.active = "NO"
 		gui.task_tomorrow.active = "NO"
 		gui.task_anytime.active = "NO"
-		gui.task_recurrency.active = "NO"
 	else
 		gui.task_edit.active = "YES"
 		gui.task_delete.active = "YES"
@@ -452,9 +452,9 @@ function gui.result:valuechanged_cb()
 	if self.value and self.value ~= "0" then
 		self.lastvalue = self.value
 		if gui.task_table[tonumber(self.value)].recurrent == "1" then
-			gui.task_recurrency.active = "NO"
+			gui.task_delete.image = gui.note_delete
 		else
-			gui.task_recurrency.active = "YES"
+			gui.task_delete.image = gui.note_go
 		end
 	end
 	
