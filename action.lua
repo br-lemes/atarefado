@@ -439,6 +439,7 @@ function gui.result:valuechanged_cb()
 		gui.task_edit.active = "NO"
 		gui.task_delete.active = "NO"
 		gui.task_delete.image = gui.note_delete
+		gui.task_delete.tip = "Excluir Tarefa (DEL)"
 		gui.task_today.active = "NO"
 		gui.task_tomorrow.active = "NO"
 		gui.task_anytime.active = "NO"
@@ -453,8 +454,10 @@ function gui.result:valuechanged_cb()
 		self.lastvalue = self.value
 		if gui.task_table[tonumber(self.value)].recurrent == "1" then
 			gui.task_delete.image = gui.note_delete
+			gui.task_delete.tip = "Excluir Tarefa (DEL)"
 		else
 			gui.task_delete.image = gui.note_go
+			gui.task_delete.tip = "Concluir Tarefa (DEL)"
 		end
 	end
 	
