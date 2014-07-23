@@ -560,3 +560,33 @@ function gui.dbname:valuechanged_cb()
 		gui.task_load()
 	end
 end
+
+function gui.savehtml:action()
+	gui.savedlg:popup()
+	if gui.savedlg.status ~= "-1" then
+		-- TODO: completar extensão .html
+		local htmlfile = io.open(gui.savedlg.value, "w")
+		if htmlfile then
+			htmlfile:write(string.format([[
+<HTML>
+	<HEAD>
+		<TITLE>Atarefado - %s</TITLE>
+	<HEAD>
+<BODY>
+	<H1>Atarefado - %s</H1>
+	<H2>Tag: %s</H2>
+	<H2>Filtro: %s</H2>
+	<UL>
+]], gui.dbname[gui.dbname.value], gui.dbname[gui.dbname.value],
+			gui.taglist[gui.taglist.value], gui.search.value))
+			-- TODO: mostrar ícones selecionados
+			for i = 1, gui.result.count do
+				-- TODO: ícone de cada item
+				htmlfile:write(string.format("\t\t<LI>%s</LI>\n",
+					gui.result[i]))
+			end
+			htmlfile:write("\t</UL>\n</BODY>\n</HTML>\n")
+			htmlfile:close()
+		end
+	end
+end
