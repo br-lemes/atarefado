@@ -561,10 +561,16 @@ function gui.dbname:valuechanged_cb()
 	end
 end
 
+function gui.savedlg:file_cb(file_name, status)
+	if status == "OK" and not file_name:match("%.[^\\/]+$") then
+		gui.savedlg.file = file_name:match("[\\/]([^\\/.]+)%.?$") .. ".html"
+		return iup.CONTINUE
+	end
+end
+
 function gui.savehtml:action()
 	gui.savedlg:popup()
 	if gui.savedlg.status ~= "-1" then
-		-- TODO: completar extensão .html
 		local htmlfile = io.open(gui.savedlg.value, "w")
 		if htmlfile then
 			htmlfile:write(string.format([[
