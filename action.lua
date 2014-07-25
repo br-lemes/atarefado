@@ -573,6 +573,25 @@ function gui.savehtml:action()
 	if gui.savedlg.status ~= "-1" then
 		local htmlfile = io.open(gui.savedlg.value, "w")
 		if htmlfile then
+			local filter = ""
+			if gui.anytime.value == "ON" then
+				filter = "<LI class='green' style='float: left; padding-right:32px;'>Qualquer dia</LI>"
+			end
+			if gui.tomorrow.value == "ON" then
+				filter = filter .. "<LI class='blue' style='float: left; padding-right:32px;'>Amanhã</LI>"
+			end
+			if gui.future.value == "ON" then
+				filter = filter .. "<LI class='black' style='float: left; padding-right:32px;'>Futuras</LI>"
+			end
+			if gui.today.value == "ON" then
+				filter = filter .. "<LI class='orange' style='float: left; padding-right:32px;'>Hoje</LI>"
+			end
+			if gui.yesterday.value == "ON" then
+				filter = filter .. "<LI class='purple' style='float: left; padding-right:32px;'>Ontem</LI>"
+			end
+			if gui.late.value == "ON" then
+				filter = filter .. "<LI class='red' sstyle='float: left; padding-right:32px;'>Vencidas</LI>"
+			end
 			htmlfile:write(string.format([[
 <HTML>
 	<HEAD>
@@ -589,11 +608,11 @@ function gui.savehtml:action()
 <BODY>
 	<H1>Atarefado - %s</H1>
 	<H2>Tag: %s</H2>
-	<H2>Filtro: %s</H2>
+	<H2>Filtros: %s</H2>
+	<UL>%s</UL>
 	<UL>
 ]], gui.dbname[gui.dbname.value], gui.dbname[gui.dbname.value],
-			gui.taglist[gui.taglist.value], gui.search.value))
-			-- TODO: mostrar ícones selecionados
+			gui.taglist[gui.taglist.value], gui.search.value, filter))
 			for i = 1, gui.result.count do
 				local v = gui.task_table[i]
 				if eng.isanytime(v.date) then
@@ -609,7 +628,7 @@ function gui.savehtml:action()
 				elseif eng.islate(v.date) then
 					v.color = "red"
 				end
-				htmlfile:write(string.format("\t\t<LI class=\"%s\">%s</LI>\n",
+				htmlfile:write(string.format('\t\t<LI class="%s">%s</LI>\n',
 					v.color, v.name))
 			end
 			htmlfile:write("\t</UL>\n</BODY>\n</HTML>\n")
