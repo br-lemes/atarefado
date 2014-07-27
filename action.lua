@@ -590,11 +590,13 @@ function gui.savehtml:action()
 				filter = filter .. "<LI class='purple' style='float: left; padding-right:32px;'>Ontem</LI>"
 			end
 			if gui.late.value == "ON" then
-				filter = filter .. "<LI class='red' sstyle='float: left; padding-right:32px;'>Vencidas</LI>"
+				filter = filter .. "<LI class='red' style='float: left; padding-right:32px;'>Vencidas</LI>"
 			end
 			htmlfile:write(string.format([[
+<!DOCTYPE html>
 <HTML>
 	<HEAD>
+		<meta charset="UTF-8">
 		<TITLE>Atarefado - %s</TITLE>
 		<STYLE>
 			li.black {list-style-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB94HGgIMG0ww7poAAAJiSURBVDjLpZOxT1NRGMV/97373n0vfSDB1kVSEaMyKFgSwoAmTjiAJqyS0MVE/wXjrKyMmOgACW5dVAbTkDiYgAxUHChJFShJ0wq1BdrSQnnvOUgJGnDxS+7w3XO/8yXn3CN83+d/Svzdj4w87JPSGBNC3D0J+L7/8fCw/nR6+s1nwD+NQI9GRyccp/lRJHKLcPgSplIAHOzvs7GRJpH4Qrm8+2pycuoJ4J4kkNHoaKz1fPDB/cEhUt9XWVpaIp/PAxAMBunu7ubqlQ7ezbyn8DP/enJy6jHg6oAYHh6+EwqFxgYHh/gQnyWZTOK6LkopTNOkXq+TTqfJ5ja5NzBAOr3e09bWNptMJjc0wHAc53lvbx9z8wsUiwVs28ayLJRSKKWwLAvbtikWC8zNL9Db24fjOC8AQwK2lLK/qamZXC6LZVlomnaq4p7nkctl6bp5A13X+wFbAqYQgkw2i1IKXddOMefYC1zXI5PNIoQAMCUghBDsVSooZTWAM0tKn71KpfFOSAAhoFQqY5rqpMVnfp1SqUxjjwT8Wm1/sX5Y7wkEHDzP++e4pmlUKmVqtf1FwJfAQSqVGnecwFRLSwsgziT5La7PdmGLVCo1DhzogJ/JZIrt7Zc73MP69VDoAtIw0HX9+EgpMQwDXdNYX/vG1tbW23g8/hIo6oAHeMvLy4vhcDhcq1avKaUIBJowlcIwDITQ2N3ZZn1tlc3NHzOxWOwZkAOqDcl14BxwMRKJ3O7s7Hxi23YXjaQKQbVa/bqysjKRSCQ+ARlgB3D/CBMQAFqBIOAc3XEUnDKQBwpApRGmX7hz407psoIvAAAAAElFTkSuQmCC');}
@@ -604,12 +606,13 @@ function gui.savehtml:action()
 			li.purple{list-style-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB94HGQISA5mo5v0AAAJlSURBVDjLpZNNSJRRGIWf+/eNg5q/aaIYaCghWlgRYUmEQUi0qK1LIaFAcBdBrUpqEQYJBrZz6yYKpKxkKrAgsSREk2JEnXT+HJ1xZnTm+1qMA2YSQS+cxX25nAvnuUc4jsP/jNh9fnBu8KRb5fZKW57NmgshsKU9Fk/HbvS87vwAOHsZqP62oYH8wrzO+gsHqWgswbg1AFvxFL6pIDMjXtZXo4PXRju6gPROA93fNjRcVFFwqbX7KJH5NZanV0isJgHIKXRRfriMgup9eB5OEvJFnlwf7bgKpBUgbrXcP1NRXtHb2t3M/PsFQt+CkHJQWqG0wtmyWV9cZyOYoPFyHb7JYPORohOvxuZfzEvA7M85cKehvZaVST/JUBJjWWhjobXJyFgYyyIZSrIy6aehvZZSV9ldwEjAbUlXS3FVPhu+OFoZlDIoqX+XMmhl2PDFKa7Kx0irBXBrwAJIBJJoY/7ksnNUJv9EIJndWBoQCEhHbZTS/8Q+HbWzDwmd5bwZTmG0wbb//rGkzNwVIuMgASeaWpuI+GMYYzBaodXeMlphjCHijxFNrU0AjgQ2x5c8fd5ZH1IojLYyQe4KUSuD0RZSKLyzPsaXPH3ApgKcr4HP4WNlp2oSQbu+sqYcrTRSKKSUSKkyBlqDFEx4pvEGfjx99OneYyCsABuw33hHJppKjlfHlrfqctw55Bfm4XK5MMbgAP6lMFMfZ/jun3t++23PTeAnEBc7ABUAlRcPXTndWnW+q8BV2JQtqhAQSa5+8Sy8HHg2N/wOWAQiQFrsopwLFAOlQN72ju3iRIEAEAJi2TL9AreD3KRrTpxGAAAAAElFTkSuQmCC');}
 			li.red   {list-style-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB94HGQIOC3EEM5IAAAJkSURBVDjLpZPPS1RRHMU/98d7b56/ddIURSMimbCilYiREqELwdZtqkWUFP0B0rraClFY5KZNq4gEN0PEREFJKJSWmiCa1tSoM6/x1zDOm9tiZsBKadGFs7g/zuHyPecIYwz/s8Sf+2etodYSyW1lTGdBXAiBL0RkPUv/2dGpUcDsJqDCbaHB0rKySw2nz1AVakEVuQD4m1vEpyZZevGctWTyYdebqT7A3ymgw22hJxU1Nb0tl6+xPTNBavQlmeVo7rK6jkBrB1bzUSYf3MX7ERvqejt1BfAFIIZOHDp1ZH915PjV66SGH7O9NA9Kg5Q5+WwW/AxWwwECved4f+8OM7GVjovjs68kYNXb+mZTdw/pyAj+chRZVIx0XaTj5OC6yKJi/OUo6cgITd091NnqFmBJwA0o2V4ZrMBfmEM6LtJ2kNr6HbaDdFz8hTkqgxU4UrYDrgZsA8jFObQdwEgJQuzumTEIpZGLcwUbbA0IhMR4CaTtYPYiF2wzBuMlQEgAofNGk/USKCdA9h/Bkvm3hV9KwCQz/ri3mULbDlpbqD2gtYW2HbzNFMmMPw4YCaTDMW9gIRpDKo22HZRl/TVEZeXIUmkWojHCMW8ASCvAvEusJTqDZQe3N9ab62trcySlEFIhlUJpjdIWQkjGPk0z660P93+cvw8kFJAFsk+/rY63l5c0ppLeYTfgUFxamsuAZSGEYDUeZ2JmlunV5MiFsc83gO/AVmHkCigH6s831pzsravqC2p1zOwozGrG/zAcjQ8++hJ7DXwFfhaizA6RYqAK2AeU5M/IF2cdWAHiwEahTL8A2T7ZYtz52FMAAAAASUVORK5CYII=');}
 		</STYLE>
-	<HEAD>
+	</HEAD>
 <BODY>
 	<H1>Atarefado - %s</H1>
 	<H2>Tag: %s</H2>
 	<H2>Filtros: %s</H2>
 	<UL>%s</UL>
+	<BR>
 	<UL>
 ]], gui.dbname[gui.dbname.value], gui.dbname[gui.dbname.value],
 			gui.taglist[gui.taglist.value], gui.search.value, filter))
