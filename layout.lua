@@ -198,7 +198,7 @@ gui.dialog = iup.dialog{
 							expand = "HORIZONTAL",
 							mask   = "20/d/d-/d/d-/d/d",
 						},
-						iup.fill{rastersize = "100"},
+						iup.fill{rastersize = "80"},
 						iup.button{
 							name   = "task_cancel",
 							tip    = "ESC",
