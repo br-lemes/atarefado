@@ -32,7 +32,7 @@ function gui.dialog:k_any(k)
 		else
 			self:close_cb()
 		end
-	elseif (k == iup.K_cC or iup.K_cc) and iup.GetFocus() == gui.result then
+	elseif (k == 805306435 --[[iup.K_cC]] or k == 536870979 --[[iup.K_cc]]) and iup.GetFocus() == gui.result then
 		if gui.result.value ~= nil and gui.result.value ~= "0" then
 			for k,v in pairs(gui.task_table[tonumber(gui.result.value)]) do
 				print(k, v)
