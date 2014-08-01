@@ -1,4 +1,6 @@
 
+gui.clipboard = iup.clipboard{}
+
 function gui.question(message)
 	local dlg = iup.messagedlg{
 		title      = "Confirmar",
@@ -34,10 +36,10 @@ function gui.dialog:k_any(k)
 		end
 	elseif (k == 805306435 --[[iup.K_cC]] or k == 536870979 --[[iup.K_cc]]) and iup.GetFocus() == gui.result then
 		if gui.result.value ~= nil and gui.result.value ~= "0" then
-			for k,v in pairs(gui.task_table[tonumber(gui.result.value)]) do
-				print(k, v)
-			end
-			io.stdout:flush()
+			local item = gui.task_table[tonumber(gui.result.value)]
+			gui.clipboard.text = nil
+			gui.clipboard.text = string.format("gui.clipbuf = {\n\tname = %q,\n\tdate = %q,\n\tcomment = %q,\n\trecurrent = %q\n}\n",
+				item.name, item.date, item.comment, item.recurrent)
 		end
 	elseif k == iup.K_CR then
 		if iup.GetFocus() == gui.search then
