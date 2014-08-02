@@ -37,9 +37,25 @@ function gui.dialog:k_any(k)
 	elseif (k == 805306435 --[[iup.K_cC]] or k == 536870979 --[[iup.K_cc]]) and iup.GetFocus() == gui.result then
 		if gui.result.value ~= nil and gui.result.value ~= "0" then
 			local item = gui.task_table[tonumber(gui.result.value)]
+			local tags = eng.get_tags(item.id)
+			local buff = ""
+			for k,v in pairs(tags) do
+				if k <= 38 then
+					buff = string.format("%s\t\t[%d] = %q,\n", buff, k, v)
+				end
+			end
 			gui.clipboard.text = nil
-			gui.clipboard.text = string.format("gui.clipbuf = {\n\tname = %q,\n\tdate = %q,\n\tcomment = %q,\n\trecurrent = %q\n}\n",
-				item.name, item.date, item.comment, item.recurrent)
+			gui.clipboard.text = string.format([[
+eng.new_task{
+	name = %q,
+	date = %q,
+	comment = %q,
+	recurrent = %q,
+	tags = {
+%s
+	}
+}
+]], item.name, item.date, item.comment, item.recurrent, buff)
 		end
 	elseif k == iup.K_CR then
 		if iup.GetFocus() == gui.search then
