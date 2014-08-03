@@ -163,9 +163,15 @@ function eng.has_notags(task)
 	local cur = eng.con:execute(string.format(
 		'SELECT * FROM tags WHERE task=%d;', task))
 	local row = { }
-	cur:fetch(row)
+	while cur:fetch(row, "a") do
+		-- ignore the first 38 special tags
+		if tonumber(row.tag) > 38 then 
+			cur:close()
+			return false
+		end
+	end
 	cur:close()
-	return row[1] == nil
+	return true
 end
 
 -- creates a new task
