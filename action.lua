@@ -39,9 +39,9 @@ function gui.dialog:k_any(k)
 			local item = gui.task_table[tonumber(gui.result.value)]
 			local tags = eng.get_tags(item.id)
 			local buff = ""
-			for k,v in pairs(tags) do
-				if k <= 38 then
-					buff = string.format("%s\t\t[%d] = %q,\n", buff, k, v)
+			for i = 1,38 do
+				if tags[i] then
+					buff = string.format("%s %d,", buff, i)
 				end
 			end
 			gui.clipboard.text = nil
@@ -51,9 +51,7 @@ eng.new_task{
 	date = %q,
 	comment = %q,
 	recurrent = %q,
-	tags = {
-%s
-	}
+	tags = {%s }
 }
 ]], item.name, item.date, item.comment, item.recurrent, buff)
 		end
