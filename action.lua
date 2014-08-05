@@ -279,13 +279,15 @@ function gui.new_cancel:action()
 end
 
 function gui.edit_button:action()
-	gui.optbox.active      = "NO"
-	gui.new_button.active  = "NO"
-	gui.edit_button.active = "NO"
-	gui.del_button.active  = "NO"
-	gui.zbox.value = gui.edit_tag
-	gui.search.value = gui.tag_table[tonumber(gui.taglist.value)].name
-	iup.SetFocus(gui.search)
+	if tonumber(gui.taglist.value) >= 3 then
+		gui.optbox.active      = "NO"
+		gui.new_button.active  = "NO"
+		gui.edit_button.active = "NO"
+		gui.del_button.active  = "NO"
+		gui.zbox.value = gui.edit_tag
+		gui.search.value = gui.tag_table[tonumber(gui.taglist.value)].name
+		iup.SetFocus(gui.search)
+	end
 end
 
 gui.taglist.dblclick_cb = gui.edit_button.action
