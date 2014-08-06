@@ -56,7 +56,7 @@ eng.new_task{
 ]], item.name, item.date, item.comment, item.recurrent, buff)
 		end
 	elseif (k == 805306454 --[[iup.K_cV]] or k == 536870998 --[[iup.K_cv]]) and iup.GetFocus() == gui.result then
-		if gui.clipboard.text:match([[
+		if gui.clipboard.text and gui.clipboard.text:match([[
 eng%.new_task{
 	name = .*,
 	date = .*,
