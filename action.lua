@@ -150,7 +150,7 @@ function gui.tag_load()
 	local id    = 0
 	local value = tonumber(gui.taglist.value)
 	if gui.tag_table and gui.tag_table[value] then
-		id = gui.tag_table[tonumber(gui.taglist.value)].id
+		id = gui.tag_table[value].id
 	end
 	gui.tag_table = { }
 	gui.tag_table.id = { }
@@ -255,6 +255,7 @@ function gui.new_button:action()
 end
 
 function gui.new_ok:action()
+	gui.taglist.lastvalue = nil
 	eng.new_tag(gui.search.value)
 	local cur = eng.con:execute('SELECT last_insert_rowid();')
 	local row = { }
@@ -279,13 +280,14 @@ function gui.new_cancel:action()
 end
 
 function gui.edit_button:action()
-	if tonumber(gui.taglist.value) >= 3 then
+	local i = tonumber(gui.taglist.value)
+	if i >= 3 then
 		gui.optbox.active      = "NO"
 		gui.new_button.active  = "NO"
 		gui.edit_button.active = "NO"
 		gui.del_button.active  = "NO"
 		gui.zbox.value = gui.edit_tag
-		gui.search.value = gui.tag_table[tonumber(gui.taglist.value)].name
+		gui.search.value = gui.tag_table[i].name
 		iup.SetFocus(gui.search)
 	end
 end
@@ -293,6 +295,7 @@ end
 gui.taglist.dblclick_cb = gui.edit_button.action
 
 function gui.edit_ok:action()
+	gui.taglist.lastvalue = nil
 	eng.upd_tag(gui.tag_table[tonumber(gui.taglist.value)].id, gui.search.value)
 	gui.tag_load()
 	gui.edit_cancel:action()
@@ -313,6 +316,7 @@ end
 function gui.del_button:action()
 	local i = tonumber(gui.taglist.value)
 	if i >= 3 and gui.question("Excluir tag?") == 1 then
+		gui.taglist.lastvalue = nil
 		eng.del_tag(gui.tag_table[i].id)
 		gui.tag_load()
 		iup.SetFocus(gui.search)
@@ -391,8 +395,7 @@ function gui.taglist:valuechanged_cb()
 		eng.con:execute(string.format(
 			'UPDATE options SET value=%q WHERE name="tag";', self.value, self.name))
 		self.lastvalue = self.value
-		local i = tonumber(self.value)
-		if i >= 3 then
+		if tonumber(self.value) >= 3 then
 			gui.edit_button.active = "YES"
 			gui.del_button.active  = "YES"
 		else
@@ -408,9 +411,10 @@ function gui.result:dblclick_cb()
 	if gui.result.value == "0" or gui.result.value == nil then
 		item = { name = gui.search.value, date = "", comment = "", recurrent = "1" }
 		local value = ""
-		if tonumber(gui.taglist.value) > 2 then
+		local j = tonumber(gui.taglist.value)
+		if j > 2 then
 			for i = 3, #gui.tag_table do
-				if i == tonumber(gui.taglist.value) then
+				if i == j then
 					value = value .. "+"
 				else
 					value = value .. "-"
@@ -494,7 +498,6 @@ function gui.result:valuechanged_cb()
 			gui.task_delete.tip = "Concluir Tarefa (DEL)"
 		end
 	end
-	
 end
 
 function gui.task_new:action()
@@ -587,6 +590,7 @@ end
 function gui.dbname:valuechanged_cb()
 	if gui.dbname.value ~= nil and gui.dbname.value ~= "0" and gui.dbname.lastvalue ~= gui.dbname.value then
 		gui.dbname.lastvalue = gui.dbname.value
+		gui.taglist.lastvalue = nil
 		eng.done()
 		eng.init(gui.dblist[tonumber(gui.dbname.value)])
 		gui.tag_load()
