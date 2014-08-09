@@ -677,3 +677,5 @@ function gui.savehtml:action()
 		end
 	end
 end
+
+gui.task_tag.dblclick_cb = gui.task_ok.action
