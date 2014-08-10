@@ -55,7 +55,7 @@ eng.new_task{
 }
 ]], item.name, item.date, item.comment, item.recurrent, buff)
 		end
-	elseif (k == 805306454 --[[iup.K_cV]] or k == 536870998 --[[iup.K_cv]]) and iup.GetFocus() == gui.result then
+	elseif (k == 805306454 --[[iup.K_cV]] or k == 536870998 --[[iup.K_cv]]) and (iup.GetFocus() == gui.result or iup.GetFocus() == gui.search) then
 		if gui.clipboard.text and gui.clipboard.text:match([[
 eng%.new_task{
 	name = .*,
@@ -70,6 +70,7 @@ eng%.new_task{
 			if n > 2 then s = tostring(gui.tag_table[n].id) end
 			loadstring(string.format(gui.clipboard.text, s))()
 			gui.task_load()
+			return iup.IGNORE
 		end
 	elseif k == iup.K_CR then
 		if iup.GetFocus() == gui.search then
