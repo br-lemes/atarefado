@@ -1,4 +1,6 @@
 
+gui = { }
+
 function gui.option(self)
 	eng.con:execute(string.format(
 		'UPDATE options SET value=%q WHERE name=%q;', self.value, self.name))
@@ -53,44 +55,44 @@ gui.dialog = iup.dialog{
 						iup.button{
 							name   = "task_new",
 							tip    = "Nova Tarefa (ENTER)",
-							image  = gui.note_add,
+							image  = ico.note_add,
 							active = "YES",
 						},
 						iup.button{
 							name   = "task_edit",
 							tip    = "Editar Tarefa (ENTER)",
-							image  = gui.note_edit,
+							image  = ico.note_edit,
 							active = "NO",
 						},
 						iup.button{
 							name   = "task_delete",
 							tip    = "Excluir Tarefa (DEL)",
-							image  = gui.note_delete,
+							image  = ico.note_delete,
 							active = "NO",
 						},
 						iup.fill{},
 						iup.button{
 							name    = "savehtml",
 							tip     = "Salvar como HTML",
-							image   = gui.html,
+							image   = ico.html,
 						},
 						iup.fill{},
 						iup.button{
 							name   = "task_today",
 							tip    = "Marcar para hoje (F2)",
-							image  = gui.flag_orange,
+							image  = ico.flag_orange,
 							active = "NO",
 						},
 						iup.button{
 							name   = "task_tomorrow",
 							tip    = "Deixar para amanhã (F3)",
-							image  = gui.flag_blue,
+							image  = ico.flag_blue,
 							active = "NO",
 						},
 						iup.button{
 							name   = "task_anytime",
 							tip    = "Deixar para qualquer dia (F4)",
-							image  = gui.flag_green,
+							image  = ico.flag_green,
 							active = "NO",
 						},
 					},
@@ -229,7 +231,7 @@ gui.dialog = iup.dialog{
 				margin = "0",
 				iup.toggle{
 					name   = "anytime",
-					image  = gui.green,
+					image  = ico.green,
 					tip    = "Qualquer dia",
 					value  = "ON",
 					action = gui.option,
@@ -237,7 +239,7 @@ gui.dialog = iup.dialog{
 				iup.fill{},
 				iup.toggle{
 					name   = "tomorrow",
-					image  = gui.blue,
+					image  = ico.blue,
 					tip    = "Amanhã",
 					value  = "ON",
 					action = gui.option,
@@ -245,7 +247,7 @@ gui.dialog = iup.dialog{
 				iup.fill{},
 				iup.toggle{
 					name   = "future",
-					image  = gui.black,
+					image  = ico.black,
 					tip    = "Futuras",
 					value  = "ON",
 					action = gui.option,
@@ -256,7 +258,7 @@ gui.dialog = iup.dialog{
 				margin = "0",
 				iup.toggle{
 					name   = "today",
-					image  = gui.orange,
+					image  = ico.orange,
 					tip    = "Hoje",
 					value  = "ON",
 					action = gui.option,
@@ -264,7 +266,7 @@ gui.dialog = iup.dialog{
 				iup.fill{},
 				iup.toggle{
 					name   = "yesterday",
-					image  = gui.purple,
+					image  = ico.purple,
 					tip    = "Ontem",
 					value  = "ON",
 					action = gui.option,
@@ -272,7 +274,7 @@ gui.dialog = iup.dialog{
 				iup.fill{},
 				iup.toggle{
 					name   = "late",
-					image  = gui.red,
+					image  = ico.red,
 					tip    = "Vencidas",
 					value  = "ON",
 					action = gui.option,
@@ -293,21 +295,21 @@ gui.dialog = iup.dialog{
 				iup.button{
 					name   = "new_button",
 					tip    = "Nova Tag (F10)",
-					image  = gui.tag_blue_add,
+					image  = ico.tag_blue_add,
 					active = "YES",
 				},
 				iup.fill{},
 				iup.button{
 					name   = "edit_button",
 					tip    = "Editar Tag (F11)",
-					image  = gui.tag_blue_edit,
+					image  = ico.tag_blue_edit,
 					active = "NO",
 				},
 				iup.fill{},
 				iup.button{
 					name   = "del_button",
 					tip    = "Excluir Tag (F12)",
-					image  = gui.tag_blue_delete,
+					image  = ico.tag_blue_delete,
 					active = "NO",
 				},
 			},

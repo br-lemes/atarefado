@@ -206,17 +206,17 @@ function gui.item_load()
 	if v then
 		gui.result.appenditem = v.name
 		if eng.isanytime(v.date) then
-			gui.result["image" .. n] = gui.green
+			gui.result["image" .. n] = ico.green
 		elseif eng.istomorrow(v.date) then
-			gui.result["image" .. n] = gui.blue
+			gui.result["image" .. n] = ico.blue
 		elseif eng.isfuture(v.date) then
-			gui.result["image" .. n] = gui.black
+			gui.result["image" .. n] = ico.black
 		elseif eng.istoday(v.date) then
-			gui.result["image" .. n] = gui.orange
+			gui.result["image" .. n] = ico.orange
 		elseif eng.isyesterday(v.date) then
-			gui.result["image" .. n] = gui.purple
+			gui.result["image" .. n] = ico.purple
 		elseif eng.islate(v.date) then
-			gui.result["image" .. n] = gui.red
+			gui.result["image" .. n] = ico.red
 		end
 		gui.result.itemcount = n
 	else
@@ -477,7 +477,7 @@ function gui.result:valuechanged_cb()
 	if self.value == "0" or self.value == nil then
 		gui.task_edit.active = "NO"
 		gui.task_delete.active = "NO"
-		gui.task_delete.image = gui.note_delete
+		gui.task_delete.image = ico.note_delete
 		gui.task_delete.tip = "Excluir Tarefa (DEL)"
 		gui.task_today.active = "NO"
 		gui.task_tomorrow.active = "NO"
@@ -492,10 +492,10 @@ function gui.result:valuechanged_cb()
 	if self.value and self.value ~= "0" then
 		self.lastvalue = self.value
 		if gui.task_table[tonumber(self.value)].recurrent == "1" then
-			gui.task_delete.image = gui.note_delete
+			gui.task_delete.image = ico.note_delete
 			gui.task_delete.tip = "Excluir Tarefa (DEL)"
 		else
-			gui.task_delete.image = gui.note_go
+			gui.task_delete.image = ico.note_go
 			gui.task_delete.tip = "Concluir Tarefa (DEL)"
 		end
 	end

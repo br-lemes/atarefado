@@ -1,4 +1,6 @@
-gui.note_go = iup.imagergba{
+ico = { }
+
+ico.note_go = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -29,7 +31,7 @@ gui.note_go = iup.imagergba{
 	},
 }
 
-gui.note_edit = iup.imagergba{
+ico.note_edit = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -60,7 +62,7 @@ gui.note_edit = iup.imagergba{
 	},
 }
 
-gui.flag_orange = iup.imagergba{
+ico.flag_orange = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -91,7 +93,7 @@ gui.flag_orange = iup.imagergba{
 	},
 }
 
-gui.black = iup.imagergba{
+ico.black = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -122,7 +124,7 @@ gui.black = iup.imagergba{
 	},
 }
 
-gui.note_delete = iup.imagergba{
+ico.note_delete = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -153,7 +155,7 @@ gui.note_delete = iup.imagergba{
 	},
 }
 
-gui.tag_blue_edit = iup.imagergba{
+ico.tag_blue_edit = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -184,7 +186,7 @@ gui.tag_blue_edit = iup.imagergba{
 	},
 }
 
-gui.tag_blue_add = iup.imagergba{
+ico.tag_blue_add = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -215,7 +217,7 @@ gui.tag_blue_add = iup.imagergba{
 	},
 }
 
-gui.flag_green = iup.imagergba{
+ico.flag_green = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -246,7 +248,7 @@ gui.flag_green = iup.imagergba{
 	},
 }
 
-gui.flag_blue = iup.imagergba{
+ico.flag_blue = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -277,7 +279,7 @@ gui.flag_blue = iup.imagergba{
 	},
 }
 
-gui.tag_blue_delete = iup.imagergba{
+ico.tag_blue_delete = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -308,7 +310,7 @@ gui.tag_blue_delete = iup.imagergba{
 	},
 }
 
-gui.note_add = iup.imagergba{
+ico.note_add = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -339,7 +341,7 @@ gui.note_add = iup.imagergba{
 	},
 }
 
-gui.green = iup.imagergba{
+ico.green = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -370,7 +372,7 @@ gui.green = iup.imagergba{
 	},
 }
 
-gui.orange = iup.imagergba{
+ico.orange = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -401,7 +403,7 @@ gui.orange = iup.imagergba{
 	},
 }
 
-gui.blue = iup.imagergba{
+ico.blue = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -432,7 +434,7 @@ gui.blue = iup.imagergba{
 	},
 }
 
-gui.purple = iup.imagergba{
+ico.purple = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -463,7 +465,7 @@ gui.purple = iup.imagergba{
 	},
 }
 
-gui.red = iup.imagergba{
+ico.red = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {
@@ -494,7 +496,7 @@ gui.red = iup.imagergba{
 	},
 }
 
-gui.html = iup.imagergba{
+ico.html = iup.imagergba{
 	width = 24,
 	height = 24,
 	pixels = {

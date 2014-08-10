@@ -2,8 +2,6 @@
 os.setlocale("pt_BR")
 os.setlocale("C", "numeric")
 
-gui = { }
-
 require("lfs")
 require("iuplua")
 require("engine")
