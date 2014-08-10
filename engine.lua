@@ -1,40 +1,4 @@
 
--- init(dbname)
--- done()
-
--- has_table(table)
--- has_id(id, table)
--- has_tag(task, tag)
--- has_notags(task)
-
--- new_task{ ...; tags = {} }
--- new_tag(name)
-
--- del_task(task)
--- del_tag(tag)
-
--- set_tag(task, tag)
--- clear_tag(task, tag)
-
--- gettasks
--- get_task(task)
--- get_tags([task])
-
--- upd_task{ ...; id = n }
--- upd_tag(tag, newname)
-
--- go_next(task)
-
--- isdate(d)
--- isanytime(d)
--- istomorrow(d)
--- isfuture(d)
--- istoday(d)
--- isyesterday(d)
--- islate(d)
-
--- daysmonth(month, year)
-
 require('luasql.sqlite3')
 
 -- assert time calculations (os dependent)
@@ -53,7 +17,7 @@ assert(
 
 eng = { }
 
--- initialize variables and creates a database if not exists
+-- initialize variables and create a database if not exists
 -- return: nothing
 function eng.init(dbname)
 	eng.env = assert(luasql.sqlite3())
@@ -174,7 +138,7 @@ function eng.has_notags(task)
 	return true
 end
 
--- creates a new task
+-- create a new task
 -- return: 1 or nil and error message
 function eng.new_task(task)
 	if not task or task.name == nil then
@@ -198,7 +162,7 @@ function eng.new_task(task)
 	return cur, err
 end
 
--- creates a new tag
+-- create a new tag
 -- return: 1 or nil and error message
 function eng.new_tag(name)
 	local cur, err = eng.con:execute(string.format(
@@ -206,7 +170,7 @@ function eng.new_tag(name)
 	return cur, err
 end
 
--- removes a task or goes to next if it's recurrent
+-- remove a task or go to next if it's recurrent
 -- return: 1 or nil and error message
 function eng.del_task(task, force)
 	local task = eng.get_task(task)
@@ -339,7 +303,7 @@ function eng.get_tags(task)
 	return result
 end
 
--- rename the given task
+-- update (rename) the given task
 -- return: 1 or nil and error message
 function eng.upd_task(task)
 	local upd_string = ''
