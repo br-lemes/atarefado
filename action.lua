@@ -22,43 +22,9 @@ function gui.dialog:k_any(k)
 			self:close_cb()
 		end
 	elseif (k == 805306435 --[[iup.K_cC]] or k == 536870979 --[[iup.K_cc]]) and iup.GetFocus() == gui.result then
-		if gui.result.value ~= nil and gui.result.value ~= "0" then
-			local item = fun.task_table[tonumber(gui.result.value)]
-			local tags = eng.get_tags(item.id)
-			local buff = ""
-			for i = 1,38 do
-				if tags[i] then
-					buff = string.format("%s %d,", buff, i)
-				end
-			end
-			fun.clipboard.text = nil
-			fun.clipboard.text = string.format([[
-eng.new_task{
-	name = %q,
-	date = %q,
-	comment = %q,
-	recurrent = %q,
-	tags = {%s %%s }
-}
-]], item.name, item.date, item.comment, item.recurrent, buff)
-		end
+		fun.copy()
 	elseif (k == 805306454 --[[iup.K_cV]] or k == 536870998 --[[iup.K_cv]]) and (iup.GetFocus() == gui.result or iup.GetFocus() == gui.search) then
-		if fun.clipboard.text and fun.clipboard.text:match([[
-eng%.new_task{
-	name = .*,
-	date = .*,
-	comment = .*,
-	recurrent =.*,
-	tags = {.* %%s }
-}
-]]) then
-			local s = ""
-			local n = tonumber(gui.taglist.value)
-			if n > 2 then s = tostring(fun.tag_table[n].id) end
-			loadstring(string.format(fun.clipboard.text, s))()
-			fun.task_load()
-			return iup.IGNORE
-		end
+		if fun.paste() then return iup.IGNORE end
 	elseif k == iup.K_CR then
 		if iup.GetFocus() == gui.search then
 			if gui.zbox.value == gui.new_tag then

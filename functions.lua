@@ -148,4 +148,52 @@ function fun.db_load()
 	end
 end
 
+function fun.copy()
+	local fmt = [[
+eng.new_task{
+	name = %q,
+	date = %q,
+	comment = %q,
+	recurrent = %q,
+	tags = {%s %%s }
+}
+]]
+	if gui.result.value ~= nil and gui.result.value ~= "0" then
+		local item = fun.task_table[tonumber(gui.result.value)]
+		local tags = eng.get_tags(item.id)
+		local buff = ""
+		for i = 1,38 do
+			if tags[i] then
+				buff = string.format("%s %d,", buff, i)
+			end
+		end
+		fun.clipboard.text = nil
+		fun.clipboard.text = string.format(fmt, item.name, item.date,
+			item.comment, item.recurrent, buff)
+		return true
+	end
+	return false
+end
+
+function fun.paste()
+	local fmt = [[
+eng%.new_task{
+	name = .*,
+	date = .*,
+	comment = .*,
+	recurrent =.*,
+	tags = {.* %%s }
+}
+]]
+	if fun.clipboard.text and fun.clipboard.text:match(fmt) then
+		local s = ""
+		local n = tonumber(gui.taglist.value)
+		if n > 2 then s = tostring(fun.tag_table[n].id) end
+		loadstring(string.format(fun.clipboard.text, s))()
+		fun.task_load()
+		return true
+	end
+	return false
+end
+
 fun.load_timer.action_cb = fun.task_load
