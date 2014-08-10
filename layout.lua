@@ -4,7 +4,7 @@ gui = { }
 function gui.option(self)
 	eng.con:execute(string.format(
 		'UPDATE options SET value=%q WHERE name=%q;', self.value, self.name))
-	gui.task_load()
+	fun.task_load()
 end
 
 function gui.iupnames(elem, dest)

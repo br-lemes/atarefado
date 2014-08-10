@@ -1,19 +1,6 @@
 
-gui.clipboard = iup.clipboard{}
-
-function gui.question(message)
-	local dlg = iup.messagedlg{
-		title      = "Confirmar",
-		value      = message,
-		buttons    = "YESNO",
-		dialogtype = "QUESTION"
-	}
-	dlg:popup()
-	return tonumber(dlg.buttonresponse)
-end
-
 function gui.dialog:close_cb()
-	if gui.question("Sair do Atarefado?") == 1 then
+	if fun.question("Sair do Atarefado?") == "1" then
 		self:hide()
 		eng.done()
 	else
@@ -36,7 +23,7 @@ function gui.dialog:k_any(k)
 		end
 	elseif (k == 805306435 --[[iup.K_cC]] or k == 536870979 --[[iup.K_cc]]) and iup.GetFocus() == gui.result then
 		if gui.result.value ~= nil and gui.result.value ~= "0" then
-			local item = gui.task_table[tonumber(gui.result.value)]
+			local item = fun.task_table[tonumber(gui.result.value)]
 			local tags = eng.get_tags(item.id)
 			local buff = ""
 			for i = 1,38 do
@@ -44,8 +31,8 @@ function gui.dialog:k_any(k)
 					buff = string.format("%s %d,", buff, i)
 				end
 			end
-			gui.clipboard.text = nil
-			gui.clipboard.text = string.format([[
+			fun.clipboard.text = nil
+			fun.clipboard.text = string.format([[
 eng.new_task{
 	name = %q,
 	date = %q,
@@ -56,7 +43,7 @@ eng.new_task{
 ]], item.name, item.date, item.comment, item.recurrent, buff)
 		end
 	elseif (k == 805306454 --[[iup.K_cV]] or k == 536870998 --[[iup.K_cv]]) and (iup.GetFocus() == gui.result or iup.GetFocus() == gui.search) then
-		if gui.clipboard.text and gui.clipboard.text:match([[
+		if fun.clipboard.text and fun.clipboard.text:match([[
 eng%.new_task{
 	name = .*,
 	date = .*,
@@ -67,9 +54,9 @@ eng%.new_task{
 ]]) then
 			local s = ""
 			local n = tonumber(gui.taglist.value)
-			if n > 2 then s = tostring(gui.tag_table[n].id) end
-			loadstring(string.format(gui.clipboard.text, s))()
-			gui.task_load()
+			if n > 2 then s = tostring(fun.tag_table[n].id) end
+			loadstring(string.format(fun.clipboard.text, s))()
+			fun.task_load()
 			return iup.IGNORE
 		end
 	elseif k == iup.K_CR then
@@ -109,11 +96,11 @@ eng%.new_task{
 	elseif k == iup.K_F4 then
 		gui.task_anytime:action()
 	elseif k == iup.K_F5 then
-		gui.db_load()
+		fun.db_load()
 		if gui.taglist.value == "0" or gui.taglist.value == nil then gui.taglist.value = "1" end
-		gui.tag_load()
-		gui.opt_load()
-		gui.task_load()
+		fun.tag_load()
+		fun.opt_load()
+		fun.task_load()
 	elseif k == iup.K_F10 and gui.zbox.value == gui.result_box then
 		gui.new_button:action()
 		return iup.IGNORE
@@ -124,124 +111,10 @@ eng%.new_task{
 	end
 end
 
-function gui.opt_load()
-	local cur = eng.con:execute('SELECT value FROM options;')
-	local row = { }
-	cur:fetch(row) gui.anytime.value   = row[1]
-	cur:fetch(row) gui.tomorrow.value  = row[1]
-	cur:fetch(row) gui.future.value    = row[1]
-	cur:fetch(row) gui.today.value     = row[1]
-	cur:fetch(row) gui.yesterday.value = row[1]
-	cur:fetch(row) gui.late.value      = row[1]
-	cur:fetch(row) gui.taglist.value   = row[1]
-	cur:close()
-	if gui.taglist.value == nil or gui.taglist.value == "0" then
-		gui.taglist.value = "1"
-	end
-	if tonumber(gui.taglist.value) >= 3 then
-		gui.edit_button.active = "YES"
-		gui.del_button.active = "YES"
-	end
-end
-
-gui.task_table = { }
-gui.tag_table = { }
-
-function gui.tag_load()
-	local id    = 0
-	local value = tonumber(gui.taglist.value)
-	if gui.tag_table and gui.tag_table[value] then
-		id = gui.tag_table[value].id
-	end
-	gui.tag_table = { }
-	gui.tag_table.id = { }
-	gui.taglist.removeitem = "ALL"
-	gui.task_tag.removeitem = "ALL"
-	table.insert(gui.tag_table, false)
-	table.insert(gui.tag_table, false)
-	gui.taglist.appenditem = "Todas"
-	gui.taglist.appenditem = "Nenhuma"
-	for i,v in ipairs(eng.get_tags()) do
-		table.insert(gui.tag_table, v)
-		gui.tag_table.id[v.id] = #gui.tag_table
-		gui.taglist.appenditem = v.name
-		gui.task_tag.appenditem = v.name
-	end
-	gui.taglist.value = gui.tag_table.id[id]
-end
-
-function gui.task_load()
-	local value = tonumber(gui.result.value)
-	local flags = { }
-	local tag   = false
-	local i     = tonumber(gui.taglist.value) or 1
-	if gui.task_table and gui.task_table[value] then
-		gui.result.lastid = gui.task_table[value].id
-	else
-		gui.result.lastid = 0
-	end
-	gui.result.itemcount = 0
-	gui.task_table = { }
-	gui.task_table.id = { }
-	gui.result.removeitem = "ALL"
-	flags.anytime = gui.anytime.value == "ON"
-	flags.tomorrow = gui.tomorrow.value == "ON"
-	flags.future = gui.future.value == "ON"
-	flags.today = gui.today.value == "ON"
-	flags.yesterday = gui.yesterday.value == "ON"
-	flags.late = gui.late.value == "ON"
-	if i == 2 then tag = -1 elseif i > 2 then tag = gui.tag_table[i].id end
-	gui.result.removeitem = "ALL"
-	for _,v in ipairs(eng.gettasks(gui.search.value, flags, tag)) do
-		table.insert(gui.task_table, v)
-		gui.task_table.id[v.id] = #gui.task_table
-	end
-	gui.load_timer.run = "NO"
-	iup.SetIdle(gui.item_load)
-end
-
-function gui.item_load()
-	local n = gui.result.itemcount + 1
-	local v = gui.task_table[n]
-	if v then
-		gui.result.appenditem = v.name
-		if eng.isanytime(v.date) then
-			gui.result["image" .. n] = ico.green
-		elseif eng.istomorrow(v.date) then
-			gui.result["image" .. n] = ico.blue
-		elseif eng.isfuture(v.date) then
-			gui.result["image" .. n] = ico.black
-		elseif eng.istoday(v.date) then
-			gui.result["image" .. n] = ico.orange
-		elseif eng.isyesterday(v.date) then
-			gui.result["image" .. n] = ico.purple
-		elseif eng.islate(v.date) then
-			gui.result["image" .. n] = ico.red
-		end
-		gui.result.itemcount = n
-	else
-		local value = gui.task_table.id[gui.result.lastid]
-		if value == nil then value = gui.result.lastvalue end
-		if value and tonumber(value) > tonumber(gui.result.count) then
-			value = gui.result.count
-		end
-		gui.result.itemcount = 0
-		gui.result.value = value
-		iup.SetIdle(nil)
-		gui.result:valuechanged_cb()
-	end
-end
-
-gui.load_timer = iup.timer{
-	time      = 500,
-	run       = "NO",
-	action_cb = gui.task_load
-}
-
 function gui.search:valuechanged_cb()
 	if gui.zbox.value == gui.result_box then
-		gui.load_timer.run  = "NO"
-		gui.load_timer.run  = "YES"
+		fun.load_timer.run  = "NO"
+		fun.load_timer.run  = "YES"
 	end
 end
 
@@ -262,10 +135,10 @@ function gui.new_ok:action()
 	local row = { }
 	cur:fetch(row)
 	cur:close()
-	gui.tag_load()
+	fun.tag_load()
 	gui.new_cancel:action()
-	gui.taglist.value = gui.tag_table.id[row[1]]
-	gui.task_load()
+	gui.taglist.value = fun.tag_table.id[row[1]]
+	fun.task_load()
 end
 
 function gui.new_cancel:action()
@@ -288,7 +161,7 @@ function gui.edit_button:action()
 		gui.edit_button.active = "NO"
 		gui.del_button.active  = "NO"
 		gui.zbox.value = gui.edit_tag
-		gui.search.value = gui.tag_table[i].name
+		gui.search.value = fun.tag_table[i].name
 		iup.SetFocus(gui.search)
 	end
 end
@@ -297,8 +170,8 @@ gui.taglist.dblclick_cb = gui.edit_button.action
 
 function gui.edit_ok:action()
 	gui.taglist.lastvalue = nil
-	eng.upd_tag(gui.tag_table[tonumber(gui.taglist.value)].id, gui.search.value)
-	gui.tag_load()
+	eng.upd_tag(fun.tag_table[tonumber(gui.taglist.value)].id, gui.search.value)
+	fun.tag_load()
 	gui.edit_cancel:action()
 end
 
@@ -316,10 +189,10 @@ end
 
 function gui.del_button:action()
 	local i = tonumber(gui.taglist.value)
-	if i >= 3 and gui.question("Excluir tag?") == 1 then
+	if i >= 3 and fun.question("Excluir tag?") == "1" then
 		gui.taglist.lastvalue = nil
-		eng.del_tag(gui.tag_table[i].id)
-		gui.tag_load()
+		eng.del_tag(fun.tag_table[i].id)
+		fun.tag_load()
 		iup.SetFocus(gui.search)
 	end
 end
@@ -328,7 +201,7 @@ function gui.task_ok:action()
 	if gui.search.value:match("^%s*$") then return end
 	local upd = { }
 	if gui.result.value ~= nil and gui.result.value ~= "0" then
-		upd.id = gui.task_table[tonumber(gui.result.value)].id
+		upd.id = fun.task_table[tonumber(gui.result.value)].id
 	end
 	upd.name = gui.search.value
 	upd.date = gui.task_date.value
@@ -348,9 +221,9 @@ function gui.task_ok:action()
 	for i = 1, #gui.task_tag.value do
 		local n = gui.task_tag.value:byte(i)
 		if n == 43 then
-			eng.set_tag(upd.id, gui.tag_table[i+2].id)
+			eng.set_tag(upd.id, fun.tag_table[i+2].id)
 		elseif n == 45 then
-			eng.clear_tag(upd.id, gui.tag_table[i+2].id)
+			eng.clear_tag(upd.id, fun.tag_table[i+2].id)
 		end
 	end
 	for i = 1, 7 do
@@ -371,7 +244,7 @@ function gui.task_ok:action()
 	end
 	eng.con:execute('END;')
 	gui.task_cancel:action()
-	gui.task_load()
+	fun.task_load()
 end
 
 function gui.task_cancel:action()
@@ -386,7 +259,6 @@ function gui.task_cancel:action()
 	if gui.result.value == "0" or gui.result.value == nil then
 		iup.SetFocus(gui.search)
 	else
-		-- corrigir result.value
 		iup.SetFocus(gui.result)
 	end
 end
@@ -403,7 +275,7 @@ function gui.taglist:valuechanged_cb()
 			gui.edit_button.active = "NO"
 			gui.del_button.active  = "NO"
 		end
-		gui.task_load()
+		fun.task_load()
 	end
 end
 
@@ -414,7 +286,7 @@ function gui.result:dblclick_cb()
 		local value = ""
 		local j = tonumber(gui.taglist.value)
 		if j > 2 then
-			for i = 3, #gui.tag_table do
+			for i = 3, #fun.tag_table do
 				if i == j then
 					value = value .. "+"
 				else
@@ -424,11 +296,11 @@ function gui.result:dblclick_cb()
 		end
 		gui.task_tag.value = value
 	else
-		item = gui.task_table[tonumber(gui.result.value)]
+		item = fun.task_table[tonumber(gui.result.value)]
 		gui.search.value = item.name
 		local tagt = eng.get_tags(item.id)
 		local tagv = ""
-		for i,v in ipairs(gui.tag_table) do
+		for i,v in ipairs(fun.tag_table) do
 			if v then
 				if tagt[tonumber(v.id)] then
 					tagv = tagv .. "+"
@@ -491,7 +363,7 @@ function gui.result:valuechanged_cb()
 	end
 	if self.value and self.value ~= "0" then
 		self.lastvalue = self.value
-		if gui.task_table[tonumber(self.value)].recurrent == "1" then
+		if fun.task_table[tonumber(self.value)].recurrent == "1" then
 			gui.task_delete.image = ico.note_delete
 			gui.task_delete.tip = "Excluir Tarefa (DEL)"
 		else
@@ -510,7 +382,7 @@ gui.task_edit.action = gui.result.dblclick_cb
 
 function gui.task_delete:action(force)
 	if gui.result.value ~= nil and gui.result.value ~= "0" then
-		local task = gui.task_table[tonumber(gui.result.value)]
+		local task = fun.task_table[tonumber(gui.result.value)]
 		local question = "Excluir tarefa?"
 		if task.recurrent ~= "1" then
 			if force then
@@ -519,9 +391,9 @@ function gui.task_delete:action(force)
 				question = "Tarefa concluída?"
 			end
 		end
-		if gui.question(question) == 1 then
+		if fun.question(question) == "1" then
 			eng.del_task(task.id, force)
-			gui.task_load()
+			fun.task_load()
 		end
 	end
 end
@@ -529,10 +401,10 @@ end
 function gui.task_today:action()
 	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
-		upd.id = gui.task_table[tonumber(gui.result.value)].id
+		upd.id = fun.task_table[tonumber(gui.result.value)].id
 		upd.date = os.date('%Y-%m-%d')
 		eng.upd_task(upd)
-		gui.task_load()
+		fun.task_load()
 		iup.SetFocus(gui.result)
 	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = os.date('%Y-%m-%d')
@@ -542,10 +414,10 @@ end
 function gui.task_tomorrow:action()
 	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
-		upd.id = gui.task_table[tonumber(gui.result.value)].id
+		upd.id = fun.task_table[tonumber(gui.result.value)].id
 		upd.date = os.date('%Y-%m-%d', os.time()+24*60*60)
 		eng.upd_task(upd)
-		gui.task_load()
+		fun.task_load()
 		iup.SetFocus(gui.result)
 	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = os.date('%Y-%m-%d', os.time()+24*60*60)
@@ -555,36 +427,13 @@ end
 function gui.task_anytime:action()
 	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
-		upd.id = gui.task_table[tonumber(gui.result.value)].id
+		upd.id = fun.task_table[tonumber(gui.result.value)].id
 		upd.date = ""
 		eng.upd_task(upd)
-		gui.task_load()
+		fun.task_load()
 		iup.SetFocus(gui.result)
 	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = ""
-	end
-end
-
-gui.dblist = { }
-
-function gui.db_load()
-	local value = gui.dbname.value
-	if value == "0" then value = "1" end
-	gui.dblist = { }
-	gui.dbname.removeitem = "ALL"
-	for file in lfs.dir(".") do
-		if file:sub(-7, -1) == ".sqlite" then
-			table.insert(gui.dblist, file)
-			gui.dbname.appenditem = file:sub(1, -8)
-		end
-	end
-	if #gui.dblist == 0 then
-		eng.init('atarefado.sqlite')
-		eng.done()
-		gui.db_load()
-	else
-		gui.dbname.lastvalue = value
-		gui.dbname.value = value
 	end
 end
 
@@ -593,10 +442,10 @@ function gui.dbname:valuechanged_cb()
 		gui.dbname.lastvalue = gui.dbname.value
 		gui.taglist.lastvalue = nil
 		eng.done()
-		eng.init(gui.dblist[tonumber(gui.dbname.value)])
-		gui.tag_load()
-		gui.opt_load()
-		gui.task_load()
+		eng.init(fun.dblist[tonumber(gui.dbname.value)])
+		fun.tag_load()
+		fun.opt_load()
+		fun.task_load()
 	end
 end
 
@@ -656,7 +505,7 @@ function gui.savehtml:action()
 ]], gui.dbname[gui.dbname.value], gui.dbname[gui.dbname.value],
 			gui.taglist[gui.taglist.value], gui.search.value, filter))
 			for i = 1, gui.result.count do
-				local v = gui.task_table[i]
+				local v = fun.task_table[i]
 				if eng.isanytime(v.date) then
 					v.color = "green"
 				elseif eng.istomorrow(v.date) then
