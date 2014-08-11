@@ -70,9 +70,9 @@ function gui.dialog:k_any(k)
 	elseif k == iup.K_F10 and gui.zbox.value == gui.result_box then
 		gui.new_button:action()
 		return iup.IGNORE
-	elseif k == iup.K_F11 then
+	elseif k == iup.K_F11 and gui.zbox.value == gui.result_box then
 		gui.edit_button:action()
-	elseif k == iup.K_F12 then
+	elseif k == iup.K_F12 and gui.zbox.value == gui.result_box then
 		gui.del_button:action()
 	end
 end
