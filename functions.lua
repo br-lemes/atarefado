@@ -197,6 +197,7 @@ eng%.new_task{
 end
 
 function fun.reload()
+	if gui.zbox.value ~= gui.result_box then return end
 	fun.db_load()
 	if gui.taglist.value == "0" or gui.taglist.value == nil then
 		gui.taglist.value = "1"

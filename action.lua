@@ -61,26 +61,26 @@ function gui.dialog:k_any(k)
 		gui.task_tomorrow:action()
 	elseif k == iup.K_F4 then
 		gui.task_anytime:action()
-	elseif k == iup.K_F5 and gui.zbox.value == gui.result_box then
+	elseif k == iup.K_F5 then
 		fun.reload()
-	elseif k == iup.K_F10 and gui.zbox.value == gui.result_box then
+	elseif k == iup.K_F10 then
 		gui.new_button:action()
 		return iup.IGNORE
-	elseif k == iup.K_F11 and gui.zbox.value == gui.result_box then
+	elseif k == iup.K_F11 then
 		gui.edit_button:action()
-	elseif k == iup.K_F12 and gui.zbox.value == gui.result_box then
+	elseif k == iup.K_F12 then
 		gui.del_button:action()
 	end
 end
 
 function gui.search:valuechanged_cb()
-	if gui.zbox.value == gui.result_box then
-		fun.load_timer.run  = "NO"
-		fun.load_timer.run  = "YES"
-	end
+	if gui.zbox.value ~= gui.result_box then return end
+	fun.load_timer.run  = "NO"
+	fun.load_timer.run  = "YES"
 end
 
 function gui.new_button:action()
+	if gui.zbox.value ~= gui.result_box then return end
 	gui.optbox.active      = "NO"
 	gui.new_button.active  = "NO"
 	gui.edit_button.active = "NO"
@@ -116,6 +116,7 @@ function gui.new_cancel:action()
 end
 
 function gui.edit_button:action()
+	if gui.zbox.value ~= gui.result_box then return end
 	local i = tonumber(gui.taglist.value)
 	if i >= 3 then
 		gui.optbox.active      = "NO"
@@ -150,6 +151,7 @@ function gui.edit_cancel:action()
 end
 
 function gui.del_button:action()
+	if gui.zbox.value ~= gui.result_box then return end
 	local i = tonumber(gui.taglist.value)
 	if i >= 3 and fun.question("Excluir tag?") == "1" then
 		gui.taglist.lastvalue = nil
