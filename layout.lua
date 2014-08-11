@@ -3,7 +3,8 @@ gui = { }
 
 function gui.option(self)
 	eng.con:execute(string.format(
-		'UPDATE options SET value=%q WHERE name=%q;', self.value, self.name))
+		'UPDATE options SET value=%q WHERE name=%q;',
+		 self.value, self.name))
 	fun.task_load()
 end
 
