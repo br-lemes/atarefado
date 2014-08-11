@@ -61,12 +61,8 @@ function gui.dialog:k_any(k)
 		gui.task_tomorrow:action()
 	elseif k == iup.K_F4 then
 		gui.task_anytime:action()
-	elseif k == iup.K_F5 then
-		fun.db_load()
-		if gui.taglist.value == "0" or gui.taglist.value == nil then gui.taglist.value = "1" end
-		fun.tag_load()
-		fun.opt_load()
-		fun.task_load()
+	elseif k == iup.K_F5 and gui.zbox.value == gui.result_box then
+		fun.reload()
 	elseif k == iup.K_F10 and gui.zbox.value == gui.result_box then
 		gui.new_button:action()
 		return iup.IGNORE

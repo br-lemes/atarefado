@@ -196,4 +196,14 @@ eng%.new_task{
 	return false
 end
 
+function fun.reload()
+	fun.db_load()
+	if gui.taglist.value == "0" or gui.taglist.value == nil then
+		gui.taglist.value = "1"
+	end
+	fun.tag_load()
+	fun.opt_load()
+	fun.task_load()
+end
+
 fun.load_timer.action_cb = fun.task_load
