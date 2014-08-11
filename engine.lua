@@ -30,14 +30,17 @@ function eng.init(dbname)
 				id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 				name TEXT NOT NULL
 			);]])
-		local semana = { 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb' }
-		for i, v in ipairs(semana) do
+		for i, v in ipairs{
+				'Dom', 'Seg', 'Ter', 'Qua',
+				'Qui', 'Sex', 'Sáb'
+			} do
 			eng.con:execute(string.format(
 				'INSERT INTO tagnames VALUES(NULL, %q);', v))
 		end
 		for i = 1, 31 do
 			eng.con:execute(string.format(
-				'INSERT INTO tagnames VALUES(NULL, "%02d");', i))
+				'INSERT INTO tagnames VALUES(NULL, "%02d");',
+				i))
 		end
 	end
 
@@ -67,14 +70,15 @@ function eng.init(dbname)
 				name TEXT NOT NULL,
 				value TEXT
 			);]])
-		eng.con:execute('INSERT INTO options VALUES(NULL, "anytime", "ON");')
-		eng.con:execute('INSERT INTO options VALUES(NULL, "tomorrow", "ON");')
-		eng.con:execute('INSERT INTO options VALUES(NULL, "future", "ON");')
-		eng.con:execute('INSERT INTO options VALUES(NULL, "today", "ON");')
-		eng.con:execute('INSERT INTO options VALUES(NULL, "yesterday", "ON");')
-		eng.con:execute('INSERT INTO options VALUES(NULL, "late", "ON");')
-		eng.con:execute('INSERT INTO options VALUES(NULL, "tag", "1");')
-		eng.con:execute('INSERT INTO options VALUES(NULL, "version", "1");')
+		local optfmt = 'INSERT INTO options VALUES(NULL, %q, %q);'
+		for i, v in ipairs{
+				'anytime', 'tomorrow', 'future',
+				'today', 'yesterday', 'late'
+			} do
+			eng.con:execute(string.format(optfmt, v, 'ON'))
+		end
+		eng.con:execute(string.format(optfmt, 'tag', '1'))
+		eng.con:execute(string.format(optfmt, 'version', '1'))
 	end
 	eng.con:execute('END;')
 
@@ -91,7 +95,8 @@ end
 -- return: true or false
 function eng.has_table(table)
 	local cur = eng.con:execute(string.format(
-		'SELECT * FROM sqlite_master WHERE type="table" AND name=%q;', table))
+		'SELECT * FROM sqlite_master WHERE type="table" AND name=%q;',
+		table))
 	local row = { }
 	cur:fetch(row)
 	cur:close()
@@ -283,7 +288,8 @@ function eng.get_tags(task)
 	local result = { }
 	if not task then
 		-- ignore the first 38 special tags
-		local cur = eng.con:execute('SELECT * FROM tagnames WHERE id > 38 ORDER BY name;')
+		local cur = eng.con:execute(
+			'SELECT * FROM tagnames WHERE id > 38 ORDER BY name;')
 		local row = { }
 		while cur:fetch(row) do
 			table.insert(result, {id = row[1], name = row[2]})
@@ -291,9 +297,10 @@ function eng.get_tags(task)
 		cur:close()
 	else
 		if not eng.has_id(task, 'tasks') then return nil end
-		local cur = eng.con:execute(string.format(
-			'SELECT tag, name FROM tags JOIN tagnames ON tag=id WHERE task=%d ORDER BY name;',
-			task))
+		local cur = eng.con:execute(string.format([[
+			SELECT tag, name FROM tags
+			JOIN tagnames ON tag=id WHERE task=%d
+			ORDER BY name;]], task))
 		local row = { }
 		while cur:fetch(row) do
 			result[tonumber(row[1])] = row[2]
@@ -306,17 +313,17 @@ end
 -- update (rename) the given task
 -- return: 1 or nil and error message
 function eng.upd_task(task)
-	local upd_string = ''
+	local upd_str = ''
 	for k, v in pairs(task) do
 		if k ~= 'id' then
-			if upd_string ~= '' then
-				upd_string = upd_string .. ','
+			if upd_str ~= '' then
+				upd_str = upd_str .. ','
 			end
-			upd_string = string.format('%s %s=%q', upd_string, k, v)
+			upd_str = string.format('%s %s=%q', upd_str, k, v)
 		end
 	end
 	local cur, err = eng.con:execute(string.format(
-		'UPDATE tasks SET %s WHERE id=%d;', upd_string, task.id))
+		'UPDATE tasks SET %s WHERE id=%d;', upd_str, task.id))
 	return cur, err
 end
 
@@ -349,7 +356,8 @@ function eng.go_next(task)
 				d.day = d.day + (i - d.wday)
 				local cur, err = eng.con:execute(string.format(
 					'UPDATE tasks SET date=%q WHERE id=%d;',
-					os.date('%Y-%m-%d', os.time(d)), task.id))
+					os.date('%Y-%m-%d', os.time(d)),
+					task.id))
 				return cur, err
 			end
 		end
@@ -359,7 +367,8 @@ function eng.go_next(task)
 				d.day = d.day + (7 - d.wday + i)
 				local cur, err = eng.con:execute(string.format(
 					'UPDATE tasks SET date=%q WHERE id=%d;',
-					os.date('%Y-%m-%d', os.time(d)), task.id))
+					os.date('%Y-%m-%d', os.time(d)),
+					task.id))
 				return cur, err
 			end
 		end
@@ -370,7 +379,8 @@ function eng.go_next(task)
 				d.day = i
 				local cur, err = eng.con:execute(string.format(
 					'UPDATE tasks SET date=%q WHERE id=%d;',
-					os.date('%Y-%m-%d', os.time(d)), task.id))
+					os.date('%Y-%m-%d', os.time(d)),
+					task.id))
 				return cur, err
 			end
 		end
@@ -381,7 +391,8 @@ function eng.go_next(task)
 				d.month = d.month + 1
 				local cur, err = eng.con:execute(string.format(
 					'UPDATE tasks SET date=%q WHERE id=%d;',
-					os.date('%Y-%m-%d', os.time(d)), task.id))
+					os.date('%Y-%m-%d', os.time(d)),
+					task.id))
 				return cur, err
 			end
 		end
@@ -393,13 +404,15 @@ function eng.go_next(task)
 		else d.day = i end
 		local cur, err = eng.con:execute(string.format(
 			'UPDATE tasks SET date=%q WHERE id=%d;',
-			os.date('%Y-%m-%d', os.time(d)), task.id))
+			os.date('%Y-%m-%d', os.time(d)),
+			task.id))
 		return cur, err
 	elseif task.recurrent == '1' then
 		d.day = d.day + 1
 		local cur, err = eng.con:execute(string.format(
 			'UPDATE tasks SET date=%q WHERE id=%d;',
-			os.date('%Y-%m-%d', os.time(d)), task.id))
+			os.date('%Y-%m-%d', os.time(d)),
+			task.id))
 		return cur, err
 	end
 end
@@ -408,7 +421,8 @@ end
 function eng.isdate(d)
 	t = { }
 	t.year, t.month, t.day = d:match('(%d%d%d%d)-(%d%d)-(%d%d)')
-	return t.year and t.month and t.day and os.date('%Y-%m-%d', os.time(t)) == d
+	return t.year and t.month and t.day and
+		os.date('%Y-%m-%d', os.time(t)) == d
 end
 
 -- return true if d is an unespecified time
@@ -423,7 +437,8 @@ end
 
 -- return true if d is in the future but not tomorrow
 function eng.isfuture(d)
-	return not eng.isanytime(d) and not eng.istomorrow(d) and d > os.date('%Y-%m-%d')
+	return not eng.isanytime(d) and not eng.istomorrow(d) and
+		d > os.date('%Y-%m-%d')
 end
 
 -- return true if d is today
@@ -438,7 +453,8 @@ end
 
 -- return true if d is in the past but not yesterday
 function eng.islate(d)
-	return not eng.isanytime(d) and not eng.isyesterday(d) and d < os.date('%Y-%m-%d')
+	return not eng.isanytime(d) and not eng.isyesterday(d) and
+		d < os.date('%Y-%m-%d')
 end
 
 -- return the number of days in a month
