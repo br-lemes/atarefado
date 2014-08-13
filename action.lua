@@ -21,9 +21,14 @@ function gui.dialog:k_any(k)
 		else
 			self:close_cb()
 		end
-	elseif (k == 805306435 --[[iup.K_cC]] or k == 536870979 --[[iup.K_cc]]) and iup.GetFocus() == gui.result then
+	elseif (k == 805306435 --[[iup.K_cC]] or
+		k == 536870979 --[[iup.K_cc]]) and
+		iup.GetFocus() == gui.result then
 		fun.copy()
-	elseif (k == 805306454 --[[iup.K_cV]] or k == 536870998 --[[iup.K_cv]]) and (iup.GetFocus() == gui.result or iup.GetFocus() == gui.search) then
+	elseif (k == 805306454 --[[iup.K_cV]] or
+		k == 536870998 --[[iup.K_cv]]) and
+		(iup.GetFocus() == gui.result or
+		iup.GetFocus() == gui.search) then
 		if fun.paste() then return iup.IGNORE end
 	elseif k == iup.K_CR then
 		if iup.GetFocus() == gui.search then
@@ -38,18 +43,26 @@ function gui.dialog:k_any(k)
 			end
 		elseif iup.GetFocus() == gui.task_date then
 			gui.task_ok:action()
-		elseif gui.zbox.value == gui.result_box and gui.result.value ~= nil and gui.result.value ~= "0" then
+		elseif gui.zbox.value == gui.result_box and
+			gui.result.value ~= nil and
+			gui.result.value ~= "0" then
 			gui.result:dblclick_cb()
 		end
-	elseif k == iup.K_DEL and iup.GetFocus() ~= gui.search and gui.zbox.value == gui.result_box then
+	elseif k == iup.K_DEL and 
+		iup.GetFocus() ~= gui.search and
+		gui.zbox.value == gui.result_box then
 		gui.task_delete:action()
-	elseif k == 268500991 --[[iup.K_sDEL]] and iup.GetFocus() ~= gui.search and gui.zbox.value == gui.result_box then
+	elseif k == 268500991 --[[iup.K_sDEL]] and
+		iup.GetFocus() ~= gui.search and
+		gui.zbox.value == gui.result_box then
 		gui.task_delete:action(true)
 	elseif k == iup.K_DOWN and iup.GetFocus() == gui.search then
 		iup.SetFocus(gui.result)
 		gui.result.value = "1"
 		gui.result:valuechanged_cb()
-	elseif k == iup.K_UP and iup.GetFocus() == gui.result and gui.result.value == "1" then
+	elseif k == iup.K_UP and
+		iup.GetFocus() == gui.result and
+		gui.result.value == "1" then
 		iup.SetFocus(gui.search)
 		gui.result.value = nil
 		gui.result.lastvalue = nil
@@ -107,7 +120,8 @@ function gui.new_cancel:action()
 	gui.search.value      = ""
 	gui.optbox.active     = "YES"
 	gui.new_button.active = "YES"
-	if gui.taglist.value ~= nil and tonumber(gui.taglist.value) >= 3 then
+	if gui.taglist.value ~= nil and
+		tonumber(gui.taglist.value) >= 3 then
 		gui.edit_button.active = "YES"
 		gui.del_button.active  = "YES"
 	end
@@ -132,8 +146,9 @@ end
 gui.taglist.dblclick_cb = gui.edit_button.action
 
 function gui.edit_ok:action()
+	local i = tonumber(gui.taglist.value)
 	gui.taglist.lastvalue = nil
-	eng.upd_tag(fun.tag_table[tonumber(gui.taglist.value)].id, gui.search.value)
+	eng.upd_tag(fun.tag_table[i].id, gui.search.value)
 	fun.tag_load()
 	gui.edit_cancel:action()
 end
@@ -230,7 +245,8 @@ end
 function gui.taglist:valuechanged_cb()
 	if self.value ~= nil and self.lastvalue ~= self.value then
 		eng.con:execute(string.format(
-			'UPDATE options SET value=%q WHERE name="tag";', self.value, self.name))
+			'UPDATE options SET value=%q WHERE name="tag";',
+			self.value, self.name))
 		self.lastvalue = self.value
 		if tonumber(self.value) >= 3 then
 			gui.edit_button.active = "YES"
@@ -246,7 +262,8 @@ end
 function gui.result:dblclick_cb()
 	local item
 	if gui.result.value == "0" or gui.result.value == nil then
-		item = { name = gui.search.value, date = "", comment = "", recurrent = "1" }
+		item = { name = gui.search.value, date = "", comment = "",
+		recurrent = "1" }
 		local value = ""
 		local j = tonumber(gui.taglist.value)
 		if j > 2 then
@@ -299,7 +316,8 @@ function gui.result:dblclick_cb()
 	gui.del_button.active  = "NO"
 	gui.zbox.value = gui.task_box
 	gui.task_date.value = item.date
-	gui.task_comment.value = loadstring(string.format('return "%s"', item.comment))()
+	gui.task_comment.value = loadstring(string.format(
+		'return "%s"', item.comment))()
 	gui.task_recurrent.value = item.recurrent or "1"
 	gui.task_zoption.valuepos = gui.task_recurrent.value - 1
 	iup.SetFocus(gui.search)
@@ -363,7 +381,8 @@ function gui.task_delete:action(force)
 end
 
 function gui.task_today:action()
-	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
+	if gui.zbox.value == gui.result_box and 
+		(gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
 		upd.id = fun.task_table[tonumber(gui.result.value)].id
 		upd.date = os.date('%Y-%m-%d')
@@ -376,7 +395,8 @@ function gui.task_today:action()
 end
 
 function gui.task_tomorrow:action()
-	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
+	if gui.zbox.value == gui.result_box and
+		(gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
 		upd.id = fun.task_table[tonumber(gui.result.value)].id
 		upd.date = os.date('%Y-%m-%d', os.time()+24*60*60)
@@ -389,7 +409,8 @@ function gui.task_tomorrow:action()
 end
 
 function gui.task_anytime:action()
-	if gui.zbox.value == gui.result_box and (gui.result.value ~= nil and gui.result.value ~= "0") then
+	if gui.zbox.value == gui.result_box and
+		(gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
 		upd.id = fun.task_table[tonumber(gui.result.value)].id
 		upd.date = ""
@@ -402,7 +423,9 @@ function gui.task_anytime:action()
 end
 
 function gui.dbname:valuechanged_cb()
-	if gui.dbname.value ~= nil and gui.dbname.value ~= "0" and gui.dbname.lastvalue ~= gui.dbname.value then
+	if gui.dbname.value ~= nil and
+		gui.dbname.value ~= "0" and
+		gui.dbname.lastvalue ~= gui.dbname.value then
 		gui.dbname.lastvalue = gui.dbname.value
 		gui.taglist.lastvalue = nil
 		eng.done()
@@ -415,7 +438,8 @@ end
 
 function gui.savedlg:file_cb(file_name, status)
 	if status == "OK" and not file_name:match("%.[^\\/]+$") then
-		gui.savedlg.file = file_name:match("[\\/]([^\\/.]+)%.?$") .. ".html"
+		gui.savedlg.file = file_name:match("[\\/]([^\\/.]+)%.?$")
+			.. ".html"
 		return iup.CONTINUE
 	end
 end
@@ -467,7 +491,8 @@ function gui.savehtml:action()
 	<br>
 	<ul>
 ]], gui.dbname[gui.dbname.value], gui.dbname[gui.dbname.value],
-			gui.taglist[gui.taglist.value], gui.search.value, filter))
+			gui.taglist[gui.taglist.value],
+			gui.search.value, filter))
 			for i = 1, gui.result.count do
 				local v = fun.task_table[i]
 				if eng.isanytime(v.date) then
@@ -483,8 +508,10 @@ function gui.savehtml:action()
 				elseif eng.islate(v.date) then
 					v.color = "red"
 				end
-				htmlfile:write(string.format('\t\t<li class="%s">%s</li>\n',
-					v.color, v.name))
+				htmlfile:write(
+					string.format(
+						'\t\t<li class="%s">%s</li>\n',
+						v.color, v.name))
 			end
 			htmlfile:write("\t</ul>\n</body>\n</html>\n")
 			htmlfile:close()
