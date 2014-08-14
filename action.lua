@@ -243,20 +243,19 @@ function gui.task_cancel:action()
 end
 
 function gui.taglist:valuechanged_cb()
-	if self.value ~= nil and self.lastvalue ~= self.value then
-		eng.con:execute(string.format(
-			'UPDATE options SET value=%q WHERE name="tag";',
-			self.value, self.name))
-		self.lastvalue = self.value
-		if tonumber(self.value) >= 3 then
-			gui.edit_button.active = "YES"
-			gui.del_button.active  = "YES"
-		else
-			gui.edit_button.active = "NO"
-			gui.del_button.active  = "NO"
-		end
-		fun.task_load()
+	if self.value == nil or self.lastvalue == self.value then return end
+	eng.con:execute(string.format(
+		'UPDATE options SET value=%q WHERE name="tag";',
+		self.value, self.name))
+	self.lastvalue = self.value
+	if tonumber(self.value) >= 3 then
+		gui.edit_button.active = "YES"
+		gui.del_button.active  = "YES"
+	else
+		gui.edit_button.active = "NO"
+		gui.del_button.active  = "NO"
 	end
+	fun.task_load()
 end
 
 function gui.result:dblclick_cb()
@@ -363,20 +362,19 @@ end
 gui.task_edit.action = gui.result.dblclick_cb
 
 function gui.task_delete:action(force)
-	if gui.result.value ~= nil and gui.result.value ~= "0" then
-		local task = fun.task_table[tonumber(gui.result.value)]
-		local question = "Excluir tarefa?"
-		if task.recurrent ~= "1" then
-			if force then
-				question = "Excluir permanentemente tarefa recorrente?"
-			else
-				question = "Tarefa concluída?"
-			end
+	if gui.result.value == nil or gui.result.value == "0" then return end
+	local task = fun.task_table[tonumber(gui.result.value)]
+	local question = "Excluir tarefa?"
+	if task.recurrent ~= "1" then
+		if force then
+			question = "Excluir permanentemente tarefa recorrente?"
+		else
+			question = "Tarefa concluída?"
 		end
-		if fun.question(question) == "1" then
-			eng.del_task(task.id, force)
-			fun.task_load()
-		end
+	end
+	if fun.question(question) == "1" then
+		eng.del_task(task.id, force)
+		fun.task_load()
 	end
 end
 
