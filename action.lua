@@ -10,6 +10,54 @@ function gui.dialog:close_cb()
 	end
 end
 
+function gui.search:k_any(k)
+--	if (k == iup.K_cV or k == iup.K_cv) then
+	if (k == 805306454 or k == 536870998) then
+		if fun.paste() then return iup.IGNORE end
+	elseif k == iup.K_DOWN then
+		iup.SetFocus(gui.result)
+		gui.result.value = "1"
+		gui.result:valuechanged_cb()
+	elseif k == iup.K_CR then
+		if gui.zbox.value == gui.new_tag then
+			gui.new_ok:action()
+		elseif gui.zbox.value == gui.edit_tag then
+			gui.edit_ok:action()
+		elseif gui.zbox.value == gui.task_box then
+			gui.task_ok:action()
+		elseif gui.zbox.value == gui.result_box then
+			gui.task_new:action()
+		end
+	end
+	return iup.CONTINUE
+end
+
+function gui.result:k_any(k)
+--	if (k == iup.K_cC or k == iup.K_cc) then
+	if (k == 805306435 or k == 536870979) then
+		fun.copy()
+--	elseif (k == iup.K_cV or k == iup.K_cv) then
+	elseif (k == 805306454 or k == 536870998) then
+		fun.past()
+	elseif k == iup.K_UP and gui.result.value == "1" then
+		iup.SetFocus(gui.search)
+		gui.result.value = nil
+		gui.result.lastvalue = nil
+		gui.result:valuechanged_cb()
+		return iup.IGNORE
+	elseif k == iup.K_CR and self.value ~= nil and self.value ~= "0" then
+		gui.result:dblclick_cb()
+	end
+	return iup.CONTINUE
+end
+
+function gui.task_date:k_any(k)
+	if k == iup.K_CR then
+		gui.task_ok:action()
+	end
+	return iup.CONTINUE
+end
+
 function gui.dialog:k_any(k)
 	if k == iup.K_ESC then
 		if gui.zbox.value == gui.new_tag then
@@ -21,33 +69,6 @@ function gui.dialog:k_any(k)
 		else
 			self:close_cb()
 		end
-	elseif (k == 805306435 --[[iup.K_cC]] or
-		k == 536870979 --[[iup.K_cc]]) and
-		iup.GetFocus() == gui.result then
-		fun.copy()
-	elseif (k == 805306454 --[[iup.K_cV]] or
-		k == 536870998 --[[iup.K_cv]]) and
-		(iup.GetFocus() == gui.result or
-		iup.GetFocus() == gui.search) then
-		if fun.paste() then return iup.IGNORE end
-	elseif k == iup.K_CR then
-		if iup.GetFocus() == gui.search then
-			if gui.zbox.value == gui.new_tag then
-				gui.new_ok:action()
-			elseif gui.zbox.value == gui.edit_tag then
-				gui.edit_ok:action()
-			elseif gui.zbox.value == gui.task_box then
-				gui.task_ok:action()
-			elseif gui.zbox.value == gui.result_box then
-				gui.task_new:action()
-			end
-		elseif iup.GetFocus() == gui.task_date then
-			gui.task_ok:action()
-		elseif gui.zbox.value == gui.result_box and
-			gui.result.value ~= nil and
-			gui.result.value ~= "0" then
-			gui.result:dblclick_cb()
-		end
 	elseif k == iup.K_DEL and 
 		iup.GetFocus() ~= gui.search and
 		gui.zbox.value == gui.result_box then
@@ -56,18 +77,6 @@ function gui.dialog:k_any(k)
 		iup.GetFocus() ~= gui.search and
 		gui.zbox.value == gui.result_box then
 		gui.task_delete:action(true)
-	elseif k == iup.K_DOWN and iup.GetFocus() == gui.search then
-		iup.SetFocus(gui.result)
-		gui.result.value = "1"
-		gui.result:valuechanged_cb()
-	elseif k == iup.K_UP and
-		iup.GetFocus() == gui.result and
-		gui.result.value == "1" then
-		iup.SetFocus(gui.search)
-		gui.result.value = nil
-		gui.result.lastvalue = nil
-		gui.result:valuechanged_cb()
-		return iup.IGNORE
 	elseif k == iup.K_F2 then
 		gui.task_today:action()
 	elseif k == iup.K_F3 then
