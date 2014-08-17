@@ -32,7 +32,7 @@ function fun.opt_load()
 	cur:fetch(row) gui.yesterday.value = row[1]
 	cur:fetch(row) gui.late.value      = row[1]
 	cur:fetch(row) gui.taglist.value   = row[1]
-	cur:close()
+	cur:close()  gui.taglist.lastvalue = row[1]
 	if gui.taglist.value == nil or gui.taglist.value == "0" then
 		gui.taglist.value = "1"
 	end
