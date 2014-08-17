@@ -69,13 +69,9 @@ function gui.dialog:k_any(k)
 		else
 			self:close_cb()
 		end
-	elseif k == iup.K_DEL and 
-		iup.GetFocus() ~= gui.search and
-		gui.zbox.value == gui.result_box then
+	elseif k == iup.K_DEL then
 		gui.task_delete:action()
-	elseif k == 268500991 --[[iup.K_sDEL]] and
-		iup.GetFocus() ~= gui.search and
-		gui.zbox.value == gui.result_box then
+	elseif k == 268500991 --[[iup.K_sDEL]] then
 		gui.task_delete:action(true)
 	elseif k == iup.K_F2 then
 		gui.task_today:action()
@@ -371,7 +367,10 @@ end
 gui.task_edit.action = gui.result.dblclick_cb
 
 function gui.task_delete:action(force)
-	if gui.result.value == nil or gui.result.value == "0" then return end
+	if iup.GetFocus() == gui.search or
+		gui.zbox.value ~= gui.result_box or
+		gui.result.value == nil or
+		gui.result.value == "0" then return end
 	local task = fun.task_table[tonumber(gui.result.value)]
 	local question = "Excluir tarefa?"
 	if task.recurrent ~= "1" then
