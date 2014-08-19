@@ -30,7 +30,7 @@ gui.savedlg = iup.filedlg{
 
 gui.dialog = iup.dialog{
 	font       = "HELVETICA_BOLD_12",
-	title      = "Atarefado 1.1",
+	title      = "Atarefado 1.1+",
 	rastersize = "600x440",
 	iup.split{
 		iup.vbox{

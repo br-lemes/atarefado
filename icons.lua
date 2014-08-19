@@ -1,3 +1,6 @@
+-- Free FatCow-Farm Fresh Icons
+-- http://www.fatcow.com/free-icons
+
 ico = { }
 
 ico.note_go = iup.imagergba{
