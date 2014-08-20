@@ -149,6 +149,9 @@ function fun.db_load()
 end
 
 function fun.copy()
+	if gui.result.value == nil or gui.result.value == "0" then
+		return false
+	end
 	local fmt = [[
 eng.new_task{
 	name = %q,
@@ -158,21 +161,18 @@ eng.new_task{
 	tags = {%s %%s }
 }
 ]]
-	if gui.result.value ~= nil and gui.result.value ~= "0" then
-		local item = fun.task_table[tonumber(gui.result.value)]
-		local tags = eng.get_tags(item.id)
-		local buff = ""
-		for i = 1,38 do
-			if tags[i] then
-				buff = string.format("%s %d,", buff, i)
-			end
+	local item = fun.task_table[tonumber(gui.result.value)]
+	local tags = eng.get_tags(item.id)
+	local buff = ""
+	for i = 1,38 do
+		if tags[i] then
+			buff = string.format("%s %d,", buff, i)
 		end
-		fun.clipboard.text = nil
-		fun.clipboard.text = string.format(fmt, item.name, item.date,
-			item.comment, item.recurrent, buff)
-		return true
 	end
-	return false
+	fun.clipboard.text = nil
+	fun.clipboard.text = string.format(fmt, item.name, item.date,
+		item.comment, item.recurrent, buff)
+	return true
 end
 
 function fun.paste()
