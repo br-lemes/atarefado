@@ -148,6 +148,13 @@ function fun.db_load()
 	end
 end
 
+function fun.cut()
+	if not fun.copy() then return false end
+	eng.del_task(fun.task_table[tonumber(gui.result.value)].id, true)
+	fun.task_load()
+	return true
+end
+
 function fun.copy()
 	if gui.result.value == nil or gui.result.value == "0" then
 		return false

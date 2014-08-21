@@ -39,6 +39,9 @@ function gui.result:k_any(k)
 --	elseif (k == iup.K_cV or k == iup.K_cv) then
 	elseif (k == 805306454 or k == 536870998) then
 		fun.paste()
+--	elseif (k == iup.K_cX or k == iup.K_cx) then
+	elseif (k == 805306456 or k == 536871000) then
+		fun.cut()
 	elseif k == iup.K_UP and gui.result.value == "1" then
 		iup.SetFocus(gui.search)
 		gui.result.value = nil
