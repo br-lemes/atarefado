@@ -528,4 +528,10 @@ function gui.savehtml:action()
 	end
 end
 
+function gui.result:button_cb(button, pressed, x, y, status)
+	if button == iup.BUTTON3 and pressed == 0 then
+		gui.menu:popup(iup.MOUSEPOS,iup.MOUSEPOS)
+	end
+end
+
 gui.task_tag.dblclick_cb = gui.task_ok.action

@@ -21,6 +21,21 @@ function gui.iupnames(elem, dest)
 	end
 end
 
+gui.menu = iup.menu{
+	iup.item{
+		title = "Recortar",
+		action = function() fun.cut() end
+	},
+	iup.item{
+		title = "Copiar",
+		action = function() fun.copy() end
+	},
+	iup.item{
+		title = "Colar",
+		action = function() fun.paste() end
+	},
+}
+
 gui.savedlg = iup.filedlg{
 	name       = "savedlg",
 	dialogtype = "SAVE",
@@ -30,7 +45,7 @@ gui.savedlg = iup.filedlg{
 
 gui.dialog = iup.dialog{
 	font       = "HELVETICA_BOLD_12",
-	title      = "Atarefado 1.2",
+	title      = "Atarefado 1.2+",
 	rastersize = "600x440",
 	iup.split{
 		iup.vbox{
