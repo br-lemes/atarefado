@@ -242,6 +242,7 @@ gui.dialog = iup.dialog{
 				name     = "dbname",
 				dropdown = "YES",
 				expand   = "HORIZONTAL",
+				visiblecolumns = "1",
 			},
 			iup.hbox{
 				margin = "0",
