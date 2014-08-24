@@ -23,15 +23,15 @@ end
 
 gui.menu = iup.menu{
 	iup.item{
-		title = "Recortar",
+		title = "Recortar\tCtrl+X",
 		action = function() fun.cut() end
 	},
 	iup.item{
-		title = "Copiar",
+		title = "Copiar\tCtrl+C",
 		action = function() fun.copy() end
 	},
 	iup.item{
-		title = "Colar",
+		title = "Colar\tCtrl+V",
 		action = function() fun.paste() end
 	},
 }
