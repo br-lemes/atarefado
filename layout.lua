@@ -23,6 +23,10 @@ end
 
 gui.menu = iup.menu{
 	iup.item{
+		title = "Editar\tENTER",
+		action = function() gui.result:dblclick_cb() end
+	},
+	iup.item{
 		title = "Recortar\tCtrl+X",
 		action = function() fun.cut() end
 	},
@@ -34,6 +38,10 @@ gui.menu = iup.menu{
 		title = "Colar\tCtrl+V",
 		action = function() fun.paste() end
 	},
+	iup.item{
+		title = "Excluir\tDEL",
+		action = function() gui.task_delete:action() end
+	}
 }
 
 gui.savedlg = iup.filedlg{
