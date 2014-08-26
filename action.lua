@@ -534,19 +534,19 @@ function gui.result:button_cb(button, pressed, x, y, status)
 		if i ~= -1 then self.value = i end
 		if self.value and self.value ~= "0" then
 			gui.result_menu_edit.active = "YES"
+			gui.result_menu_delete.active = "YES"
 			gui.result_menu_cut.active = "YES"
 			gui.result_menu_copy.active = "YES"
-			gui.result_menu_delete.active = "YES"
 			if fun.task_table[tonumber(self.value)].recurrent == "1" then
-				gui.result_menu_delete.title = "Excluir\tDEL"
+				gui.result_menu_delete.title = "Excluir Tarefa\tDEL"
 			else
-				gui.result_menu_delete.title = "Concluir\tDEL"
+				gui.result_menu_delete.title = "Concluir Tarefa\tDEL"
 			end
 		else
 			gui.result_menu_edit.active = "NO"
+			gui.result_menu_delete.active = "NO"		
 			gui.result_menu_cut.active = "NO"
 			gui.result_menu_copy.active = "NO"
-			gui.result_menu_delete.active = "NO"		
 		end
 		if fun.canpaste() then
 			gui.result_menu_paste.active = "YES"

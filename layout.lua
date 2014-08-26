@@ -10,30 +10,36 @@ end
 
 gui.result_menu = iup.menu{
 	iup.item{
+		name   = "result_menu_new",
+		title  = "Nova Tarefa\tENTER",
+		action = function() gui.task_new:action() end
+	},
+	iup.item{
 		name   = "result_menu_edit",
-		title  = "Editar\tENTER",
+		title  = "Editar Tarefa\tENTER",
 		action = function() gui.result:dblclick_cb() end
 	},
 	iup.item{
+		name   = "result_menu_delete",
+		title  = "Excluir Tarefa\tDEL",
+		action = function() gui.task_delete:action() end
+	},
+	iup.separator{},
+	iup.item{
 		name   = "result_menu_cut",
-		title  = "Recortar\tCtrl+X",
+		title  = "Recortar\t\tCtrl+X",
 		action = function() fun.cut() end
 	},
 	iup.item{
 		name   = "result_menu_copy",
-		title  = "Copiar\tCtrl+C",
+		title  = "Copiar\t\tCtrl+C",
 		action = function() fun.copy() end
 	},
 	iup.item{
 		name   = "result_menu_paste",
-		title  = "Colar\tCtrl+V",
+		title  = "Colar\t\tCtrl+V",
 		action = function() fun.paste() end
 	},
-	iup.item{
-		name   = "result_menu_delete",
-		title  = "Excluir\tDEL",
-		action = function() gui.task_delete:action() end
-	}
 }
 
 gui.savedlg = iup.filedlg{
