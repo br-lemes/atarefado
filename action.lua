@@ -548,6 +548,11 @@ function gui.result:button_cb(button, pressed, x, y, status)
 			gui.result_menu_copy.active = "NO"
 			gui.result_menu_delete.active = "NO"		
 		end
+		if fun.canpaste() then
+			gui.result_menu_paste.active = "YES"
+		else
+			gui.result_menu_paste.active = "NO"
+		end
 		gui.result_menu:popup(iup.MOUSEPOS,iup.MOUSEPOS)
 	end
 end
