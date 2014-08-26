@@ -533,11 +533,20 @@ function gui.result:button_cb(button, pressed, x, y, status)
 		local i = iup.ConvertXYToPos(self, x, y)
 		if i ~= -1 then self.value = i end
 		if self.value and self.value ~= "0" then
+			gui.result_menu_edit.active = "YES"
+			gui.result_menu_cut.active = "YES"
+			gui.result_menu_copy.active = "YES"
+			gui.result_menu_delete.active = "YES"
 			if fun.task_table[tonumber(self.value)].recurrent == "1" then
 				gui.result_menu_delete.title = "Excluir\tDEL"
 			else
 				gui.result_menu_delete.title = "Concluir\tDEL"
 			end
+		else
+			gui.result_menu_edit.active = "NO"
+			gui.result_menu_cut.active = "NO"
+			gui.result_menu_copy.active = "NO"
+			gui.result_menu_delete.active = "NO"		
 		end
 		gui.result_menu:popup(iup.MOUSEPOS,iup.MOUSEPOS)
 	end
