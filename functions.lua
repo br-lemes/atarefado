@@ -182,7 +182,7 @@ eng.new_task{
 	return true
 end
 
-function fun.paste()
+function fun.canpaste()
 	local fmt = [[
 eng%.new_task{
 	name = .*,
@@ -192,15 +192,17 @@ eng%.new_task{
 	tags = {.* %%s }
 }
 ]]
-	if fun.clipboard.text and fun.clipboard.text:match(fmt) then
-		local s = ""
-		local n = tonumber(gui.taglist.value)
-		if n > 2 then s = tostring(fun.tag_table[n].id) end
-		loadstring(string.format(fun.clipboard.text, s))()
-		fun.task_load()
-		return true
-	end
-	return false
+	return fun.clipboard.text and fun.clipboard.text:match(fmt)
+end
+
+function fun.paste()
+	if not fun.canpaste() then return false end
+	local s = ""
+	local n = tonumber(gui.taglist.value)
+	if n > 2 then s = tostring(fun.tag_table[n].id) end
+	loadstring(string.format(fun.clipboard.text, s))()
+	fun.task_load()
+	return true
 end
 
 function fun.reload()
