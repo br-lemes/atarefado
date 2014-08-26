@@ -10,18 +10,22 @@ end
 
 gui.result_menu = iup.menu{
 	iup.item{
+		name   = "result_menu_edit",
 		title  = "Editar\tENTER",
 		action = function() gui.result:dblclick_cb() end
 	},
 	iup.item{
+		name   = "result_menu_cut",
 		title  = "Recortar\tCtrl+X",
 		action = function() fun.cut() end
 	},
 	iup.item{
+		name   = "result_menu_copy",
 		title  = "Copiar\tCtrl+C",
 		action = function() fun.copy() end
 	},
 	iup.item{
+		name   = "result_menu_paste",
 		title  = "Colar\tCtrl+V",
 		action = function() fun.paste() end
 	},
