@@ -7,8 +7,8 @@ require("iuplua")
 require("engine")
 require("icons")
 require("layout")
-require("action")
 require("functions")
+require("action")
 
 iup.SetGlobal("UTF8MODE", "NO")
 

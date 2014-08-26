@@ -8,38 +8,26 @@ function gui.option(self)
 	fun.task_load()
 end
 
-function gui.iupnames(elem, dest)
-	if type(elem) == "userdata" then
-		if elem.name ~= "" and elem.name ~= nil then
-			dest[elem.name] = elem
-		end
-	end
-	local i = 1
-	while elem[i] do
-		gui.iupnames(elem[i], dest)
-		i = i + 1
-	end
-end
-
-gui.menu = iup.menu{
+gui.result_menu = iup.menu{
 	iup.item{
-		title = "Editar\tENTER",
+		title  = "Editar\tENTER",
 		action = function() gui.result:dblclick_cb() end
 	},
 	iup.item{
-		title = "Recortar\tCtrl+X",
+		title  = "Recortar\tCtrl+X",
 		action = function() fun.cut() end
 	},
 	iup.item{
-		title = "Copiar\tCtrl+C",
+		title  = "Copiar\tCtrl+C",
 		action = function() fun.copy() end
 	},
 	iup.item{
-		title = "Colar\tCtrl+V",
+		title  = "Colar\tCtrl+V",
 		action = function() fun.paste() end
 	},
 	iup.item{
-		title = "Excluir\tDEL",
+		name   = "result_menu_delete",
+		title  = "Excluir\tDEL",
 		action = function() gui.task_delete:action() end
 	}
 }
@@ -341,5 +329,3 @@ gui.dialog = iup.dialog{
 		},
 	},
 }
-
-gui.iupnames(gui.dialog, gui)

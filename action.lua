@@ -532,7 +532,14 @@ function gui.result:button_cb(button, pressed, x, y, status)
 	if button == iup.BUTTON3 and pressed == 0 then
 		local i = iup.ConvertXYToPos(self, x, y)
 		if i ~= -1 then self.value = i end
-		gui.menu:popup(iup.MOUSEPOS,iup.MOUSEPOS)
+		if self.value and self.value ~= "0" then
+			if fun.task_table[tonumber(self.value)].recurrent == "1" then
+				gui.result_menu_delete.title = "Excluir\tDEL"
+			else
+				gui.result_menu_delete.title = "Concluir\tDEL"
+			end
+		end
+		gui.result_menu:popup(iup.MOUSEPOS,iup.MOUSEPOS)
 	end
 end
 
