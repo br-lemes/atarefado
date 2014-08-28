@@ -45,17 +45,17 @@ gui.result_menu = iup.menu{
 	iup.separator{},
 	iup.item{
 		name   = "result_menu_cut",
-		title  = "Recortar\t\tCtrl+X",
+		title  = "Recortar\tCtrl+X",
 		action = function() fun.cut() end
 	},
 	iup.item{
 		name   = "result_menu_copy",
-		title  = "Copiar\t\tCtrl+C",
+		title  = "Copiar\tCtrl+C",
 		action = function() fun.copy() end
 	},
 	iup.item{
 		name   = "result_menu_paste",
-		title  = "Colar\t\tCtrl+V",
+		title  = "Colar\tCtrl+V",
 		action = function() fun.paste() end
 	},
 }
