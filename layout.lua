@@ -8,6 +8,24 @@ function gui.option(self)
 	fun.task_load()
 end
 
+gui.taglist_menu = iup.menu{
+	iup.item{
+		name   = "taglist_menu_new",
+		title  = "Nova Tag\tF10",
+		action = function() gui.new_button:action() end
+	},
+	iup.item{
+		name   = "taglist_menu_edit",
+		title  = "Editar Tag\tF11",
+		action = function() gui.edit_button:action() end
+	},
+	iup.item{
+		name   = "taglist_menu_delete",
+		title  = "Excluir Tag\tF12",
+		action = function() gui.del_button:action() end
+	},
+}
+
 gui.result_menu = iup.menu{
 	iup.item{
 		name   = "result_menu_new",

@@ -551,7 +551,24 @@ function gui.result:button_cb(button, pressed, x, y, status)
 		else
 			gui.result_menu_paste.active = "NO"
 		end
-		gui.result_menu:popup(iup.MOUSEPOS,iup.MOUSEPOS)
+		gui.result_menu:popup(iup.MOUSEPOS, iup.MOUSEPOS)
+	end
+end
+
+function gui.taglist:button_cb(button, pressed, x, y, status)
+	if button == iup.BUTTON3 and pressed == 0 then
+		local i = iup.ConvertXYToPos(self, x, y)
+		if i ~= -1 then self.value = i end
+		if self.value and tonumber(self.value) <= 2 then
+			gui.taglist_menu_new.active = "YES"
+			gui.taglist_menu_edit.active = "NO"
+			gui.taglist_menu_delete.active = "NO"
+		else
+			gui.taglist_menu_new.active = "YES"
+			gui.taglist_menu_edit.active = "YES"
+			gui.taglist_menu_delete.active = "YES"
+		end
+		gui.taglist_menu:popup(iup.MOUSEPOS, iup.MOUSEPOS)
 	end
 end
 

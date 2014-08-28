@@ -231,5 +231,6 @@ end
 
 fun.iupnames(gui.dialog, gui)
 fun.iupnames(gui.result_menu, gui)
+fun.iupnames(gui.taglist_menu, gui)
 
 fun.load_timer.action_cb = fun.task_load
