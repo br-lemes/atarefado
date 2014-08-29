@@ -58,6 +58,22 @@ gui.result_menu = iup.menu{
 		title  = "Colar\tCtrl+V",
 		action = function() fun.paste() end
 	},
+	iup.separator{},
+	iup.item{
+		name   = "result_menu_today",
+		title  = "Marcar para hoje\tF2",
+		action = function() gui.task_today:action() end
+	},
+	iup.item{
+		name   = "result_menu_tomorrow",
+		title  = "Deixar para amanhã\tF3",
+		action = function() gui.task_tomorrow:action() end
+	},
+	iup.item{
+		name   = "result_menu_anytime",
+		title  = "Deixar para qualquer dia\tF4",
+		action = function() gui.task_anytime:action() end
+	},
 }
 
 gui.savedlg = iup.filedlg{
