@@ -538,6 +538,8 @@ function gui.result:button_cb(button, pressed, x, y, status)
 			gui.result_menu_today.active = "YES"
 			gui.result_menu_tomorrow.active = "YES"
 			gui.result_menu_anytime.active = "YES"
+			gui.result_menu_priup.active = "YES"
+			gui.result_menu_pridown.active = "YES"
 			if fun.task_table[tonumber(self.value)].recurrent == "1" then
 				gui.result_menu_delete.title = "Excluir Tarefa\tDEL"
 			else
@@ -551,6 +553,8 @@ function gui.result:button_cb(button, pressed, x, y, status)
 			gui.result_menu_today.active = "NO"
 			gui.result_menu_tomorrow.active = "NO"
 			gui.result_menu_anytime.active = "NO"
+			gui.result_menu_priup.active = "NO"
+			gui.result_menu_pridown.active = "NO"
 		end
 		if fun.canpaste() then
 			gui.result_menu_paste.active = "YES"

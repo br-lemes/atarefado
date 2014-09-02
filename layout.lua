@@ -74,6 +74,17 @@ gui.result_menu = iup.menu{
 		title  = "Deixar para qualquer dia\tF4",
 		action = function() gui.task_anytime:action() end
 	},
+	iup.separator{},
+	iup.item{
+		name   = "result_menu_priup",
+		title  = "Aumentar prioridade",
+		action = function() fun.priup() end
+	},
+	iup.item{
+		name   = "result_menu_pridown",
+		title  = "Diminuir prioridade",
+		action = function() fun.pridown() end
+	},
 }
 
 gui.savedlg = iup.filedlg{
