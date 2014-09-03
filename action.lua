@@ -33,8 +33,6 @@ function gui.search:k_any(k)
 end
 
 function gui.result:k_any(k)
-	print(k)
-	io.stdout:flush()
 --	if (k == iup.K_cC or k == iup.K_cc) then
 	if (k == 805306435 or k == 536870979) then
 		fun.copy()
@@ -48,6 +46,10 @@ function gui.result:k_any(k)
 		fun.priup()
 	elseif k == 536936276 then
 		fun.pridown()
+	elseif k == 1073807186 then
+		fun.priup(10)
+	elseif k == 1073807188 then
+		fun.pridown(10)
 	elseif k == iup.K_UP and gui.result.value == "1" then
 		iup.SetFocus(gui.search)
 		gui.result.value = nil

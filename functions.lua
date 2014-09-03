@@ -229,28 +229,28 @@ function fun.iupnames(elem, dest)
 	end
 end
 
-function fun.priup()
+function fun.priup(inc)
 	if not gui.result.value or gui.result.value == "0" then return end
 	local item = fun.task_table[tonumber(gui.result.value)]
 	local num = tonumber(item.name:match("^(%d%d) ?%- ?"))
 	if num == nil then
 		item.name = "10 - " .. item.name
 	else
-		if num > 1 then num = num - 1 end
+		if num > 1 then num = num - (inc or 1) end
 		item.name = item.name:gsub("^%d%d ?%- ?", string.format("%02d - ", num))
 	end
 	eng.upd_task{id=item.id, name=item.name}
 	fun.task_load()
 end
 
-function fun.pridown()
+function fun.pridown(inc)
 	if not gui.result.value or gui.result.value == "0" then return end
 	local item = fun.task_table[tonumber(gui.result.value)]
 	local num = tonumber(item.name:match("^(%d%d) ?%- ?"))
 	if num == nil then
 		item.name = "90 - " .. item.name
 	else
-		if num < 99 then num = num + 1 end
+		if num < 99 then num = num + (inc or 1) end
 		item.name = item.name:gsub("^%d%d ?%- ?", string.format("%02d - ", num))
 	end
 	eng.upd_task{id=item.id, name=item.name}
