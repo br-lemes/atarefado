@@ -230,28 +230,34 @@ function fun.iupnames(elem, dest)
 end
 
 function fun.priup(inc)
+	inc = inc or 1
 	if not gui.result.value or gui.result.value == "0" then return end
 	local item = fun.task_table[tonumber(gui.result.value)]
 	local num = tonumber(item.name:match("^(%d%d) ?%- ?"))
+	if num and num <= inc then return end
 	if num == nil then
-		item.name = "10 - " .. item.name
+		item.name = string.format("%02d - %s", inc, item.name)
 	else
-		if num > 1 then num = num - (inc or 1) end
-		item.name = item.name:gsub("^%d%d ?%- ?", string.format("%02d - ", num))
+		if num > 1 then num = num - inc end
+		item.name = item.name:gsub("^%d%d ?%- ?",
+			string.format("%02d - ", num))
 	end
 	eng.upd_task{id=item.id, name=item.name}
 	fun.task_load()
 end
 
 function fun.pridown(inc)
+	inc = inc or 1
 	if not gui.result.value or gui.result.value == "0" then return end
 	local item = fun.task_table[tonumber(gui.result.value)]
 	local num = tonumber(item.name:match("^(%d%d) ?%- ?"))
+	if num and num >= 100 - inc then return end
 	if num == nil then
-		item.name = "90 - " .. item.name
+		item.name = string.format("%02d - %s", 100 - inc, item.name)
 	else
-		if num < 99 then num = num + (inc or 1) end
-		item.name = item.name:gsub("^%d%d ?%- ?", string.format("%02d - ", num))
+		if num < 99 then num = num + inc end
+		item.name = item.name:gsub("^%d%d ?%- ?",
+			string.format("%02d - ", num))
 	end
 	eng.upd_task{id=item.id, name=item.name}
 	fun.task_load()
