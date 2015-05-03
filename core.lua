@@ -1,5 +1,5 @@
 
-require('luasql.sqlite3')
+local luasql = require('luasql.sqlite3')
 
 -- assert time calculations (os dependent)
 
@@ -16,6 +16,18 @@ assert(
 )
 
 local env, con
+
+local function hasTable(table)
+	if not con then return nil, 'There is no open database' end
+	local cur, err = con:execute(string.format(
+		'SELECT * FROM sqlite_master WHERE type="table" AND name=%q;',
+		table))
+	if not cur then return nil, err end
+	local row = { }
+	cur:fetch(row)
+	cur:close()
+	return row[1] ~= nil
+end
 
 local function open(dbname)
 	local err
@@ -87,18 +99,6 @@ end
 local function close()
 	if con then con:close() end
 	if env then env:close() end
-end
-
-local function hasTable(table)
-	if not con then return nil, 'There is no open database' end
-	local cur, err = con:execute(string.format(
-		'SELECT * FROM sqlite_master WHERE type="table" AND name=%q;',
-		table))
-	if not cur then return nil, err end
-	local row = { }
-	cur:fetch(row)
-	cur:close()
-	return row[1] ~= nil
 end
 
 local function hasId(id, table)
@@ -204,6 +204,14 @@ local function delTag(tag)
 	return cur, err
 end
 
+local function setOption(option, value)
+	if not con then return nil, 'There is no open database' end
+	local cur, err = con:execute(string.format(
+		'UPDATE options SET value=%q WHERE name=%q;',
+		 value, option))
+	return cur, err
+end
+
 local function setTag(task, tag)
 	if not con then return nil, 'There is no open database' end
 	if not hasId(tag, 'tagnames') then
@@ -271,6 +279,23 @@ local function getTags(task)
 		end
 		cur:close()
 	end
+	return result
+end
+
+local function getOptions()
+	if not con then return nil, 'There is no open database' end
+	local cur, err = con:execute('SELECT value FROM options;')
+	if not cur then return nil, err end
+	local result = { }
+	local row = { }
+	cur:fetch(row) result.anytime   = row[1]
+	cur:fetch(row) result.tomorrow  = row[1]
+	cur:fetch(row) result.future    = row[1]
+	cur:fetch(row) result.today     = row[1]
+	cur:fetch(row) result.yesterday = row[1]
+	cur:fetch(row) result.late      = row[1]
+	cur:fetch(row) result.tag       = row[1]
+	cur:close()
 	return result
 end
 
@@ -378,6 +403,26 @@ local function goNext(task)
 	end
 end
 
+local function lastRow()
+	if not con then return nil, 'There is no open database' end
+	local cur, err = con:execute('SELECT last_insert_rowid();')
+	if not cur then return nil, err end
+	local row = { }
+	cur:fetch(row)
+	cur:close()
+	return row[1]
+end
+
+local function Begin()
+	if not con then return nil, 'There is no open database' end
+	con:execute('BEGIN;')	
+end
+
+local function End()
+	if not con then return nil, 'There is no open database' end
+	con:execute('END;')
+end
+
 local function isDate(d)
 	t = { }
 	t.year, t.month, t.day = d:match('(%d%d%d%d)-(%d%d)-(%d%d)')
@@ -418,6 +463,40 @@ local function daysMonth(month, year)
 	end
 	return month == 2 and is_leap_year(year) and 29
 		or ('\31\28\31\30\31\30\31\31\30\31\30\31'):byte(month)
+end
+
+function getTasks(pattern, flags, tag)
+	if not con then return nil, 'There is no open database' end
+	local flags = flags or { }
+	if flags.anytime   == nil then flags.anytime   = true end
+	if flags.tomorrow  == nil then flags.tomorrow  = true end
+	if flags.future    == nil then flags.future    = true end
+	if flags.today     == nil then flags.today     = true end
+	if flags.yesterday == nil then flags.yesterday = true end
+	if flags.late      == nil then flags.late      = true end
+	local cur, err = con:execute(
+		'SELECT * FROM tasks ORDER BY name;')
+	if not cur then return nil, err end
+	local row = { }
+	local result = { }
+	while cur:fetch(row, 'a') do
+		local a, b = pcall(string.match,
+			row.name:upper(), pattern:upper())
+		if ((isAnytime(row.date) and flags.anytime) or
+			(isTomorrow(row.date) and flags.tomorrow) or
+			(isFuture(row.date) and flags.future) or
+			(isToday(row.date) and flags.today) or
+			(isYesterday(row.date) and flags.yesterday) or
+			(isLate(row.date) and flags.late)) and
+			(not tag or (tag == -1 and hasNoTags(row.id)) or
+			hasTag(row.id, tag)) and (a and b) then
+				local copy = { }
+				for k,v in pairs(row) do copy[k] = v end
+				table.insert(result, copy)
+		end
+	end
+	cur:close()
+	return result
 end
 
 return {
@@ -462,6 +541,10 @@ return {
 	-- remove the tag from any task and remove the tag
 	-- return: 1 or nil and error message
 	delTag = delTag,
+	-- function setOption(option, value)
+	-- set the given database option
+	-- return: 1 or nil and error message
+	setOption = setOption,
 	-- function setTag(task, tag)
 	-- add to the given task the given tag
 	-- return: 1 or nil and error message
@@ -473,11 +556,17 @@ return {
 	-- function getTask(task)
 	-- return a table with the given task or nil
 	getTask = getTask,
+	-- function getTasks(pattern, flags, tag)
+	-- return a table with the tasks that match the pattern, flags and tag
+	getTasks = getTasks,
 	-- function getTags()
 	-- return a table with all tags
 	-- function getTags(task)
 	-- return a table with all the task's tags
 	getTags = getTags,
+	-- function getOptions()
+	-- return a table with the database options
+	getOptions = getOptions,
 	-- function updTask(task)
 	-- update (rename) the given task
 	-- return: 1 or nil and error message
@@ -490,6 +579,8 @@ return {
 	-- put off a task till next date
 	-- return: 1 or nil and error message
 	goNext = goNext,
+	-- function lastRow - return last_insert_rowid()
+	lastRow = lastRow,
 	-- function isDate(d) - return true if d is a valid
 	isDate = isDate,
 	-- function isAnytime(d) - return true if d is an unespecified time
