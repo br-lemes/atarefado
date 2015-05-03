@@ -23,16 +23,15 @@ function fun.question(message)
 end
 
 function fun.opt_load()
-	local cur = eng.con:execute('SELECT value FROM options;')
-	local row = { }
-	cur:fetch(row) gui.anytime.value   = row[1]
-	cur:fetch(row) gui.tomorrow.value  = row[1]
-	cur:fetch(row) gui.future.value    = row[1]
-	cur:fetch(row) gui.today.value     = row[1]
-	cur:fetch(row) gui.yesterday.value = row[1]
-	cur:fetch(row) gui.late.value      = row[1]
-	cur:fetch(row) gui.taglist.value   = row[1]
-	cur:close()  gui.taglist.lastvalue = row[1]
+	local options = eng.get_options()
+	gui.anytime.value     = options.anytime
+	gui.tomorrow.value    = options.tomorrow
+	gui.future.value      = options.future
+	gui.today.value       = options.today
+	gui.yesterday.value   = options.yesterday
+	gui.late.value        = options.late
+	gui.taglist.value     = options.tag
+	gui.taglist.lastvalue = options.tag
 	if gui.taglist.value == nil or gui.taglist.value == "0" then
 		gui.taglist.value = "1"
 	end

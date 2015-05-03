@@ -122,13 +122,9 @@ end
 function gui.new_ok:action()
 	gui.taglist.lastvalue = nil
 	eng.new_tag(gui.search.value)
-	local cur = eng.con:execute('SELECT last_insert_rowid();')
-	local row = { }
-	cur:fetch(row)
-	cur:close()
 	fun.tag_load()
 	gui.new_cancel:action()
-	gui.taglist.value = fun.tag_table.id[row[1]]
+	gui.taglist.value = fun.tag_table.id[eng.last_row()]
 	fun.task_load()
 end
 
@@ -202,16 +198,12 @@ function gui.task_ok:action()
 	upd.date = gui.task_date.value
 	upd.comment = gui.task_comment.value
 	upd.recurrent = gui.task_recurrent.value
-	eng.con:execute('BEGIN;')
+	eng.Begin()
 	if upd.id then
 		eng.upd_task(upd)
 	else
 		eng.new_task(upd)
-		local cur = eng.con:execute('SELECT last_insert_rowid();')
-		local row = { }
-		cur:fetch(row)
-		cur:close()
-		upd.id = row[1]
+		upd.id = eng.last_row()
 	end
 	for i = 1, #gui.task_tag.value do
 		local n = gui.task_tag.value:byte(i)
@@ -237,7 +229,7 @@ function gui.task_ok:action()
 			eng.clear_tag(upd.id, i+7)
 		end
 	end
-	eng.con:execute('END;')
+	eng.End()
 	gui.task_cancel:action()
 	fun.task_load()
 end
@@ -260,9 +252,7 @@ end
 
 function gui.taglist:valuechanged_cb()
 	if self.value == nil or self.lastvalue == self.value then return end
-	eng.con:execute(string.format(
-		'UPDATE options SET value=%q WHERE name="tag";',
-		self.value, self.name))
+	eng.set_option('tag', self.value)
 	self.lastvalue = self.value
 	if tonumber(self.value) >= 3 then
 		gui.edit_button.active = "YES"
