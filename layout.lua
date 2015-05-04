@@ -2,7 +2,7 @@
 gui = { }
 
 function gui.option(self)
-	eng.set_option(self.value, self.name)
+	eng.set_option(self.name, self.value)
 	fun.task_load()
 end
 
