@@ -15,13 +15,13 @@ assert(
 	os.time{day = 1, month = 1, year = 2013}
 )
 
-eng = { }
+local eng = { }
 
 -- initialize variables and create a database if not exists
 -- return: nothing
 function eng.init(dbname)
 	eng.env = assert(luasql.sqlite3())
-	eng.con = assert(eng.env:connect(dbname))
+	eng.con = assert(eng.env:connect('database/' .. dbname))
 
 	eng.con:execute('BEGIN;')
 	if not eng.has_table('tagnames') then
@@ -134,7 +134,7 @@ function eng.has_notags(task)
 	local row = { }
 	while cur:fetch(row, "a") do
 		-- ignore the first 38 special tags
-		if tonumber(row.tag) > 38 then 
+		if tonumber(row.tag) > 38 then
 			cur:close()
 			return false
 		end
@@ -507,4 +507,4 @@ function eng.End()
 	eng.con:execute('END;')
 end
 
-
+return eng

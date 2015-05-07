@@ -2,13 +2,14 @@
 os.setlocale("pt_BR")
 os.setlocale("C", "numeric")
 
+eng = require("engine")
+
 require("lfs")
 require("iuplua")
-require("engine")
-require("icons")
-require("layout")
-require("functions")
-require("action")
+require("desktop.icons")
+require("desktop.layout")
+require("desktop.functions")
+require("desktop.action")
 
 iup.SetGlobal("UTF8MODE", "NO")
 

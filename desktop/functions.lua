@@ -131,7 +131,7 @@ function fun.db_load()
 	if value == "0" then value = "1" end
 	fun.dblist = { }
 	gui.dbname.removeitem = "ALL"
-	for file in lfs.dir(".") do
+	for file in lfs.dir("database") do
 		if file:sub(-7, -1) == ".sqlite" then
 			table.insert(fun.dblist, file)
 			gui.dbname.appenditem = file:sub(1, -8)
