@@ -1,0 +1,8 @@
+body { padding-top: 80px; }
+.navbar-header { padding-right: 15px; }
+.navbar-brand { padding-top: 9px; padding-bottom: 9px; }
+.navbar-brand > img { display: inline; }
+.scrollable-menu { height: auto; max-height: 250px; overflow-x: hidden; }
+.list-group-link { color: #333; }
+.list-group-link:hover { color: #333; text-decoration: none; }
+li.list-group-item:hover { background-color: #f5f5f5; }
