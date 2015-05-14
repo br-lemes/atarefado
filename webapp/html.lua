@@ -81,6 +81,16 @@ if GET.action == "post" and not POST.cancel then
 		else
 			html.alert("Tag sem nome.", "alert-danger")
 		end
+	elseif POST.action == "del_task" then
+		local s = "excluída"
+		if POST.recurrent and not POST.force then s = "concluída" end
+		local cur, err = eng.del_task(POST.id, POST.force)
+		if cur then
+			html.alert(string.format("Tarefa %s: %s.", s, POST.name), "alert-success")
+		else
+			html.debug(POST.recurrent)
+			html.alert(err, "alert-danger")
+		end
 	elseif POST.action == "del_tag" then
 		local cur, err = eng.del_tag(POST.id)
 		if cur then
