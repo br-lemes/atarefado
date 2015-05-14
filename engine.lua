@@ -280,6 +280,7 @@ function eng.get_task(task)
 	local row = { }
 	cur:fetch(row, 'a')
 	cur:close()
+	row.recurrent = tostring(row.recurrent) -- it's a string number
 	return row
 end
 
@@ -415,6 +416,7 @@ function eng.go_next(task)
 			task.id))
 		return cur, err
 	end
+	return nil, "Should never happens"
 end
 
 -- return true if d is a valid date else return nil or false
