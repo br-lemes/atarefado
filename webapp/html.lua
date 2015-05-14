@@ -9,7 +9,16 @@ html.duelist = { "anytime", "tomorrow", "future", "today", "yesterday", "late" }
 -- due [date] list :)
 html.onoff = { ON = "OFF", OFF = "ON" }
 
+html.alertString = ""
 html.debugString = ""
+
+function html.alert(msg, class)
+	html.alertString = string.format([[
+		<div class="alert alert-dismissible %s">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+				%s
+		</div>]], class, msg)
+end
 
 function html.debug(msg)
 	html.debugString = string.format("%s<br>%s<br>",
@@ -63,40 +72,32 @@ eng.init(html.dbactive .. ".sqlite")
 if GET.action == "post" and not POST.cancel then
 	if POST.action == "new_tag" then
 		if POST.name ~= "" then
-			eng.new_tag(POST.name)
-			html.alert = string.format([[
-			<div class="alert alert-dismissible alert-success">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				Nova tag criada: %s.
-			</div>]], POST.name)
+			local cur, err = eng.new_tag(POST.name)
+			if cur then
+				html.alert(string.format("Nova tag criada: %s.", POST.name), "alert-success")
+			else
+				html.alert(err, "alert-danger")
+			end
 		else
-			html.alert = [[
-			<div class="alert alert-dismissible alert-danger">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				Tag sem nome.
-			</div>]]
+			html.alert("Tag sem nome.", "alert-danger")
 		end
 	elseif POST.action == "del_tag" then
-		eng.del_tag(POST.id)
-		html.alert = string.format([[
-			<div class="alert alert-dismissible alert-success">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				Tag excluída: %s.
-			</div>]], POST.name)
+		local cur, err = eng.del_tag(POST.id)
+		if cur then
+			html.alert(string.format("Tag excluída: %s.", POST.name), "alert-success")
+		else
+			html.alert(err, "alert-danger")
+		end
 	elseif POST.action == "upd_tag" then
 		if POST.name ~= "" then
-			eng.upd_tag(POST.id, POST.name)
-			html.alert = string.format([[
-				<div class="alert alert-dismissible alert-success">
-					<button type="button" class="close" data-dismiss="alert">×</button>
-					Tag atualizada: %s.
-				</div>]], POST.name)
+			local cur, err = eng.upd_tag(POST.id, POST.name)
+			if cur then
+				html.alert(string.format("Tag atualizada: %s.", POST.name), "alert-success")
+			else
+				html.alert(err, "alert-danger")
+			end
 		else
-			html.alert = [[
-			<div class="alert alert-dismissible alert-danger">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				Tag sem nome.
-			</div>]]
+			html.alert("Tag sem nome.", "alert-danger")
 		end
 	end
 	elseif GET.action == "set_date" then
@@ -104,21 +105,30 @@ if GET.action == "post" and not POST.cancel then
 		if GET.date == "today" then
 			upd.id = GET.id
 			upd.date = os.date("%Y-%m-%d")
-			eng.upd_task(upd)
+			local cur, err = eng.upd_task(upd)
+			if not cur then html.alert(err, "alert-danger") end
 		elseif GET.date == "tomorrow" then
 			upd.id = GET.id
 			upd.date = os.date("%Y-%m-%d", os.time()+24*60*60)
-			eng.upd_task(upd)
+			local cur, err = eng.upd_task(upd)
+			if not cur then html.alert(err, "alert-danger") end
 		elseif GET.date == "anytime" then
 			upd.id = GET.id
 			upd.date = ""
-			eng.upd_task(upd)
+			local cur, err = eng.upd_task(upd)
+			if not cur then html.alert(err, "alert-danger") end
 		end
 end
 for i, v in ipairs(html.duelist) do
-	if GET[v] then eng.set_option(v, GET[v]) end
+	if GET[v] then
+		local cur, err = eng.set_option(v, GET[v])
+		if not cur then html.alert(err, "alert-danger") end
+	end
 end
-if GET.tag then eng.set_option("tag", GET.tag) end
+if GET.tag then
+	local cur, err = eng.set_option("tag", GET.tag)
+	if not cur then html.alert(err, "alert-danger") end
+end
 html.options = eng.get_options()
 html.options.tag = tonumber(html.options.tag)
 html.taglist = eng.get_tags()

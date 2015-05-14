@@ -11,7 +11,7 @@ html = require("webapp.html")
 	<div class="container">
 		<div class="row">
 			<div class="col-md-7">
-				<%= html.alert %>
+				<%= html.alertString %>
 				<% if GET.action == "new_task" then %>
 					<%in webapp/newtask.lua %>
 				<% elseif GET.action == "new_tag" then %>
