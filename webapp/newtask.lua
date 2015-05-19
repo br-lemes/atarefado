@@ -25,7 +25,7 @@
 			<div class="col-lg-10">
 				<select class="form-control" name="tags[]" size="7" multiple>
 				<% for i, v in ipairs(html.taglist) do  if i > 2 then %>
-					<option value="<%= v.id%>"><%= v.name %></option>
+					<option value="<%= v.id%>" <% if tonumber(POST.tag) == v.id then %>selected<% end %>><%= v.name %></option>
 				<% end end %>
 				</select>
 			</div>

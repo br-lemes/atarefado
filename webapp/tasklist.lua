@@ -1,5 +1,6 @@
 <form class="form-horizontal" id="main" action=".?action=new_task&database=<%= html.dbactive %>" method="POST">
 <div class="form-group">
+	<input type="hidden" name="tag" value="<%= html.taglist[html.options.tag].id %>">
 	<div class="col-xs-10">
 		<input class="form-control" name="name" type="text" autofocus>
 	</div>
