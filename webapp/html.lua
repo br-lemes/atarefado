@@ -70,7 +70,49 @@ else
 end
 eng.init(html.dbactive .. ".sqlite")
 if GET.action == "post" and not POST.cancel then
-	if POST.action == "new_tag" then
+	if POST.action == "new_task" then
+		if POST.name ~= "" then
+			local upd = { }
+			upd.name = POST.name
+			upd.date = POST.date
+			upd.comment = POST.comment
+			upd.recurrent = POST.recurrent
+			eng.Begin()
+			html.debug("POST data")
+			local cur, err = eng.new_task(upd)
+			if cur then
+				upd.id = eng.last_row()
+				local taglist = eng.get_tags()
+				for i, v in ipairs(taglist) do
+					if POST.tags and POST.tags:match("%f[%d]" .. v.id .. "%f[%D]") then
+						eng.set_tag(upd.id, v.id)
+					else
+						eng.clear_tag(upd.id, v.id)
+					end
+				end
+				for i = 1, 7 do
+					if POST.rweek and POST.rweek:match("%f[%d]" .. i .. "%f[%D]") then
+						eng.set_tag(upd.id, i)
+					else
+						eng.clear_tag(upd.id, i)
+					end
+				end
+				for i = 1, 31 do
+					if POST.rmonth and POST.rmonth:match("%f[%d]" .. i .. "%f[%D]") then
+						eng.set_tag(upd.id, i+7)
+					else
+						eng.clear_tag(upd.id, i+7)
+					end
+				end
+				html.alert(string.format("Nova tarefa criada: %s.", POST.name), "alert-success")
+			else
+				html.alert(err, "alert-danger")
+			end
+			eng.End()
+		else
+			html.alert("Tarefa sem nome.", "alert-danger")
+		end
+	elseif POST.action == "new_tag" then
 		if POST.name ~= "" then
 			local cur, err = eng.new_tag(POST.name)
 			if cur then
@@ -98,6 +140,47 @@ if GET.action == "post" and not POST.cancel then
 		else
 			html.alert(err, "alert-danger")
 		end
+	elseif POST.action == "upd_task" then
+			local upd = { }
+			upd.id = POST.id
+			upd.name = POST.name
+			upd.date = POST.date
+			upd.comment = POST.comment
+			upd.recurrent = POST.recurrent
+			eng.Begin()
+			html.debug("POST data")
+			local cur, err = eng.upd_task(upd)
+			if cur then
+				local taglist = eng.get_tags()
+				for i, v in ipairs(taglist) do
+					if POST.tags and POST.tags:match("%f[%d]" .. v.id .. "%f[%D]") then
+						eng.set_tag(upd.id, v.id)
+					else
+						eng.clear_tag(upd.id, v.id)
+					end
+				end
+				for i = 1, 7 do
+					if POST.rweek and POST.rweek:match("%f[%d]" .. i .. "%f[%D]") then
+						eng.set_tag(upd.id, i)
+					else
+						eng.clear_tag(upd.id, i)
+					end
+				end
+				for i = 1, 31 do
+					if POST.rmonth and POST.rmonth:match("%f[%d]" .. i .. "%f[%D]") then
+						eng.set_tag(upd.id, i+7)
+					else
+						eng.clear_tag(upd.id, i+7)
+					end
+				end
+				html.alert(string.format("Tarefa atualizada: %s.", POST.name), "alert-success")
+			else
+				html.alert(err, "alert-danger")
+			end
+			eng.End()
+		else
+			html.alert("Tarefa sem nome.", "alert-danger")
+		end
 	elseif POST.action == "upd_tag" then
 		if POST.name ~= "" then
 			local cur, err = eng.upd_tag(POST.id, POST.name)
@@ -109,7 +192,6 @@ if GET.action == "post" and not POST.cancel then
 		else
 			html.alert("Tag sem nome.", "alert-danger")
 		end
-	end
 	elseif GET.action == "set_date" then
 		local upd = { }
 		if GET.date == "today" then

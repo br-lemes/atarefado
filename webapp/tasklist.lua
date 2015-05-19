@@ -1,3 +1,13 @@
+<form class="form-horizontal" id="main" action=".?action=new_task&database=<%= html.dbactive %>" method="POST">
+<div class="form-group">
+	<div class="col-xs-10">
+		<input class="form-control" name="name" type="text" autofocus>
+	</div>
+	<div class="col-xs-2">
+		<button class="btn btn-default pull-right" type="submit"><%= html.img("note_add", 16) %></button>
+	</div>
+</div>
+</form>
 <ul class="list-group">
 <% for i, v in pairs(html.tasklist) do %>
 	<% for key, value in pairs(v) do html.debug(key .. "=" .. value) end %>

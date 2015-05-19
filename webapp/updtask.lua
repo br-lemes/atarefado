@@ -1,12 +1,17 @@
+<%
+	task = eng.get_task(GET.id)
+	tags = eng.get_tags(GET.id)
+%>
 <form class="form-horizontal" id="main" action=".?action=post&database=<%= html.dbactive %>" method="POST">
 	<fieldset>
 		<legend>Nova tarefa</legend>
 		<input type="hidden" name="action" value="upd_task">
+		<input type="hidden" name="id" value="<%= task.id %>">
 		<div class="form-group">
-		  <label for="name" class="col-lg-2 control-label">Tarefa</label>
-		  <div class="col-lg-10">
-			<input class="form-control" id="name" name="name" type="text" value="<%= task.name %>" autofocus>
-		  </div>
+			<label for="name" class="col-lg-2 control-label">Tarefa</label>
+			<div class="col-lg-10">
+				<input class="form-control" name="name" type="text" value="<%= task.name %>" autofocus>
+			</div>
 		</div>
 		<div class="form-group">
 			<label for="date" class="col-lg-2 control-label">Data</label>
