@@ -11,7 +11,7 @@ require("desktop.layout")
 require("desktop.functions")
 require("desktop.action")
 
-iup.SetGlobal("UTF8MODE", "NO")
+iup.SetGlobal("UTF8MODE", "YES")
 
 gui.dialog:show()
 fun.db_load()
