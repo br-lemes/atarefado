@@ -376,7 +376,7 @@ function gui.task_delete:action(force)
 		if force then
 			question = "Excluir permanentemente tarefa recorrente?"
 		else
-			question = "Tarefa concluÌda?"
+			question = "Tarefa conclu√≠da?"
 		end
 	end
 	if fun.question(question) == "1" then
@@ -459,7 +459,7 @@ function gui.savehtml:action()
 				filter = "<li class='green' style='float: left; padding-right:32px;'>Qualquer dia</li>"
 			end
 			if gui.tomorrow.value == "ON" then
-				filter = filter .. "<li class='blue' style='float: left; padding-right:32px;'>Amanh„</li>"
+				filter = filter .. "<li class='blue' style='float: left; padding-right:32px;'>Amanh√£</li>"
 			end
 			if gui.future.value == "ON" then
 				filter = filter .. "<li class='black' style='float: left; padding-right:32px;'>Futuras</li>"

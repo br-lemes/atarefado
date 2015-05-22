@@ -64,7 +64,7 @@ gui.result_menu = iup.menu{
 	},
 	iup.item{
 		name   = "result_menu_tomorrow",
-		title  = "Deixar para amanh„\tF3",
+		title  = "Deixar para amanh√£\tF3",
 		action = function() gui.task_tomorrow:action() end
 	},
 	iup.item{
@@ -88,7 +88,7 @@ gui.result_menu = iup.menu{
 gui.savedlg = iup.filedlg{
 	name       = "savedlg",
 	dialogtype = "SAVE",
-	extfilter  = "P·gina HTML (*.html)|*.html;*.htm",
+	extfilter  = "P√°gina HTML (*.html)|*.html;*.htm",
 	title      = "Salvar como HTML",
 }
 
@@ -150,7 +150,7 @@ gui.dialog = iup.dialog{
 						},
 						iup.button{
 							name   = "task_tomorrow",
-							tip    = "Deixar para amanh„ (F3)",
+							tip    = "Deixar para amanh√£ (F3)",
 							image  = ico.flag_blue,
 							active = "NO",
 						},
@@ -200,7 +200,7 @@ gui.dialog = iup.dialog{
 					iup.tabs{
 						margin   = "10x10",
 						iup.vbox{
-							tabtitle = "&Coment·rios",
+							tabtitle = "&Coment√°rios",
 							iup.text{
 								name      = "task_comment",
 								expand    = "YES",
@@ -223,10 +223,10 @@ gui.dialog = iup.dialog{
 								dropdown = "YES",
 								expand   = "HORIZONTAL",
 								value    = "1",
-								"N„o",
+								"N√£o",
 								"Semanal",
 								"Mensal",
-								"⁄ltimo dia",
+								"√öltimo dia",
 							},
 							iup.zbox{
 								name = "task_zoption",
@@ -238,11 +238,11 @@ gui.dialog = iup.dialog{
 									visiblelines = "1",
 									"Domingo",
 									"Segunda-Feira",
-									"TerÁa-Feira",
+									"Ter√ßa-Feira",
 									"Quarta-Feira",
 									"Quinta-Feira",
 									"Sexta-Feira",
-									"S·bado",
+									"S√°bado",
 								},
 								iup.list{
 									name         = "task_tagm",
@@ -306,7 +306,7 @@ gui.dialog = iup.dialog{
 				iup.toggle{
 					name   = "tomorrow",
 					image  = ico.blue,
-					tip    = "Amanh„",
+					tip    = "Amanh√£",
 					value  = "ON",
 					action = gui.option,
 				},

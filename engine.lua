@@ -32,7 +32,7 @@ function eng.init(dbname)
 			);]])
 		for i, v in ipairs{
 				'Dom', 'Seg', 'Ter', 'Qua',
-				'Qui', 'Sex', 'Sáb'
+				'Qui', 'Sex', 'SÃ¡b'
 			} do
 			eng.con:execute(string.format(
 				'INSERT INTO tagnames VALUES(NULL, %q);', v))
