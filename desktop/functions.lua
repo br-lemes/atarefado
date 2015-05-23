@@ -134,7 +134,6 @@ function fun.db_load()
 	for file in lfs.dir("database") do
 		if file:sub(-7, -1) == ".sqlite" then
 			table.insert(fun.dblist, file)
-			gui.dbname.appenditem = file:sub(1, -8)
 		end
 	end
 	if #fun.dblist == 0 then
@@ -142,6 +141,10 @@ function fun.db_load()
 		eng.done()
 		fun.db_load()
 	else
+		table.sort(fun.dblist)
+		for i, v in ipairs(fun.dblist) do
+			gui.dbname.appenditem = v:sub(1, -8)
+		end
 		gui.dbname.lastvalue = value
 		gui.dbname.value = value
 	end
