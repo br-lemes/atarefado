@@ -340,7 +340,7 @@ function gui.result:valuechanged_cb()
 		gui.task_tomorrow.active = "YES"
 		gui.task_anytime.active = "YES"
 		self.lastvalue = self.value
-		if fun.task_table[tonumber(self.value)].recurrent == "1" then
+		if fun.task_table[tonumber(self.value)] and fun.task_table[tonumber(self.value)].recurrent == "1" then
 			gui.task_delete.image = ico.note_delete
 			gui.task_delete.tip = "Excluir Tarefa (DEL)"
 		else
