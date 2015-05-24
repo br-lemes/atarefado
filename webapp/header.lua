@@ -6,7 +6,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="webapp/js/jquery.min.js"></script>
 	<script src="webapp/js/bootstrap.min.js"></script>
+	<script src="webapp/js/bootstrap-datepicker.min.js"></script>
+	<script src="webapp/js/bootstrap-datepicker.pt-BR.min.js"></script>
 	<link href="webapp/css/bootstrap.min.css" rel="stylesheet">
+	<link href="webapp/css/bootstrap-datepicker3.min.css" rel="stylesheet">
 	<link href="webapp/css/atarefado.css" rel="stylesheet">
 	<link href="favicon.png" rel="shortcut icon">
 </head>

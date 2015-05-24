@@ -16,7 +16,7 @@
 		<div class="form-group">
 			<label for="date" class="col-lg-2 control-label">Data</label>
 			<div class="col-lg-10">
-				<input class="form-control" type="date" name="date" value="<%= task.date %>">
+				<input id="date-picker" class="form-control" type="text" name="date" value="<%= task.date %>" onfocus="blur();">
 			</div>
 		</div>
 		<div class="form-group">
@@ -80,3 +80,10 @@
 		</div>
 	</fieldset>
 </form>
+<script>
+	$('#date-picker').datepicker({
+		format: "yyyy-mm-dd",
+		language: "pt-BR",
+		todayHighlight: true
+	});
+</script>
