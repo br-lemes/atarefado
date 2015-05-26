@@ -2,7 +2,7 @@
 	task = eng.get_task(GET.id)
 	tags = eng.get_tags(GET.id)
 %>
-<form class="form-horizontal" id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
+<form action="." class="form-horizontal" id="main" method="POST">
 	<fieldset>
 		<legend>Nova tarefa</legend>
 		<input type="hidden" name="database" value="<%= html.dbactive %>">

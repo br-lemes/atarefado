@@ -1,4 +1,4 @@
-<form class="form-horizontal" id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
+<form action="." class="form-horizontal" id="main" method="POST">
 	<fieldset>
 		<legend>Nova tarefa</legend>
 		<input type="hidden" name="database" value="<%= html.dbactive %>">
@@ -6,7 +6,7 @@
 		<div class="form-group">
 			<label for="name" class="col-lg-2 control-label">Tarefa</label>
 			<div class="col-lg-10">
-				<input class="form-control" name="name" type="text" value="<%= POST.name %>" autofocus>
+				<input class="form-control" name="name" type="text" value="<%= POST.name or '' %>" autofocus>
 			</div>
 		</div>
 		<div class="form-group">
@@ -26,7 +26,7 @@
 			<div class="col-lg-10">
 				<select class="form-control" name="tags[]" size="7" multiple>
 				<% for i, v in ipairs(html.taglist) do  if i > 2 then %>
-					<option value="<%= v.id%>" <% if tonumber(POST.tag) == v.id then %>selected<% end %>><%= v.name %></option>
+					<option value="<%= v.id%>" <% if tonumber(POST.tagid) == v.id then %>selected<% end %>><%= v.name %></option>
 				<% end end %>
 				</select>
 			</div>

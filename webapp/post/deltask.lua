@@ -1,4 +1,4 @@
-<form id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
+<form action="." class="form-horizontal" id="main" method="POST">
 	<fieldset>
 		<% if not GET.recurrent then %>
 			<legend>Excluir tarefa: <%= GET.name %>?</legend>

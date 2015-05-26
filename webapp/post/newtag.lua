@@ -1,4 +1,4 @@
-<form id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
+<form action="." class="form-horizontal" id="main" method="POST">
 	<fieldset>
 		<legend>Nova tag</legend>
 		<input type="hidden" name="database" value="<%= html.dbactive %>">

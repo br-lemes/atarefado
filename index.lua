@@ -1,4 +1,4 @@
-#!/usr/bin/haserl -a --shell=lua
+#!/usr/bin/haserl --shell=lua
 Content-type: text/html
 
 <%

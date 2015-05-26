@@ -51,6 +51,10 @@ function html.img(image, size)
 		image, size, size)
 end
 
+--
+-- Get database list and set the active database
+--
+
 for file in lfs.dir("database") do
 	if file:sub(-7, -1) == ".sqlite" then
 		local name = file:sub(1, -8)
@@ -63,13 +67,14 @@ if #html.dblist == 0 then
 	html.dblist["atarefado"] = #html.dblist
 end
 table.sort(html.dblist)
-if GET.database and html.dblist[GET.database] then
-	html.dbactive = GET.database
+if _G[ENV.REQUEST_METHOD].database and html.dblist[_G[ENV.REQUEST_METHOD].database] then
+	html.dbactive = _G[ENV.REQUEST_METHOD].database
 else
 	html.dbactive = html.dblist[1]
 end
+
 eng.init(html.dbactive .. ".sqlite")
-if GET.action == "post" and not POST.cancel then
+if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 	if POST.action == "new_task" then
 		if POST.name ~= "" then
 			local upd = { }
@@ -222,7 +227,7 @@ if GET.tag then
 	if not cur then html.alert(err, "alert-danger") end
 end
 html.options = eng.get_options()
-html.options.tag = tonumber(html.options.tag)
+html.options.tag = tonumber(html.options.tag) or 1
 html.taglist = eng.get_tags()
 table.insert(html.taglist, 1, { name = "Todas"})
 table.insert(html.taglist, 2, { name = "Nenhuma"})

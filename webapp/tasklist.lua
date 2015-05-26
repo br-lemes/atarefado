@@ -1,6 +1,8 @@
-<form class="form-horizontal" id="main" action="?action=new_task&database=<%= html.dbactive %>" method="POST">
+<form class="form-horizontal" id="main" action="." method="GET">
 <div class="form-group">
-	<input type="hidden" name="tag" value="<%= html.taglist[html.options.tag].id %>">
+	<input type="hidden" name="database" value="<%= html.dbactive %>">
+	<input type="hidden" name="action" value="new_task">
+	<input type="hidden" name="tagid" value="<%= html.taglist[html.options.tag].id %>">
 	<div class="col-xs-10">
 		<input class="form-control" name="name" type="text" autofocus>
 	</div>
