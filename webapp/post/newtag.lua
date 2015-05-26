@@ -1,6 +1,7 @@
-<form id="main" action=".?action=post&database=<%= html.dbactive %>" method="POST">
+<form id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
 	<fieldset>
 		<legend>Nova tag</legend>
+		<input type="hidden" name="database" value="<%= html.dbactive %>">
 		<input type="hidden" name="action" value="new_tag">
 		<div class="form-group">
 			<input class="form-control" type="text" name="name" autofocus>

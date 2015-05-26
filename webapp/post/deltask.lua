@@ -1,10 +1,11 @@
-<form id="main" action=".?action=post&database=<%= html.dbactive %>" method="POST">
+<form id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
 	<fieldset>
 		<% if not GET.recurrent then %>
 			<legend>Excluir tarefa: <%= GET.name %>?</legend>
 		<% else %>
 			<legend>Concluir tarefa: <%= GET.name %>?</legend>
 		<% end %>
+		<input type="hidden" name="database" value="<%= html.dbactive %>">
 		<input type="hidden" name="action" value="del_task">
 		<input type="hidden" name="name" value="<%= GET.name %>">
 		<input type="hidden" name="id" value="<%= GET.id %>">

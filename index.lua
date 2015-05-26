@@ -13,17 +13,17 @@ html = require("webapp.html")
 			<div class="col-md-7">
 				<%= html.alertString %>
 				<% if GET.action == "new_task" then %>
-					<%in webapp/newtask.lua %>
+					<%in webapp/post/newtask.lua %>
 				<% elseif GET.action == "new_tag" then %>
-					<%in webapp/newtag.lua %>
+					<%in webapp/post/newtag.lua %>
 				<% elseif GET.action == "del_task" then %>
-					<%in webapp/deltask.lua %>
+					<%in webapp/post/deltask.lua %>
 				<% elseif GET.action == "del_tag" then %>
-					<%in webapp/deltag.lua %>
+					<%in webapp/post/deltag.lua %>
 				<% elseif GET.action == "upd_task" then %>
-					<%in webapp/updtask.lua %>
+					<%in webapp/post/updtask.lua %>
 				<% elseif GET.action == "upd_tag" then %>
-					<%in webapp/updtag.lua %>
+					<%in webapp/post/updtag.lua %>
 				<% else %>
 					<%in webapp/tasklist.lua %>
 				<% end %>

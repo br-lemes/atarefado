@@ -1,6 +1,7 @@
-<form id="main" action=".?action=post&database=<%= html.dbactive %>" method="POST">
+<form id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
 	<fieldset>
 		<legend>Editar tag: <%= GET.name %></legend>
+		<input type="hidden" name="database" value="<%= html.dbactive %>">
 		<input type="hidden" name="action" value="upd_tag">
 		<input type="hidden" name="id" value="<%= GET.id %>">
 		<div class="form-group">

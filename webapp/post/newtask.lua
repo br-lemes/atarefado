@@ -1,6 +1,7 @@
-<form class="form-horizontal" id="main" action=".?action=post&database=<%= html.dbactive %>" method="POST">
+<form class="form-horizontal" id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
 	<fieldset>
 		<legend>Nova tarefa</legend>
+		<input type="hidden" name="database" value="<%= html.dbactive %>">
 		<input type="hidden" name="action" value="new_task">
 		<div class="form-group">
 			<label for="name" class="col-lg-2 control-label">Tarefa</label>

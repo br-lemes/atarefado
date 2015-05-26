@@ -1,6 +1,7 @@
-<form id="main" action=".?action=post&database=<%= html.dbactive %>" method="POST">
+<form id="main" action="?action=post&database=<%= html.dbactive %>" method="POST">
 	<fieldset>
 		<legend>Excluir tag: <%= GET.name %>?</legend>
+		<input type="hidden" name="database" value="<%= html.dbactive %>">
 		<input type="hidden" name="action" value="del_tag">
 		<input type="hidden" name="name" value="<%= GET.name %>">
 		<input type="hidden" name="id" value="<%= GET.id %>">
