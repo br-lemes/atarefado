@@ -6,7 +6,7 @@
 		<div class="form-group">
 			<label for="name" class="col-lg-2 control-label">Tarefa</label>
 			<div class="col-lg-10">
-				<input class="form-control" name="name" type="text" value="<%= POST.name or '' %>" autofocus>
+				<input class="form-control" name="name" type="text" value="<%= GET.name or '' %>" autofocus>
 			</div>
 		</div>
 		<div class="form-group">
@@ -26,7 +26,7 @@
 			<div class="col-lg-10">
 				<select class="form-control" name="tags[]" size="7" multiple>
 				<% for i, v in ipairs(html.taglist) do  if i > 2 then %>
-					<option value="<%= v.id%>" <% if tonumber(POST.tagid) == v.id then %>selected<% end %>><%= v.name %></option>
+					<option value="<%= v.id%>" <% if tonumber(GET.tagid) == v.id then %>selected<% end %>><%= v.name %></option>
 				<% end end %>
 				</select>
 			</div>
