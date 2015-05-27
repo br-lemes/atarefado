@@ -263,6 +263,7 @@ function eng.gettasks(pattern, flags, tag)
 			eng.has_tag(row.id, tag)) and (a and b) then
 				local copy = { }
 				for k,v in pairs(row) do copy[k] = v end
+				copy.recurrent = tostring(copy.recurrent) -- it's a string number
 				table.insert(result, copy)
 		end
 	end

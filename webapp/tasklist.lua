@@ -23,7 +23,7 @@
 			<ul class="dropdown-menu">
 				<li><a href="?action=new_task&tagid=<%= html.taglist[html.options.tag].id %>&database=<%= html.dbactive %>"><%= html.img("note_add", 16) %> Nova tarefa</a></li>
 				<li><a href="?action=upd_task&id=<%= v.id %>&database=<%= html.dbactive %>"><%= html.img("note_edit", 16) %> Editar tarefa</a></li>
-				<% if v.recurrent == 1 then %>
+				<% if v.recurrent == "1" then %>
 					<li><a href="?action=del_task&id=<%= v.id %>&name=<%= v.name %>&database=<%= html.dbactive %>"><%= html.img("note_delete", 16) %> Excluir tarefa</a></li>
 				<% else %>
 					<li><a href="?action=del_task&id=<%= v.id %>&name=<%= v.name %>&recurrent=<%= v.recurrent %>&database=<%= html.dbactive %>"><%= html.img("note_go", 16) %> Concluir tarefa</a></li>

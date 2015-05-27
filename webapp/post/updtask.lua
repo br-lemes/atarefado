@@ -39,11 +39,11 @@
 		<div class="form-group">
 			<label for="recurrent" class="col-lg-2 control-label">Recorrente</label>
 			<div class="col-lg-10">
-				<select class="form-control" name="recurrent" value="<%= task.recurrent %>">
-					<option value="1">Não</option>
-					<option value="2">Semanal</option>
-					<option value="3">Mensal</option>
-					<option value="4">Último dia</option>
+				<select class="form-control" name="recurrent">
+					<option value="1" <% if task.recurrent == "1" then %>selected<% end %>>Não</option>
+					<option value="2" <% if task.recurrent == "2" then %>selected<% end %>>Semanal</option>
+					<option value="3" <% if task.recurrent == "3" then %>selected<% end %>>Mensal</option>
+					<option value="4" <% if task.recurrent == "4" then %>selected<% end %>>Último dia</option>
 				</select>
 			</div>
 		</div>
