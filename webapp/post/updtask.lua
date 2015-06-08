@@ -23,7 +23,7 @@
 		<div class="form-group">
 			<label for="comment" class="col-lg-2 control-label">Comentários</label>
 			<div class="col-lg-10">
-				<textarea class="form-control" rows="7" name="comment"><%= task.comment %></textarea>
+				<textarea class="form-control" rows="7" name="comment"><%= task.comment:gsub("\\13", ""):gsub("\\\n", "\n") %></textarea>
 			</div>
 		</div>
 		<div class="form-group">
