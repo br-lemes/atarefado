@@ -87,4 +87,25 @@
 		language: "pt-BR",
 		todayHighlight: true
 	});
+	document.forms.main.recurrent.onchange = function () {
+		switch (document.forms.main.recurrent.value) {
+			case "1":
+				document.forms.main["rweek[]"].disabled = true;
+				document.forms.main["rmonth[]"].disabled = true;
+				break;
+			case "2":
+				document.forms.main["rweek[]"].disabled = false;
+				document.forms.main["rmonth[]"].disabled = true;
+				break;
+			case "3":
+				document.forms.main["rweek[]"].disabled = true;
+				document.forms.main["rmonth[]"].disabled = false;
+				break;
+			case "4":
+				document.forms.main["rweek[]"].disabled = true;
+				document.forms.main["rmonth[]"].disabled = true;
+				break;
+		}
+	};
+	document.forms.main.recurrent.onchange();
 </script>
