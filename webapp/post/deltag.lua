@@ -5,9 +5,13 @@
 		<input type="hidden" name="action" value="del_tag">
 		<input type="hidden" name="name" value="<%= GET.name %>">
 		<input type="hidden" name="id" value="<%= GET.id %>">
-		<div class="form-group pull-right">
-			<button class="btn" name="cancel">Cancelar</button>
-			<button type="submit" class="btn btn-primary">OK</button>
+		<div class=" form-group">
+			<div class="col-xs-12">
+				<div class="pull-right">
+					<button class="btn" name="cancel">Cancelar</button>
+					<button type="submit" class="btn btn-primary">OK</button>
+				</div>
+			</div>
 		</div>
 	</fieldset>
 </form>
