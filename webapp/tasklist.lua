@@ -13,7 +13,6 @@
 </form>
 <ul class="list-group">
 <% for i, v in pairs(html.tasklist) do %>
-	<% for key, value in pairs(v) do html.debug(key .. "=" .. value) end %>
 	<li class="list-group-item">
 		<div class="btn-group">
 			<a href="#" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
