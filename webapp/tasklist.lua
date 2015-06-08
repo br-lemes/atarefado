@@ -1,4 +1,4 @@
-<form class="form-horizontal" id="main" action="." method="GET">
+<form action="." class="form-horizontal" id="main" method="GET">
 <div class="form-group">
 	<input type="hidden" name="database" value="<%= html.dbactive %>">
 	<input type="hidden" name="action" value="new_task">
