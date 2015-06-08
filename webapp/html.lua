@@ -77,8 +77,8 @@ end
 
 eng.init(html.dbactive .. ".sqlite")
 if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
+	if POST.name then POST.name = POST.name:match("^%s*(.-)%s*$") end
 	if POST.action == "new_task" then
-		if POST.name then POST.name = POST.name:match("^%s*(.-)%s*$") end
 		if POST.name ~= "" then
 			local upd = { }
 			upd.name = POST.name
