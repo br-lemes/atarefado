@@ -85,13 +85,6 @@ gui.result_menu = iup.menu{
 	},
 }
 
-gui.savedlg = iup.filedlg{
-	name       = "savedlg",
-	dialogtype = "SAVE",
-	extfilter  = "Página HTML (*.html)|*.html;*.htm",
-	title      = "Salvar como HTML",
-}
-
 gui.dialog = iup.dialog{
 	font       = "HELVETICA_BOLD_12",
 	title      = "Atarefado 1.3+",
@@ -134,12 +127,6 @@ gui.dialog = iup.dialog{
 							tip    = "Excluir Tarefa (DEL)",
 							image  = ico.note_delete,
 							active = "NO",
-						},
-						iup.fill{},
-						iup.button{
-							name    = "savehtml",
-							tip     = "Salvar como HTML",
-							image   = ico.html,
 						},
 						iup.fill{},
 						iup.button{
