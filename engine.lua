@@ -30,7 +30,7 @@ function eng.init(dbname)
 				id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 				name TEXT NOT NULL
 			);]])
-		for i, v in ipairs{
+		for _, v in ipairs{
 				'Dom', 'Seg', 'Ter', 'Qua',
 				'Qui', 'Sex', 'Sáb'
 			} do
@@ -71,7 +71,7 @@ function eng.init(dbname)
 				value TEXT
 			);]])
 		local optfmt = 'INSERT INTO options VALUES(NULL, %q, %q);'
-		for i, v in ipairs{
+		for _, v in ipairs{
 				'anytime', 'tomorrow', 'future',
 				'today', 'yesterday', 'late'
 			} do
@@ -156,11 +156,11 @@ function eng.new_task(task)
 		'INSERT INTO tasks VALUES(NULL, %q, %q, %q, %d);',
 		task.name, task.date, task.comment, task.recurrent))
 	if cur and task.tags then
-		local cur = eng.con:execute('SELECT last_insert_rowid();')
+		cur = eng.con:execute('SELECT last_insert_rowid();')
 		local row = { }
 		cur:fetch(row)
 		cur:close()
-		for i,v in ipairs(task.tags) do
+		for _, v in ipairs(task.tags) do
 			eng.set_tag(row[1], v)
 		end
 	end
@@ -177,8 +177,8 @@ end
 
 -- remove a task or go to next if it's recurrent
 -- return: 1 or nil and error message
-function eng.del_task(task, force)
-	local task = eng.get_task(task)
+function eng.del_task(taskid, force)
+	local task = eng.get_task(taskid)
 	if task.recurrent == '1' or (task.recurrent ~= '1' and force) then
 		local cur, err = eng.con:execute(string.format(
 			'DELETE FROM tasks WHERE id=%d;', task.id))
@@ -198,12 +198,12 @@ function eng.del_tag(tag)
 	local cur = eng.con:execute('SELECT id FROM tasks;')
 	local row = { }
 	while cur:fetch(row) do
-		local cur = eng.con:execute(string.format(
+		eng.con:execute(string.format(
 			'DELETE FROM tags WHERE task=%d and tag=%d;',
 			row[1], tag))
 	end
 	cur:close()
-	local cur, err = eng.con:execute(string.format(
+	local err ; cur, err = eng.con:execute(string.format(
 		'DELETE FROM tagnames WHERE id=%d;', tag))
 	return cur, err
 end
@@ -239,7 +239,7 @@ end
 
 -- return a table with the tasks that match the pattern, flags and tag
 function eng.gettasks(pattern, flags, tag)
-	local flags = flags or { }
+	if type(flags) ~= 'table' then flags = { } end
 	if flags.anytime   == nil then flags.anytime   = true end
 	if flags.tomorrow  == nil then flags.tomorrow  = true end
 	if flags.future    == nil then flags.future    = true end
@@ -276,7 +276,7 @@ function eng.get_task(task)
 	if not eng.has_id(task, 'tasks') then
 		return nil, 'Engine: no task'
 	end
-	local cur,err = eng.con:execute(string.format(
+	local cur = eng.con:execute(string.format(
 		'SELECT * FROM tasks WHERE id=%d;', task))
 	local row = { }
 	cur:fetch(row, 'a')
@@ -342,8 +342,8 @@ end
 
 -- put off till next date what should be done today
 -- return: 1 or nil and error message
-function eng.go_next(task)
-	local task = eng.get_task(task)
+function eng.go_next(taskid)
+	local task = eng.get_task(taskid)
 	local tags = eng.get_tags(task.id)
 	if eng.isanytime(task.date) then
 		task.date = os.date('%Y-%m-%d')
@@ -422,7 +422,7 @@ end
 
 -- return true if d is a valid date else return nil or false
 function eng.isdate(d)
-	t = { }
+	local t = { }
 	t.year, t.month, t.day = d:match('(%d%d%d%d)-(%d%d)-(%d%d)')
 	return t.year and t.month and t.day and
 		os.date('%Y-%m-%d', os.time(t)) == d
@@ -463,10 +463,7 @@ end
 -- return the number of days in a month
 function eng.daysmonth(month, year)
 	while month > 12 do month = month - 12 end
-	local function is_leap_year(year)
-		return year % 4 == 0 and (year % 100 ~= 0 or year % 400 == 0)
-	end
-	return month == 2 and is_leap_year(year) and 29
+	return month == 2 and (year % 4 == 0 and (year % 100 ~= 0 or year % 400 == 0)) and 29
 		or ('\31\28\31\30\31\30\31\31\30\31\30\31'):byte(month)
 end
 
