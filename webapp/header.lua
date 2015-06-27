@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title><%= html.dbactive %> - Atarefado 1.4h</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<script src="webapp/js/jquery.min.js"></script>
 	<script src="webapp/js/bootstrap.min.js"></script>
 	<script src="webapp/js/bootstrap-datepicker.min.js"></script>
