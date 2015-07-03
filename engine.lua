@@ -132,7 +132,7 @@ function eng.has_notags(task)
 	local cur = eng.con:execute(string.format(
 		'SELECT * FROM tags WHERE task=%d;', task))
 	local row = { }
-	while cur:fetch(row, "a") do
+	while cur:fetch(row, 'a') do
 		-- ignore the first 38 special tags
 		if tonumber(row.tag) > 38 then
 			cur:close()
@@ -398,6 +398,7 @@ function eng.go_next(taskid)
 				return cur, err
 			end
 		end
+		return nil, 'Engine: no suitable date, check task consistency'
 	elseif task.recurrent == '4' then
 		local i = eng.daysmonth(d.month, d.year)
 		if d.day == i then
@@ -417,7 +418,7 @@ function eng.go_next(taskid)
 			task.id))
 		return cur, err
 	end
-	return nil, "Engine: should never happens"
+	return nil, 'Engine: should never happens'
 end
 
 -- return true if d is a valid date else return nil or false
