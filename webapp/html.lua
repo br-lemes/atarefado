@@ -105,7 +105,7 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 					end
 				end
 				for i = 1, 31 do
-					if POST.rmonth and POST.rmonth:match("%f[%d]" .. i .. "%f[%D]") then
+					if POST.rmonth and POST.rmonth:match("%f[%d]" .. i+7 .. "%f[%D]") then
 						eng.set_tag(upd.id, i+7)
 					else
 						eng.clear_tag(upd.id, i+7)
@@ -172,7 +172,7 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 					end
 				end
 				for i = 1, 31 do
-					if POST.rmonth and POST.rmonth:match("%f[%d]" .. i .. "%f[%D]") then
+					if POST.rmonth and POST.rmonth:match("%f[%d]" .. i+7 .. "%f[%D]") then
 						eng.set_tag(upd.id, i+7)
 					else
 						eng.clear_tag(upd.id, i+7)
