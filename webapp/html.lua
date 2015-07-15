@@ -147,45 +147,42 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 			html.alert(err, "alert-danger")
 		end
 	elseif POST.action == "upd_task" then
-			local upd = { }
-			upd.id = POST.id
-			upd.name = POST.name
-			upd.date = POST.date
-			upd.comment = POST.comment
-			upd.recurrent = POST.recurrent
-			eng.Begin()
-			local cur, err = eng.upd_task(upd)
-			if cur then
-				local taglist = eng.get_tags()
-				for i, v in ipairs(taglist) do
-					if POST.tags and POST.tags:match("%f[%d]" .. v.id .. "%f[%D]") then
-						eng.set_tag(upd.id, v.id)
-					else
-						eng.clear_tag(upd.id, v.id)
-					end
+		local upd = { }
+		upd.id = POST.id
+		upd.name = POST.name
+		upd.date = POST.date
+		upd.comment = POST.comment
+		upd.recurrent = POST.recurrent
+		eng.Begin()
+		local cur, err = eng.upd_task(upd)
+		if cur then
+			local taglist = eng.get_tags()
+			for i, v in ipairs(taglist) do
+				if POST.tags and POST.tags:match("%f[%d]" .. v.id .. "%f[%D]") then
+					eng.set_tag(upd.id, v.id)
+				else
+					eng.clear_tag(upd.id, v.id)
 				end
-				for i = 1, 7 do
-					if POST.rweek and POST.rweek:match("%f[%d]" .. i .. "%f[%D]") then
-						eng.set_tag(upd.id, i)
-					else
-						eng.clear_tag(upd.id, i)
-					end
-				end
-				for i = 1, 31 do
-					if POST.rmonth and POST.rmonth:match("%f[%d]" .. i+7 .. "%f[%D]") then
-						eng.set_tag(upd.id, i+7)
-					else
-						eng.clear_tag(upd.id, i+7)
-					end
-				end
-				html.alert(string.format("Tarefa atualizada: %s.", POST.name), "alert-success")
-			else
-				html.alert(err, "alert-danger")
 			end
-			eng.End()
+			for i = 1, 7 do
+				if POST.rweek and POST.rweek:match("%f[%d]" .. i .. "%f[%D]") then
+					eng.set_tag(upd.id, i)
+				else
+					eng.clear_tag(upd.id, i)
+				end
+			end
+			for i = 1, 31 do
+				if POST.rmonth and POST.rmonth:match("%f[%d]" .. i+7 .. "%f[%D]") then
+					eng.set_tag(upd.id, i+7)
+				else
+					eng.clear_tag(upd.id, i+7)
+				end
+			end
+			html.alert(string.format("Tarefa atualizada: %s.", POST.name), "alert-success")
 		else
-			html.alert("Tarefa sem nome.", "alert-danger")
+			html.alert(err, "alert-danger")
 		end
+		eng.End()
 	elseif POST.action == "upd_tag" then
 		if POST.name ~= "" then
 			local cur, err = eng.upd_tag(POST.id, POST.name)
@@ -197,24 +194,26 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 		else
 			html.alert("Tag sem nome.", "alert-danger")
 		end
-	elseif GET.action == "set_date" then
-		local upd = { }
-		if GET.date == "today" then
-			upd.id = GET.id
-			upd.date = os.date("%Y-%m-%d")
-			local cur, err = eng.upd_task(upd)
-			if not cur then html.alert(err, "alert-danger") end
-		elseif GET.date == "tomorrow" then
-			upd.id = GET.id
-			upd.date = os.date("%Y-%m-%d", os.time()+24*60*60)
-			local cur, err = eng.upd_task(upd)
-			if not cur then html.alert(err, "alert-danger") end
-		elseif GET.date == "anytime" then
-			upd.id = GET.id
-			upd.date = ""
-			local cur, err = eng.upd_task(upd)
-			if not cur then html.alert(err, "alert-danger") end
-		end
+	end
+end
+if GET.action == "set_date" then
+	local upd = { }
+	if GET.date == "today" then
+		upd.id = GET.id
+		upd.date = os.date("%Y-%m-%d")
+		local cur, err = eng.upd_task(upd)
+		if not cur then html.alert(err, "alert-danger") end
+	elseif GET.date == "tomorrow" then
+		upd.id = GET.id
+		upd.date = os.date("%Y-%m-%d", os.time()+24*60*60)
+		local cur, err = eng.upd_task(upd)
+		if not cur then html.alert(err, "alert-danger") end
+	elseif GET.date == "anytime" then
+		upd.id = GET.id
+		upd.date = ""
+		local cur, err = eng.upd_task(upd)
+		if not cur then html.alert(err, "alert-danger") end
+	end
 end
 for i, v in ipairs(html.duelist) do
 	if GET[v] then
