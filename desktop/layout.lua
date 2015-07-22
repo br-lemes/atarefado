@@ -87,7 +87,7 @@ gui.result_menu = iup.menu{
 
 gui.dialog = iup.dialog{
 	font       = "HELVETICA_BOLD_12",
-	title      = "Atarefado 1.3+",
+	title      = "Atarefado 1.4",
 	rastersize = "600x440",
 	iup.split{
 		iup.vbox{
