@@ -111,7 +111,7 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 						eng.clear_tag(upd.id, i+7)
 					end
 				end
-				html.alert(string.format("Nova tarefa criada: %s.", POST.name), "alert-success")
+				html.alert("Nova tarefa criada: " .. POST.name, "alert-success")
 			else
 				html.alert(err, "alert-danger")
 			end
@@ -123,7 +123,7 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 		if POST.name ~= "" then
 			local cur, err = eng.new_tag(POST.name)
 			if cur then
-				html.alert(string.format("Nova tag criada: %s.", POST.name), "alert-success")
+				html.alert("Nova tag criada: " .. POST.name, "alert-success")
 			else
 				html.alert(err, "alert-danger")
 			end
@@ -135,14 +135,14 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 		if POST.recurrent and not POST.force then s = "concluída" end
 		local cur, err = eng.del_task(POST.id, POST.force)
 		if cur then
-			html.alert(string.format("Tarefa %s: %s.", s, POST.name), "alert-success")
+			html.alert(string.format("Tarefa %s: %s", s, POST.name), "alert-success")
 		else
 			html.alert(err, "alert-danger")
 		end
 	elseif POST.action == "del_tag" then
 		local cur, err = eng.del_tag(POST.id)
 		if cur then
-			html.alert(string.format("Tag excluída: %s.", POST.name), "alert-success")
+			html.alert("Tag excluída: " .. POST.name, "alert-success")
 		else
 			html.alert(err, "alert-danger")
 		end
@@ -178,7 +178,7 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 					eng.clear_tag(upd.id, i+7)
 				end
 			end
-			html.alert(string.format("Tarefa atualizada: %s.", POST.name), "alert-success")
+			html.alert("Tarefa atualizada: " .. POST.name, "alert-success")
 		else
 			html.alert(err, "alert-danger")
 		end
@@ -187,7 +187,7 @@ if ENV.REQUEST_METHOD == "POST" and not POST.cancel then
 		if POST.name ~= "" then
 			local cur, err = eng.upd_tag(POST.id, POST.name)
 			if cur then
-				html.alert(string.format("Tag atualizada: %s.", POST.name), "alert-success")
+				html.alert("Tag atualizada: " .. POST.name, "alert-success")
 			else
 				html.alert(err, "alert-danger")
 			end
