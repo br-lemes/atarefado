@@ -16,8 +16,8 @@ function html.alert(msg, class)
 	html.alertString = string.format([[
 		<div class="alert alert-dismissible %s">
 			<button type="button" class="close" data-dismiss="alert">×</button>
-				%s
-		</div>]], class, msg)
+				%s%s
+		</div>]], class, msg, msg:sub(-1) ~= "." and "." or "")
 end
 
 function html.debug(msg)

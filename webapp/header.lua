@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 	<meta charset="UTF-8">
-	<title><%= html.dbactive %> - Atarefado 1.4</title>
+	<title><%= html.dbactive %> - Atarefado 1.4+</title>
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<script src="webapp/js/jquery.min.js"></script>
 	<script src="webapp/js/bootstrap.min.js"></script>
@@ -18,7 +18,7 @@
 		<div class="navbar-header pull-left">
 			<a class="navbar-brand" href=".?database=<%= html.dbactive %>">
 				<%= html.img("atarefado", 32) %>
-				<span class="hidden-xs"><%= html.dbactive %> - Atarefado 1.4h</span>
+				<span class="hidden-xs"><%= html.dbactive %> - Atarefado 1.4+</span>
 			</a>
 		</div>
 		<div class="navbar-header pull-right">
