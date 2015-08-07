@@ -4,7 +4,7 @@
 %>
 <form action="." class="form-horizontal" id="main" method="POST">
 	<fieldset>
-		<legend>Nova tarefa</legend>
+		<legend>Editar tarefa</legend>
 		<input type="hidden" name="database" value="<%= html.dbactive %>">
 		<input type="hidden" name="action" value="upd_task">
 		<input type="hidden" name="id" value="<%= task.id %>">
