@@ -2,7 +2,7 @@
 <% for i,v in pairs(html.taglist) do %>
 <% local a = "" if i == html.options.tag then a = "active" end %>
 	<li class="list-group-item <%= a %>">
-		<a class="list-group-link" href="?tag=<%= i%>&database=<%= html.dbactive %>">
+		<a style="width: 75%" href="?tag=<%= i%>&database=<%= html.dbactive %>">
 		<%= v.name %>
 		</a>
 		<span class="pull-right">
