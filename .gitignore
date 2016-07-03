@@ -1,6 +1,9 @@
 *.so
 *.dll
 *.exe
+luaw
+haserl
 luasql
-*.sqlite*
+database
+mongoose
 SciTE.properties
