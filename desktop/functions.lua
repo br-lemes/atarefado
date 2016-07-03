@@ -90,6 +90,7 @@ function fun.task_load()
 		table.insert(fun.task_table, v)
 		fun.task_table.id[v.id] = #fun.task_table
 	end
+	gui.count.title = "\n" .. #fun.task_table
 	fun.load_timer.run = "NO"
 	iup.SetIdle(fun.item_load)
 end

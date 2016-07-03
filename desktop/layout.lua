@@ -129,6 +129,14 @@ gui.dialog = iup.dialog{
 							active = "NO",
 						},
 						iup.fill{},
+						iup.label{
+							name      = "count",
+							font      = "HELVETICA_BOLD_10",
+							expand    = "HORIZONTAL",
+							alignment = "ACENTER",
+							title     = "\n0",
+						},
+						iup.fill{},
 						iup.button{
 							name   = "task_today",
 							tip    = "Marcar para hoje (F2)",
