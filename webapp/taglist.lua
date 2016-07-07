@@ -1,4 +1,5 @@
-<ul class="list-group">
+<ul id="taglist" class="list-group">
+<li class="list-group-item active"><%= #html.taglist - 2 %> Tags</li>
 <% for i,v in pairs(html.taglist) do %>
 <% local a = "" if i == html.options.tag then a = "active" end %>
 	<li class="list-group-item <%= a %>">

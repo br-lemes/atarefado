@@ -4,14 +4,15 @@
 	<input type="hidden" name="action" value="new_task">
 	<input type="hidden" name="tagid" value="<%= html.taglist[html.options.tag].id %>">
 	<div class="col-xs-10">
-		<input class="form-control" name="name" type="text" autofocus>
+		<input id="search" class="form-control" name="name" type="text" autocomplete="off" autofocus>
 	</div>
 	<div class="col-xs-2">
 		<button class="btn btn-default pull-right" type="submit"><%= html.img("note_add", 16) %></button>
 	</div>
 </div>
 </form>
-<ul class="list-group">
+<ul id="tasklist" class="list-group">
+<li class="list-group-item active"><%= #html.tasklist %> Tarefas</li>
 <% for i, v in pairs(html.tasklist) do %>
 	<li class="list-group-item">
 		<a href="#" class="dropdown-toggle" style="width: 100%" data-toggle="dropdown">
@@ -35,3 +36,16 @@
 	</li>
 <% end %>
 </ul>
+
+<script>
+$("#search").on("input", function(){
+	var r = new RegExp(this.value, "i");
+	$("#tasklist > li > a").each(function(i, e) {
+		if ($(e).text().match(r))
+			e.parentNode.style.display = "block"
+		else
+			e.parentNode.style.display = "none";
+	});
+	$("#tasklist > li.active").text($("#tasklist > li > a:visible").length + " Tarefas");
+});
+</script>
