@@ -29,9 +29,9 @@
 				<li><a href="?action=del_task&id=<%= v.id %>&name=<%= v.name %>&recurrent=<%= v.recurrent %>&database=<%= html.dbactive %>"><%= html.img("note_go", 16) %> Concluir tarefa</a></li>
 			<% end %>
 			<li class="divider"></li>
-			<li><a href="?action=set_date&date=today&id=<%= v.id %>&database=<%= html.dbactive %>"><%= html.img("today", 16) %> Marcar para hoje</a></li>
-			<li><a href="?action=set_date&date=tomorrow&id=<%= v.id %>&database=<%= html.dbactive %>"><%= html.img("tomorrow", 16) %> Marcar para amanhã</a></li>
-			<li><a href="?action=set_date&date=anytime&id=<%= v.id %>&database=<%= html.dbactive %>"><%= html.img("anytime", 16) %> Deixar para qualquer dia</a></li>
+			<li><a href="?action=set_date&date=today&id=<%= v.id %>&database=<%= html.dbactive %>"><%= html.img("flag_today", 16) %> Marcar para hoje</a></li>
+			<li><a href="?action=set_date&date=tomorrow&id=<%= v.id %>&database=<%= html.dbactive %>"><%= html.img("flag_tomorrow", 16) %> Marcar para amanhã</a></li>
+			<li><a href="?action=set_date&date=anytime&id=<%= v.id %>&database=<%= html.dbactive %>"><%= html.img("flag_anytime", 16) %> Deixar para qualquer dia</a></li>
 		</ul>
 	</li>
 <% end %>
