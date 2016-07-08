@@ -15,7 +15,7 @@
 <li class="list-group-item active"><%= #html.tasklist %> Tarefas</li>
 <% for i, v in pairs(html.tasklist) do %>
 	<li class="list-group-item">
-		<a href="#" class="dropdown-toggle" style="width: 100%" data-toggle="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 			<%= html.img(html.dueicon(v), 16) %>
 			<span class="caret"></span>
 			<%= v.name %>

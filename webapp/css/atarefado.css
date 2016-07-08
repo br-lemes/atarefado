@@ -9,3 +9,5 @@ li.list-group-item:hover { background-color: #f5f5f5; }
 @media print { a[href]:after { content: none; } }
 #tasklist > li:first-child { padding: 0px; text-align: center; }
 #taglist > li:first-child { padding: 0px; text-align: center; }
+#tasklist > li > a { width: 100%; }
+#taglist > li > a { width: 75%; }
