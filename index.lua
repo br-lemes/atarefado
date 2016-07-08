@@ -33,5 +33,6 @@ html = require("webapp.html")
 				<% html.debugInfo() %>
 			</div>
 		</div>
+		<p>Ícones por <a href="http://www.fatcow.com/free-icons/">FatCow</a>.</p>
 	</div>
 <%in webapp/footer.lua %>
