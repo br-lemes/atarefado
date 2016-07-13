@@ -115,7 +115,7 @@ function fun.item_load()
 		end
 		gui.result.itemcount = n
 	else
-		local value = fun.task_table.id[gui.result.lastid]
+		local value = fun.task_table.id[tonumber(gui.result.lastid)]
 		if value == nil then value = gui.result.lastvalue end
 		if value and tonumber(value) > tonumber(gui.result.count) then
 			value = gui.result.count

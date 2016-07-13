@@ -85,11 +85,11 @@ function gui.dialog:k_any(k)
 	elseif k == 268500991 --[[iup.K_sDEL]] then
 		gui.task_delete:action(true)
 	elseif k == iup.K_F2 then
-		gui.task_today:action()
+		gui.task_today:action(true)
 	elseif k == iup.K_F3 then
-		gui.task_tomorrow:action()
+		gui.task_tomorrow:action(true)
 	elseif k == iup.K_F4 then
-		gui.task_anytime:action()
+		gui.task_anytime:action(true)
 	elseif k == iup.K_F5 then
 		fun.reload()
 	elseif k == iup.K_F10 then
@@ -385,7 +385,7 @@ function gui.task_delete:action(force)
 	end
 end
 
-function gui.task_today:action()
+function gui.task_today:action(keyboard)
 	if gui.zbox.value == gui.result_box and
 		(gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
@@ -393,13 +393,13 @@ function gui.task_today:action()
 		upd.date = os.date('%Y-%m-%d')
 		eng.upd_task(upd)
 		fun.task_load()
-		iup.SetFocus(gui.result)
+		if not keyboard then iup.SetFocus(gui.result) end
 	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = os.date('%Y-%m-%d')
 	end
 end
 
-function gui.task_tomorrow:action()
+function gui.task_tomorrow:action(keyboard)
 	if gui.zbox.value == gui.result_box and
 		(gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
@@ -407,13 +407,13 @@ function gui.task_tomorrow:action()
 		upd.date = os.date('%Y-%m-%d', os.time()+24*60*60)
 		eng.upd_task(upd)
 		fun.task_load()
-		iup.SetFocus(gui.result)
+		if not keyboard then iup.SetFocus(gui.result) end
 	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = os.date('%Y-%m-%d', os.time()+24*60*60)
 	end
 end
 
-function gui.task_anytime:action()
+function gui.task_anytime:action(keyboard)
 	if gui.zbox.value == gui.result_box and
 		(gui.result.value ~= nil and gui.result.value ~= "0") then
 		upd = { }
@@ -421,7 +421,7 @@ function gui.task_anytime:action()
 		upd.date = ""
 		eng.upd_task(upd)
 		fun.task_load()
-		iup.SetFocus(gui.result)
+		if not keyboard then iup.SetFocus(gui.result) end
 	elseif gui.zbox.value == gui.task_box then
 		gui.task_date.value = ""
 	end
