@@ -55,7 +55,7 @@ function fun.tag_load()
 	table.insert(fun.tag_table, false)
 	gui.taglist.appenditem = "Todas"
 	gui.taglist.appenditem = "Nenhuma"
-	for i,v in ipairs(eng.get_tags()) do
+	for _,v in ipairs(eng.get_tags()) do
 		table.insert(fun.tag_table, v)
 		fun.tag_table.id[v.id] = #fun.tag_table
 		gui.taglist.appenditem = v.name
@@ -143,7 +143,7 @@ function fun.db_load()
 		fun.db_load()
 	else
 		table.sort(fun.dblist)
-		for i, v in ipairs(fun.dblist) do
+		for _, v in ipairs(fun.dblist) do
 			gui.dbname.appenditem = v:sub(1, -8)
 		end
 		gui.dbname.lastvalue = value

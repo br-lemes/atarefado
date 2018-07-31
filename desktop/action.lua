@@ -286,7 +286,7 @@ function gui.result:dblclick_cb()
 		gui.search.value = item.name
 		local tagt = eng.get_tags(item.id)
 		local tagv = ""
-		for i,v in ipairs(fun.tag_table) do
+		for _,v in ipairs(fun.tag_table) do
 			if v then
 				if tagt[tonumber(v.id)] then
 					tagv = tagv .. "+"
@@ -441,7 +441,7 @@ function gui.dbname:valuechanged_cb()
 	end
 end
 
-function gui.result:button_cb(button, pressed, x, y, status)
+function gui.result:button_cb(button, pressed, x, y)
 	if button == iup.BUTTON3 and pressed == 0 then
 		local i = iup.ConvertXYToPos(self, x, y)
 		if i ~= -1 then self.value = i end
@@ -480,7 +480,7 @@ function gui.result:button_cb(button, pressed, x, y, status)
 	end
 end
 
-function gui.taglist:button_cb(button, pressed, x, y, status)
+function gui.taglist:button_cb(button, pressed, x, y)
 	if button == iup.BUTTON3 and pressed == 0 then
 		local i = iup.ConvertXYToPos(self, x, y)
 		if i ~= -1 then self.value = i end
