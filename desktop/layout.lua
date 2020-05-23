@@ -86,7 +86,7 @@ gui.result_menu = iup.menu{
 }
 
 gui.dialog = iup.dialog{
-	font       = "HELVETICA_BOLD_12",
+	font       = "Helvetica, Bold 12",
 	title      = "Atarefado 1.4+",
 	rastersize = "600x440",
 	iup.split{
@@ -131,7 +131,7 @@ gui.dialog = iup.dialog{
 						iup.fill{},
 						iup.label{
 							name      = "count",
-							font      = "HELVETICA_BOLD_10",
+							font      = "Helvetica, Bold 10",
 							expand    = "HORIZONTAL",
 							alignment = "ACENTER",
 							title     = "\n0",
