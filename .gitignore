@@ -4,6 +4,7 @@
 luaw
 haserl
 luasql
+civetweb
 database
 mongoose
 SciTE.properties
