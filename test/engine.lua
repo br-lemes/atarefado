@@ -141,3 +141,23 @@ local function test_daysmonth()
 	end
 	assert(eng.daysmonth(2, 2019) == 28, "wrong result for 2019-02")
 end
+
+local function test_getoptions()
+	local o = eng.get_options()
+	for i, v in pairs{ "anytime", "tomorrow", "future", "today", "yesterday", "late" } do
+		assert(o[v] == "ON", v .. " ~= 'ON'")
+	end
+	assert(o.tag == "1", "tag ~= '1'")
+end
+
+local function test_setoption()
+	local o = eng.get_options()
+	assert(o.tomorrow == "ON", "tomorrow ~= 'ON'")
+	assert(eng.set_option("tomorrow", "NO"))
+	o = eng.get_options()
+	assert(o.tomorrow == "NO", "tomorrow ~= 'NO'")
+end
+
+local function test_lastrow()
+	assert(eng.last_row() == 8, "eng.last_row() ~= 8")
+end
