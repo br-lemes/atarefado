@@ -15,7 +15,7 @@ assert(
 	os.time{day = 1, month = 1, year = 2013}
 )
 
-local eng = { }
+local eng = { dateformat = "%Y-%m-%d" }
 
 -- initialize variables and create a database if not exists
 -- return: nothing
@@ -346,7 +346,7 @@ function eng.go_next(taskid)
 	local task = eng.get_task(taskid)
 	local tags = eng.get_tags(task.id)
 	if eng.isanytime(task.date) then
-		task.date = os.date('%Y-%m-%d')
+		task.date = os.date(eng.dateformat)
 	end
 	local d = { }
 	d.year, d.month, d.day = task.date:match('(%d%d%d%d)-(%d%d)-(%d%d)')
@@ -358,7 +358,7 @@ function eng.go_next(taskid)
 				d.day = d.day + (i - d.wday)
 				local cur, err = eng.con:execute(string.format(
 					'UPDATE tasks SET date=%q WHERE id=%d;',
-					os.date('%Y-%m-%d', os.time(d)),
+					os.date(eng.dateformat, os.time(d)),
 					task.id))
 				return cur, err
 			end
@@ -369,7 +369,7 @@ function eng.go_next(taskid)
 				d.day = d.day + (7 - d.wday + i)
 				local cur, err = eng.con:execute(string.format(
 					'UPDATE tasks SET date=%q WHERE id=%d;',
-					os.date('%Y-%m-%d', os.time(d)),
+					os.date(eng.dateformat, os.time(d)),
 					task.id))
 				return cur, err
 			end
@@ -381,7 +381,7 @@ function eng.go_next(taskid)
 				d.day = i
 				local cur, err = eng.con:execute(string.format(
 					'UPDATE tasks SET date=%q WHERE id=%d;',
-					os.date('%Y-%m-%d', os.time(d)),
+					os.date(eng.dateformat, os.time(d)),
 					task.id))
 				return cur, err
 			end
@@ -393,7 +393,7 @@ function eng.go_next(taskid)
 				d.month = d.month + 1
 				local cur, err = eng.con:execute(string.format(
 					'UPDATE tasks SET date=%q WHERE id=%d;',
-					os.date('%Y-%m-%d', os.time(d)),
+					os.date(eng.dateformat, os.time(d)),
 					task.id))
 				return cur, err
 			end
@@ -407,14 +407,14 @@ function eng.go_next(taskid)
 		else d.day = i end
 		local cur, err = eng.con:execute(string.format(
 			'UPDATE tasks SET date=%q WHERE id=%d;',
-			os.date('%Y-%m-%d', os.time(d)),
+			os.date(eng.dateformat, os.time(d)),
 			task.id))
 		return cur, err
 	elseif task.recurrent == '1' then
 		d.day = d.day + 1
 		local cur, err = eng.con:execute(string.format(
 			'UPDATE tasks SET date=%q WHERE id=%d;',
-			os.date('%Y-%m-%d', os.time(d)),
+			os.date(eng.dateformat, os.time(d)),
 			task.id))
 		return cur, err
 	end
@@ -426,7 +426,7 @@ function eng.isdate(d)
 	local t = { }
 	t.year, t.month, t.day = d:match('(%d%d%d%d)-(%d%d)-(%d%d)')
 	return t.year and t.month and t.day and
-		os.date('%Y-%m-%d', os.time(t)) == d
+		os.date(eng.dateformat, os.time(t)) == d
 end
 
 -- return true if d is an unespecified time
@@ -436,29 +436,29 @@ end
 
 -- return true if d is tomorrow
 function eng.istomorrow(d)
-	return d == os.date('%Y-%m-%d', os.time() + 24*60*60)
+	return d == os.date(eng.dateformat, os.time() + 24*60*60)
 end
 
 -- return true if d is in the future but not tomorrow
 function eng.isfuture(d)
 	return not eng.isanytime(d) and not eng.istomorrow(d) and
-		d > os.date('%Y-%m-%d')
+		d > os.date(eng.dateformat)
 end
 
 -- return true if d is today
 function eng.istoday(d)
-	return d == os.date('%Y-%m-%d')
+	return d == os.date(eng.dateformat)
 end
 
 -- return true if d is yesterday
 function eng.isyesterday(d)
-	return d == os.date('%Y-%m-%d', os.time() - 24*60*60)
+	return d == os.date(eng.dateformat, os.time() - 24*60*60)
 end
 
 -- return true if d is in the past but not yesterday
 function eng.islate(d)
 	return not eng.isanytime(d) and not eng.isyesterday(d) and
-		d < os.date('%Y-%m-%d')
+		d < os.date(eng.dateformat)
 end
 
 -- return the number of days in a month
