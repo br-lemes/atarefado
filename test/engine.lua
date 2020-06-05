@@ -54,3 +54,90 @@ local function test_hasid()
 		end
 	end
 end
+
+local function test_isdate()
+	assert(not eng.isdate('2020-00-01'), "accepting invalid date")
+	assert(eng.isdate('2020-01-01'), "not accepting valid date")
+	assert(not eng.isdate('01-01-2020'), "accepting invalid format")
+end
+
+local function test_isanytime()
+	assert(eng.isanytime(), "not accepting nil")
+	assert(eng.isanytime(""), "not accepting empty string")
+	assert(eng.isanytime("anytime"), "not accepting 'anytime'")
+	assert(not eng.isanytime(true), "accepting 'true'")
+end
+
+local accept = {
+	late = "accepting late (before yesterday)",
+	yesterday = "accepting yesterday",
+	today = "accepting today",
+	tomorrow = "accepting tomorrow",
+	future = "accepting future (after tomorrow)"
+}
+
+local reject = {
+	late = "not " .. accept.late,
+	yesterday = "not " .. accept.yesterday,
+	today = "not " .. accept.today,
+	tomorrow = "not " .. accept.tomorrow,
+	future = "not " .. accept.future
+}
+
+local today     = os.time() -- WARNING: the test may fail if it's 23:59:59
+local late      = today - (24 * 60 * 60) * 2
+local yesterday = today -  24 * 60 * 60
+local tomorrow  = today +  24 * 60 * 60
+local future    = today + (24 * 60 * 60) * 2
+
+local function test_istomorrow()
+	local test = eng.istomorrow
+	assert(not test(os.date(eng.dateformat,      late)), accept.late)
+	assert(not test(os.date(eng.dateformat, yesterday)), accept.yesterday)
+	assert(not test(os.date(eng.dateformat,     today)), accept.today)
+	assert(test(os.date(eng.dateformat,      tomorrow)), reject.tomorrow)
+	assert(not test(os.date(eng.dateformat,    future)), accept.future)
+end
+
+local function test_isfuture()
+	local test = eng.isfuture
+	assert(not test(os.date(eng.dateformat,      late)), accept.late)
+	assert(not test(os.date(eng.dateformat, yesterday)), accept.yesterday)
+	assert(not test(os.date(eng.dateformat,     today)), accept.today)
+	assert(not test(os.date(eng.dateformat,  tomorrow)), accept.tomorrow)
+	assert(test(os.date(eng.dateformat,        future)), reject.future)
+end
+
+local function test_istoday()
+	local test = eng.istoday
+	assert(not test(os.date(eng.dateformat,      late)), accept.late)
+	assert(not test(os.date(eng.dateformat, yesterday)), accept.yesterday)
+	assert(test(os.date(eng.dateformat,         today)), reject.today)
+	assert(not test(os.date(eng.dateformat,  tomorrow)), accept.tomorrow)
+	assert(not test(os.date(eng.dateformat,    future)), accept.future)
+end
+
+local function test_isyesterday()
+	local test = eng.isyesterday
+	assert(not test(os.date(eng.dateformat,      late)), accept.late)
+	assert(test(os.date(eng.dateformat,     yesterday)), reject.yesterday)
+	assert(not test(os.date(eng.dateformat,     today)), accept.today)
+	assert(not test(os.date(eng.dateformat,  tomorrow)), accept.tomorrow)
+	assert(not test(os.date(eng.dateformat,    future)), accept.future)
+end
+
+local function test_islate()
+	local test = eng.islate
+	assert(test(os.date(eng.dateformat,          late)), reject.late)
+	assert(not test(os.date(eng.dateformat, yesterday)), accept.yesterday)
+	assert(not test(os.date(eng.dateformat,     today)), accept.today)
+	assert(not test(os.date(eng.dateformat,  tomorrow)), accept.tomorrow)
+	assert(not test(os.date(eng.dateformat,    future)), accept.future)
+end
+
+local function test_daysmonth()
+	for i, v in pairs{ 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 } do
+		assert(eng.daysmonth(i, 2020) == v, string.format("wrong result for 2020-%02d", i))
+	end
+	assert(eng.daysmonth(2, 2019) == 28, "wrong result for 2019-02")
+end
