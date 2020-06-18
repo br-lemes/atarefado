@@ -211,8 +211,34 @@ local function test_moretag()
 	assert(count_tag(1) == 0, "unexpected number of tags")
 end
 
--- TODO del_task
+local function test_moretask()
+	assert(eng.get_task(1).recurrent == "1", "unexpected value")
+	local r, e = eng.upd_task{id = 1, recurrent = 2, date = "2020-01-01"}
+	assert(r, e)
+	assert(eng.get_task(1).recurrent == "2", "unexpected value")
+	assert(eng.set_tag(1, 1))
+	r, e = eng.go_next(1)
+	assert(r, e)
+	assert(eng.get_task(1).date == "2020-01-05", "unexpected date")
+	r, e = eng.go_next(1)
+	assert(r, e)
+	assert(eng.get_task(1).date == "2020-01-12", "unexpected date")
+	assert(eng.clear_tag(1, 1))
+	assert(eng.set_tag(1, 1 + 7))
+	r, e = eng.upd_task{id = 1, recurrent = 3}
+	assert(r, e)
+	r, e = eng.go_next(1)
+	assert(r, e)
+	assert(eng.get_task(1).date == "2020-02-01", "unexpected date")
+	assert(eng.clear_tag(1, 1 + 7))
+	r, e = eng.upd_task{id = 1, recurrent = 4}
+	assert(r, e)
+	r, e = eng.go_next(1)
+	assert(r, e)
+	assert(eng.get_task(1).date == "2020-02-29", "unexpected date")
+	r, e = eng.del_task(1, true)
+	assert(r, e)
+	assert(not eng.get_task(1), "unexpected task")
+end
+
 -- TODO gettasks
--- TODO get_tags
--- TODO upd_task
--- TODO go_next
