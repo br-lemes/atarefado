@@ -185,3 +185,12 @@ local function test_tag()
 	assert(eng.clear_tag(1, 1))
 	assert(not eng.has_tag(1, 1), "has_tag: tag not cleared")
 end
+
+-- TODO new_tag
+-- TODO del_tag
+-- TODO del_task
+-- TODO gettasks
+-- TODO get_tags
+-- TODO upd_task
+-- TODO upd_tag
+-- TODO go_next
