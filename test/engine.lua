@@ -161,3 +161,27 @@ end
 local function test_lastrow()
 	assert(eng.last_row() == 8, "eng.last_row() ~= 8")
 end
+
+local function test_task()
+	local r, e = eng.get_task(1)
+	assert(not r, e)
+	r, e = eng.new_task()
+	assert(not r, e)
+	r, e = eng.new_task{ name = "test" }
+	assert(r == 1, e)
+	r, e = eng.get_task(1)
+	assert(r, e)
+	assert(r.name == "test", "unexpected task")
+end
+
+local function test_tag()
+	assert(not eng.has_tag(1, 1), "has_tag: unexpected tag")
+	assert(eng.has_notags(1), "has_notags: unexpected tag")
+	assert(not eng.set_tag(1, 101), "set_tag: accepting invalid tag")
+	assert(eng.set_tag(1, 1))
+	assert(not eng.set_tag(1, 1), "set_tag: accepting already tagged")
+	assert(eng.has_tag(1, 1), "has_tag: tag not set")
+	assert(not eng.clear_tag(1, 101), "clear_tag: accepting invalid tag")
+	assert(eng.clear_tag(1, 1))
+	assert(not eng.has_tag(1, 1), "has_tag: tag not cleared")
+end
