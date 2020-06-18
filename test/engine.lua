@@ -186,11 +186,33 @@ local function test_tag()
 	assert(not eng.has_tag(1, 1), "has_tag: tag not cleared")
 end
 
--- TODO new_tag
--- TODO del_tag
+local function count_tag(task)
+	local tags = eng.get_tags(task)
+	local count = 0
+	for _ in pairs(tags) do count = count + 1 end
+	return count
+end
+
+local function test_moretag()
+	assert(eng.new_tag("test"))
+	local tags = eng.get_tags()
+	assert(type(tags) == "table", "tags is not a table")
+	assert(#tags == 1, "unexpected number of tags")
+	assert(tags[1].name == "test", "unexpected tag")
+	local r, e = eng.upd_tag(39, "#test")
+	assert(r == 1, e) -- FIX Engine: error when tag not found
+	tags = eng.get_tags(1)
+	assert(#tags == 0, "unexpected tag for task 1")
+	assert(eng.set_tag(1, 39))
+	assert(eng.get_tags(1)[39] == "#test", "unexpected tag")
+	assert(count_tag(1) == 1, "unexpected number of tags")
+	r, e = eng.del_tag(39)
+	assert(r == 1, e)
+	assert(count_tag(1) == 0, "unexpected number of tags")
+end
+
 -- TODO del_task
 -- TODO gettasks
 -- TODO get_tags
 -- TODO upd_task
--- TODO upd_tag
 -- TODO go_next
