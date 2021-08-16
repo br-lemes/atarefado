@@ -114,6 +114,11 @@ class Engine {
 		$query = $this->db->prepare('UPDATE options SET value=? WHERE name=?');
 		$query->execute([$value, $option]);
 	}
+
+	public function last_row() {
+		return $this->db->query('SELECT last_insert_rowid()')->fetch()[0];
+	}
+
 }
 
 $app->get('/{dbname}/options', function (Request $request, Response $response, $args): Response {
