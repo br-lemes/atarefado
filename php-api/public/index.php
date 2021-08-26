@@ -245,41 +245,51 @@ class Engine {
 
 }
 
+$app->get('/dblist', function (Request $request, Response $response, $args): Response {
+	$result = [];
+	foreach (scandir('../database') as $file) {
+		$file = explode('.', $file);
+		if (count($file) == 2 and $file[1] == 'sqlite') $result[] = $file[0];
+	}
+	$response->getBody()->write(json_encode($result, JSON_INVALID_UTF8_SUBSTITUTE));
+	return $response->withHeader('Content-type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
+});
+
 $app->get('/{dbname}/tasks/{id}', function (Request $request, Response $response, $args): Response {
 	$eng = new Engine($args['dbname']);
 	$response->getBody()->write(json_encode($eng->get_tasks($args['id']), JSON_INVALID_UTF8_SUBSTITUTE));
-	return $response->withHeader('Content-type', 'application/json');
+	return $response->withHeader('Content-type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');;
 });
 
 $app->get('/{dbname}/task/{id}', function (Request $request, Response $response, $args): Response {
 	$eng = new Engine($args['dbname']);
 	$response->getBody()->write(json_encode($eng->get_task($args['id']), JSON_INVALID_UTF8_SUBSTITUTE));
-	return $response->withHeader('Content-type', 'application/json');
+	return $response->withHeader('Content-type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');;
 });
 
 $app->get('/{dbname}/tags[/{id}]', function (Request $request, Response $response, $args): Response {
 	$eng = new Engine($args['dbname']);
 	$response->getBody()->write(json_encode($eng->get_tags($args['id']), JSON_INVALID_UTF8_SUBSTITUTE));
-	return $response->withHeader('Content-type', 'application/json');
+	return $response->withHeader('Content-type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');;
 });
 
 $app->get('/{dbname}/options', function (Request $request, Response $response, $args): Response {
 	$eng = new Engine($args['dbname']);
 	$response->getBody()->write(json_encode($eng->get_options(), JSON_INVALID_UTF8_SUBSTITUTE));
-	return $response->withHeader('Content-type', 'application/json');
+	return $response->withHeader('Content-type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');;
 });
 
 $app->put('/{dbname}/option/{option}/{value}', function (Request $request, Response $response, $args): Response {
 	$eng = new Engine($args['dbname']);
 	$eng->set_option($args['option'], $args['value']);
 	$response->getBody()->write(json_encode($eng->get_options(), JSON_INVALID_UTF8_SUBSTITUTE));
-	return $response->withHeader('Content-type', 'application/json');
+	return $response->withHeader('Content-type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');;
 });
 
 $app->get('/{dbname}/last_insert_rowid', function (Request $request, Response $response, $args): Response {
 	$eng = new Engine($args['dbname']);
 	$response->getBody()->write(json_encode($eng->last_insert_rowid(), JSON_INVALID_UTF8_SUBSTITUTE));
-	return $response->withHeader('Content-type', 'application/json');
+	return $response->withHeader('Content-type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');;
 });
 
 $app->get('/', function (Request $request, Response $response, $args): Response {
